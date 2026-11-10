@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Painel do administrador</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2F6FED}a:hover{color:#1F4FB8}
+</style>
+</helmet>
+<div style="background: #F4F6FB; font-family: Inter, system-ui, sans-serif; color: #1B2340; min-height: 1640px; padding: 32px 24px; box-sizing: border-box">
+<div style="max-width: 1320px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+  <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px">
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <h1 style="margin: 0; font-size: 28px; font-weight: 700">Painel do administrador</h1>
+      <span style="font-size: 15px; color: #4D5675">Dados de exemplo · atualizado ao fim de cada sessão</span>
+    </div>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap">
+      <button type="button" style="font-family: Inter, sans-serif; font-size: 15px; font-weight: 600; padding: 12px 18px; border-radius: 10px; border: 1px solid #C9D0E0; background: #FFFFFF; color: #1B2340; min-height: 44px">Exportar relatório</button>
+      <button type="button" style="font-family: Inter, sans-serif; font-size: 15px; font-weight: 600; padding: 12px 18px; border-radius: 10px; border: 0; background: #2F6FED; color: #FFFFFF; min-height: 44px">Gerar novo lote de questões</button>
+    </div>
+  </header>
+
+  <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+    <div style="background: #FFFFFF; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 6px">
+      <span style="font-size: 14px; color: #4D5675; font-weight: 500">Sessões nesta semana</span>
+      <span style="font-size: 32px; font-weight: 700">5</span>
+    </div>
+    <div style="background: #FFFFFF; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 6px">
+      <span style="font-size: 14px; color: #4D5675; font-weight: 500">Nota média (últimos 5 treinos)</span>
+      <span style="font-size: 32px; font-weight: 700">7,8</span>
+    </div>
+    <div style="background: #FFFFFF; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 6px">
+      <span style="font-size: 14px; color: #4D5675; font-weight: 500">Tempo de tela hoje</span>
+      <span style="font-size: 32px; font-weight: 700">18 <span style="font-size: 18px; color: #4D5675; font-weight: 500">de 30 min</span></span>
+    </div>
+    <div style="background: #FFFFFF; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 6px">
+      <span style="font-size: 14px; color: #4D5675; font-weight: 500">Sinais de cansaço (7 dias)</span>
+      <span style="font-size: 32px; font-weight: 700">1 <span style="font-size: 18px; color: #4D5675; font-weight: 500">sessão encerrada cedo</span></span>
+    </div>
+  </section>
+
+  <section style="background: #FFFFFF; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+    <h2 style="margin: 0; font-size: 20px; font-weight: 700">Desempenho por trilha</h2>
+    <div style="overflow-x: auto">
+      <table style="width: 100%; min-width: 820px; border-collapse: collapse; font-size: 15px">
+        <thead>
+          <tr style="text-align: left; color: #4D5675; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px">
+            <th style="padding: 10px 12px; border-bottom: 1px solid #E3E8F4; font-weight: 600">Trilha</th>
+            <th style="padding: 10px 12px; border-bottom: 1px solid #E3E8F4; font-weight: 600">Nível</th>
+            <th style="padding: 10px 12px; border-bottom: 1px solid #E3E8F4; font-weight: 600">Média (5 últimos)</th>
+            <th style="padding: 10px 12px; border-bottom: 1px solid #E3E8F4; font-weight: 600">Tendência</th>
+            <th style="padding: 10px 12px; border-bottom: 1px solid #E3E8F4; font-weight: 600">Habilidade mais fraca</th>
+            <th style="padding: 10px 12px; border-bottom: 1px solid #E3E8F4; font-weight: 600">Sugestão da IA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{trilhas}}" as="t" hint-placeholder-count="5">
+            <tr>
+              <td style="padding: 14px 12px; border-bottom: 1px solid #EEF1F7; font-weight: 600">{{t.nome}}</td>
+              <td style="padding: 14px 12px; border-bottom: 1px solid #EEF1F7"><span style="background: #E3EBFD; color: #1F4FB8; border-radius: 99px; padding: 4px 10px; font-size: 13px; font-weight: 600">{{t.nivel}}</span></td>
+              <td style="padding: 14px 12px; border-bottom: 1px solid #EEF1F7; font-weight: 600">{{t.media}}</td>
+              <td style="padding: 14px 12px; border-bottom: 1px solid #EEF1F7">{{t.tendencia}}</td>
+              <td style="padding: 14px 12px; border-bottom: 1px solid #EEF1F7">{{t.fraca}}</td>
+              <td style="padding: 14px 12px; border-bottom: 1px solid #EEF1F7; color: #4D5675">{{t.sugestao}}</td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <h2 style="margin: 0; font-size: 20px; font-weight: 700">Controles</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
+
+      <div style="background: #FFFFFF; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h3 style="margin: 0; font-size: 16px; font-weight: 700">Nível por trilha</h3>
+        <sc-for list="{{trilhas}}" as="t" hint-placeholder-count="5">
+          <label style="display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 15px">
+            <span>{{t.nome}}</span>
+            <select style="font-family: Inter, sans-serif; font-size: 15px; padding: 10px 12px; border-radius: 10px; border: 1px solid #C9D0E0; background: #FFFFFF; min-height: 44px; min-width: 150px">
+              <option>{{t.nivel}}</option>
+              <option>Base · 3º ano</option>
+              <option>Avanço · 4º ano</option>
+              <option>Desafio · 5º ano</option>
+            </select>
+          </label>
+        </sc-for>
+      </div>
+
+      <div style="background: #FFFFFF; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h3 style="margin: 0; font-size: 16px; font-weight: 700">Modo Prova</h3>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4D5675">Predefinição
+          <select style="font-family: Inter, sans-serif; font-size: 15px; padding: 10px 12px; border-radius: 10px; border: 1px solid #C9D0E0; background: #FFFFFF; color: #1B2340; min-height: 44px">
+            <option>Bolsão padrão · 20 questões · 90 min</option>
+            <option>Alto padrão completo · 20 + redação</option>
+            <option>Treino rápido · 12 questões</option>
+          </select>
+        </label>
+        <span style="font-size: 14px; color: #4D5675">Mistura de dificuldade (%)</span>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #4D5675">Fácil<input type="number" value="40" style="font-family: Inter, sans-serif; font-size: 15px; padding: 10px; border-radius: 10px; border: 1px solid #C9D0E0; min-height: 44px; box-sizing: border-box; width: 100%"></label>
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #4D5675">Média<input type="number" value="40" style="font-family: Inter, sans-serif; font-size: 15px; padding: 10px; border-radius: 10px; border: 1px solid #C9D0E0; min-height: 44px; box-sizing: border-box; width: 100%"></label>
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #4D5675">Difícil<input type="number" value="20" style="font-family: Inter, sans-serif; font-size: 15px; padding: 10px; border-radius: 10px; border: 1px solid #C9D0E0; min-height: 44px; box-sizing: border-box; width: 100%"></label>
+        </div>
+        <span style="font-size: 14px; color: #4D5675">Resistência atual: blocos de 10 com pausa</span>
+      </div>
+
+      <div style="background: #FFFFFF; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h3 style="margin: 0; font-size: 16px; font-weight: 700">Progressão de nível</h3>
+        <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; min-height: 44px"><input type="radio" name="prog" checked style="width: 20px; height: 20px">Automática</label>
+        <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; min-height: 44px"><input type="radio" name="prog" style="width: 20px; height: 20px">Manual (eu decido)</label>
+        <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; min-height: 44px"><input type="radio" name="prog" style="width: 20px; height: 20px">Travada</label>
+        <span style="font-size: 14px; color: #4D5675">Regra: sobe após 3 notas ≥ 8,0 seguidas na trilha</span>
+      </div>
+
+      <div style="background: #FFFFFF; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h3 style="margin: 0; font-size: 16px; font-weight: 700">Sessão e tempo de tela</h3>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4D5675">Limite diário (minutos)<input type="number" value="30" style="font-family: Inter, sans-serif; font-size: 15px; padding: 10px; border-radius: 10px; border: 1px solid #C9D0E0; min-height: 44px; box-sizing: border-box; color: #1B2340"></label>
+        <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; min-height: 44px"><input type="checkbox" checked style="width: 20px; height: 20px">A IA ajusta o tamanho do treino</label>
+        <span style="font-size: 14px; color: #4D5675">Tamanho atual do treino diário: 10 questões</span>
+      </div>
+
+      <div style="background: #FFFFFF; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h3 style="margin: 0; font-size: 16px; font-weight: 700">Material Positivo · até onde a turma chegou</h3>
+        <sc-for list="{{trilhasPositivo}}" as="t" hint-placeholder-count="4">
+          <label style="display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 15px">
+            <span>{{t.nome}}</span>
+            <input type="text" placeholder="Volume / unidade" style="font-family: Inter, sans-serif; font-size: 15px; padding: 10px 12px; border-radius: 10px; border: 1px solid #C9D0E0; min-height: 44px; box-sizing: border-box; width: 170px">
+          </label>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: #FFFFFF; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+      <h2 style="margin: 0; font-size: 20px; font-weight: 700">Fila de revisão de questões</h2>
+      <span style="font-size: 14px; color: #4D5675">Opcional · amostra semanal de 5 questões geradas pela IA</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <sc-for list="{{fila}}" as="q" hint-placeholder-count="4">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; border: 1px solid #E3E8F4; border-radius: 12px; padding: 14px 16px">
+          <div style="flex: 999 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+            <span style="font-size: 15px; font-weight: 600">{{q.texto}}</span>
+            <span style="font-size: 13px; color: #4D5675">{{q.meta}}</span>
+          </div>
+          <span style="border-radius: 99px; padding: 5px 12px; font-size: 13px; font-weight: 600; background: {{q.fundo}}; color: {{q.cor}}">{{q.status}}</span>
+          <div style="display: flex; gap: 8px">
+            <button type="button" style="font-family: Inter, sans-serif; font-size: 14px; font-weight: 600; padding: 10px 14px; border-radius: 10px; border: 0; background: #E8F6EE; color: #146B3A; min-height: 44px">Aprovar</button>
+            <button type="button" style="font-family: Inter, sans-serif; font-size: 14px; font-weight: 600; padding: 10px 14px; border-radius: 10px; border: 1px solid #C9D0E0; background: #FFFFFF; color: #1B2340; min-height: 44px">Editar</button>
+            <button type="button" style="font-family: Inter, sans-serif; font-size: 14px; font-weight: 600; padding: 10px 14px; border-radius: 10px; border: 1px solid #C9D0E0; background: #FFFFFF; color: #A12F2F; min-height: 44px">Desativar</button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="background: #FFFFFF; border-radius: 16px; padding: 24px; display: flex; flex-wrap: wrap; gap: 24px">
+    <div style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+      <h2 style="margin: 0; font-size: 20px; font-weight: 700">Redação para corrigir</h2>
+      <span style="font-size: 14px; color: #4D5675">Proposta: crie um final para a tirinha</span>
+      <div style="background: #F4F6FB; border-radius: 12px; padding: 16px; font-size: 15px; line-height: 1.6; min-height: 160px; color: #4D5675">[Texto escrito por ela aparece aqui]</div>
+    </div>
+    <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 12px">
+      <h3 style="margin: 0; font-size: 16px; font-weight: 700">Rubrica (0 a 2 por critério)</h3>
+      <sc-for list="{{rubrica}}" as="r" hint-placeholder-count="4">
+        <label style="display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 15px">
+          <span>{{r}}</span>
+          <select style="font-family: Inter, sans-serif; font-size: 15px; padding: 10px 12px; border-radius: 10px; border: 1px solid #C9D0E0; background: #FFFFFF; min-height: 44px; width: 90px">
+            <option>—</option><option>0</option><option>1</option><option>2</option>
+          </select>
+        </label>
+      </sc-for>
+      <span style="font-size: 14px; color: #4D5675">Total de 8 pontos, convertido para nota de 0 a 10</span>
+      <button type="button" style="font-family: Inter, sans-serif; font-size: 15px; font-weight: 600; padding: 12px 18px; border-radius: 10px; border: 0; background: #2F6FED; color: #FFFFFF; min-height: 44px">Salvar correção e enviar elogio</button>
+    </div>
+  </section>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const ok = { fundo: '#E8F6EE', cor: '#146B3A' };
+    const alerta = { fundo: '#FFF4E8', cor: '#8A4300' };
+    const info = { fundo: '#E3EBFD', cor: '#1F4FB8' };
+    return {
+      trilhas: [
+        { nome: 'Português', nivel: 'Base · 3º ano', media: '7,4', tendencia: 'Subindo', fraca: 'Inferir informação implícita', sugestao: 'Manter Base; mais textos curtos' },
+        { nome: 'Matemática', nivel: 'Avanço · 4º ano', media: '7,9', tendencia: 'Estável após subir', fraca: 'Divisão com resto', sugestao: 'Manter Avanço' },
+        { nome: 'Lógica', nivel: 'Base · 3º ano', media: '6,6', tendencia: 'Subindo', fraca: 'Vistas de sólidos', sugestao: 'Pílula de vistas esta semana' },
+        { nome: 'Conhecimentos Gerais', nivel: 'Base · 3º ano', media: '6,9', tendencia: 'Estável', fraca: 'Leitura de mapas', sugestao: 'Manter Base' },
+        { nome: 'Redação', nivel: 'Base · 3º ano', media: '—', tendencia: '1 texto aguardando', fraca: 'Pontuação em diálogos', sugestao: 'Corrigir texto pendente' }
+      ],
+      trilhasPositivo: [
+        { nome: 'Português' }, { nome: 'Matemática' }, { nome: 'Ciências' }, { nome: 'História e Geografia' }
+      ],
+      fila: [
+        Object.assign({ texto: 'Qual figura continua a sequência? (triângulo, círculo, quadrado…)', meta: 'Lógica · 3º ano · nível 2' }, ok, { status: 'Aprovada pela revisão automática' }),
+        Object.assign({ texto: 'Ana tinha R$ 7,50 e gastou R$ 2,75. Quanto sobrou?', meta: 'Matemática · 3º ano · nível 3' }, ok, { status: 'Aprovada pela revisão automática' }),
+        Object.assign({ texto: 'No texto, a palavra “ela” se refere a quem?', meta: 'Português · 3º ano · nível 3' }, alerta, { status: 'Contestada pela aluna' }),
+        Object.assign({ texto: 'Quantos quadrados há na figura?', meta: 'Lógica · 4º ano · nível 4' }, info, { status: 'Taxa de acerto atípica' })
+      ],
+      rubrica: ['Respeita o tema', 'Organização (começo, meio, fim)', 'Ortografia', 'Pontuação']
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+{
+  "versao": "0.1",
+  "atualizado_em": "2026-11-10",
+  "observacao": "Mapa de trabalho resumido da BNCC e de editais de bolsa. Conferir cada habilidade na BNCC oficial (http://basenacionalcomum.mec.gov.br/) e no material Positivo antes de gerar questões em escala. O campo positivo_unidade é preenchido pelo administrador a partir dos livros.",
+  "niveis": {
+    "base": "3º ano",
+    "avanco": "4º ano",
+    "desafio": "5º ano + olimpíadas"
+  },
+  "trilhas": [
+    {
+      "id": "portugues",
+      "nome": "Português",
+      "no_mvp": true,
+      "blocos": [
+        {
+          "id": "pt-leitura",
+          "nome": "Leitura",
+          "habilidades": {
+            "base": ["Localizar informação explícita", "Identificar o assunto do texto", "Reconhecer gêneros: poema, receita, bilhete, notícia, HQ"],
+            "avanco": ["Inferir informação implícita", "Sentido de palavras pelo contexto", "Finalidade do texto"],
+            "desafio": ["Comparar textos", "Distinguir fato e opinião", "Efeitos de sentido (pontuação, humor)", "Reportagem"]
+          }
+        },
+        {
+          "id": "pt-gramatica",
+          "nome": "Gramática e ortografia",
+          "habilidades": {
+            "base": ["S/SS e R/RR", "M antes de P e B", "L/U no fim de sílaba", "Sílaba tônica e acentuação", "Substantivo, adjetivo e verbo", "Singular e plural", "Pontuação e tipos de frase"],
+            "avanco": ["Pronomes", "Tempos verbais", "Concordância", "Sinônimos e antônimos", "Parágrafo", "Discurso direto"],
+            "desafio": ["Coesão: pronomes e conectivos", "Prefixos e sufixos", "Acentuação completa", "Pontuação em diálogos"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "matematica",
+      "nome": "Matemática",
+      "no_mvp": true,
+      "blocos": [
+        {
+          "id": "mat-numeros",
+          "nome": "Números e operações",
+          "habilidades": {
+            "base": ["Números até 1.000", "Composição e decomposição", "Adição e subtração com reagrupamento", "Ideias de multiplicação e divisão", "Dobro, metade e terço"],
+            "avanco": ["Números até dezenas de milhar", "Multiplicação e divisão com algoritmo", "Frações unitárias", "Decimais no dinheiro"],
+            "desafio": ["Centenas de milhar", "Frações equivalentes", "Decimais", "Porcentagens simples (10%, 25%, 50%)", "Proporcionalidade"]
+          }
+        },
+        {
+          "id": "mat-grandezas",
+          "nome": "Grandezas, geometria e dados",
+          "habilidades": {
+            "base": ["Horas em relógio analógico e digital", "Calendário", "Dinheiro", "Comprimento, massa e capacidade", "Figuras planas e sólidos", "Tabelas e gráfico de barras"],
+            "avanco": ["Ângulo reto", "Simetria", "Área contando quadradinhos", "Perímetro", "Gráficos de colunas e pictóricos"],
+            "desafio": ["Área e perímetro", "Plano cartesiano simples", "Gráfico de linha", "Chance e probabilidade"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "logica",
+      "nome": "Raciocínio Lógico",
+      "no_mvp": true,
+      "blocos": [
+        {
+          "id": "log-visual",
+          "nome": "Lógica visual e dedutiva",
+          "habilidades": {
+            "base": ["Sequências de figuras e números", "Padrões de cor e forma", "Labirintos", "Contagem de figuras"],
+            "avanco": ["Balanças e equivalências", "Problemas de quem é quem", "Vistas de sólidos", "Dobraduras e simetria"],
+            "desafio": ["Problemas estilo Canguru/OBMEP Mirim", "Tentativa e erro organizada", "Contagem", "Verdade e mentira"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "redacao",
+      "nome": "Produção de Texto",
+      "no_mvp": true,
+      "correcao": "humana (administrador) com rubrica",
+      "rubrica": ["Respeita o tema", "Organização (começo, meio, fim)", "Ortografia", "Pontuação"],
+      "pontos_por_criterio": [0, 1, 2]
+    },
+    {
+      "id": "conhecimentos",
+      "nome": "Conhecimentos Gerais",
+      "no_mvp": false,
+      "blocos": [
+        {
+          "id": "cg-ciencias",
+          "nome": "Ciências",
+          "habilidades": {
+            "base": ["Animais: características e classificação", "Som e luz", "Solo", "A Terra e o céu"],
+            "avanco": ["Cadeias alimentares", "Microrganismos", "Misturas", "Transformações reversíveis", "Pontos cardeais"],
+            "desafio": ["Corpo humano", "Nutrição", "Ciclo da água", "Fases da Lua"]
+          }
+        },
+        {
+          "id": "cg-historia",
+          "nome": "História",
+          "habilidades": {
+            "base": ["A cidade e o lugar onde vive", "Patrimônio", "Espaços públicos e privados", "Trabalho"],
+            "avanco": ["Migrações", "Povos indígenas e africanos", "Transformações ao longo do tempo"],
+            "desafio": ["Cidadania", "Registros e memória", "Formação cultural do Brasil"]
+          }
+        },
+        {
+          "id": "cg-geografia",
+          "nome": "Geografia",
+          "habilidades": {
+            "base": ["Paisagens", "Campo e cidade", "Uso do solo e da água", "Produção, incluindo agropecuária"],
+            "avanco": ["Município, estado e país", "Mapas e legendas", "Orientação"],
+            "desafio": ["Regiões do Brasil", "Urbanização", "Qualidade ambiental", "Escala"]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Questão com rascunho</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2F6FED}a:hover{color:#1F4FB8}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; padding: 24px 32px; background: #F4F6FB; font-family: Nunito, system-ui, sans-serif; color: #1B2340; display: flex; flex-direction: column; gap: 18px">
+  <header style="display: flex; align-items: center; gap: 20px">
+    <a href="Main.dc.html" aria-label="Sair da sessão" style="width: 52px; height: 52px; border-radius: 16px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2340" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </a>
+    <div style="display: flex; flex-direction: column; gap: 8px; flex-grow: 1">
+      <div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: 800">
+        <span>Treino do dia</span>
+        <span>Questão 4 de 10</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 6px">
+        <sc-for list="{{passos}}" as="p" hint-placeholder-count="10">
+          <div style="height: 12px; border-radius: 99px; background: {{p.cor}}"></div>
+        </sc-for>
+      </div>
+    </div>
+    <button type="button" aria-label="Ouvir o enunciado" style="width: 52px; height: 52px; border-radius: 16px; border: 0; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2F6FED" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"></path><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"></path></svg>
+    </button>
+  </header>
+
+  <div style="display: flex; gap: 20px; flex-grow: 1; min-height: 0">
+    <section style="flex: 1 1 0; min-width: 0; background: #FFFFFF; border-radius: 28px; padding: 28px 32px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; gap: 8px">
+        <span style="background: #E3EBFD; color: #1F4FB8; border-radius: 99px; padding: 6px 14px; font-size: 15px; font-weight: 800">Raciocínio lógico</span>
+        <span style="background: #F0F2F7; color: #4D5675; border-radius: 99px; padding: 6px 14px; font-size: 15px; font-weight: 800">Nível 2 de 5</span>
+      </div>
+      <h1 style="margin: 0; font-size: 30px; font-weight: 900">Qual figura continua a sequência?</h1>
+      <div style="display: flex; align-items: center; gap: 14px; background: #F4F6FB; border-radius: 20px; padding: 18px 22px">
+        <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 6 L52 48 L4 48 Z" fill="#2F6FED"></path></svg>
+        <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="23" fill="#F28C28"></circle></svg>
+        <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><rect x="6" y="6" width="44" height="44" rx="4" fill="#1B2340"></rect></svg>
+        <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 6 L52 48 L4 48 Z" fill="#2F6FED"></path></svg>
+        <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="23" fill="#F28C28"></circle></svg>
+        <span style="width: 56px; height: 56px; border-radius: 12px; border: 3px dashed #8A93AD; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 900; color: #4D5675; box-sizing: border-box">?</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
+        <sc-for list="{{alternativas}}" as="a" hint-placeholder-count="5">
+          <button type="button" onClick="{{a.pick}}" aria-pressed="{{a.selected}}" aria-label="Alternativa {{a.letra}}: {{a.nome}}" style="border: 4px solid {{a.borda}}; background: {{a.fundo}}; border-radius: 20px; padding: 14px 8px; display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: Nunito, system-ui, sans-serif; cursor: pointer">
+            <span style="font-size: 18px; font-weight: 900; color: #1B2340">{{a.letra}}</span>
+            <sc-if value="{{a.isCirculo}}" hint-placeholder-val="{{ false }}"><svg width="52" height="52" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="23" fill="#F28C28"></circle></svg></sc-if>
+            <sc-if value="{{a.isQuadrado}}" hint-placeholder-val="{{ false }}"><svg width="52" height="52" viewBox="0 0 56 56" aria-hidden="true"><rect x="6" y="6" width="44" height="44" rx="4" fill="#1B2340"></rect></svg></sc-if>
+            <sc-if value="{{a.isTriangulo}}" hint-placeholder-val="{{ false }}"><svg width="52" height="52" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 6 L52 48 L4 48 Z" fill="#2F6FED"></path></svg></sc-if>
+            <sc-if value="{{a.isEstrela}}" hint-placeholder-val="{{ false }}"><svg width="52" height="52" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 4 L34 21 L52 21 L37 32 L43 50 L28 39 L13 50 L19 32 L4 21 L22 21 Z" fill="#1F9D55"></path></svg></sc-if>
+            <sc-if value="{{a.isLosango}}" hint-placeholder-val="{{ false }}"><svg width="52" height="52" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 4 L52 28 L28 52 L4 28 Z" fill="#7B4FD6"></path></svg></sc-if>
+          </button>
+        </sc-for>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto">
+        <a href="Main.dc.html" style="font-size: 16px; font-weight: 800; color: #4D5675">Achei um erro</a>
+        <sc-if value="{{temEscolha}}" hint-placeholder-val="{{ false }}">
+          <a href="Feedback.dc.html" style="background: #2F6FED; color: #FFFFFF; text-decoration: none; font-size: 22px; font-weight: 900; padding: 16px 36px; border-radius: 18px">Confirmar resposta</a>
+        </sc-if>
+        <sc-if value="{{semEscolha}}" hint-placeholder-val="{{ true }}">
+          <span style="background: #D9DEEA; color: #4D5675; font-size: 22px; font-weight: 900; padding: 16px 36px; border-radius: 18px">Escolha uma figura</span>
+        </sc-if>
+      </div>
+    </section>
+
+    <aside style="width: 400px; flex-shrink: 0; background: #FFFFFF; border-radius: 28px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <h2 style="margin: 0; font-size: 20px; font-weight: 900">Rascunho</h2>
+        <div style="display: flex; gap: 8px">
+          <button type="button" aria-label="Lápis" style="width: 48px; height: 48px; border-radius: 14px; border: 0; background: #2F6FED; display: flex; align-items: center; justify-content: center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1L19 8l-3-3L5 16z"></path></svg>
+          </button>
+          <button type="button" aria-label="Borracha" style="width: 48px; height: 48px; border-radius: 14px; border: 0; background: #F0F2F7; display: flex; align-items: center; justify-content: center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B2340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21h13M5 14l8-8 6 6-8 8H8z"></path></svg>
+          </button>
+          <button type="button" style="height: 48px; border-radius: 14px; border: 0; background: #F0F2F7; padding: 0 14px; font-family: Nunito, system-ui, sans-serif; font-size: 15px; font-weight: 800; color: #1B2340">Limpar</button>
+        </div>
+      </div>
+      <div style="flex-grow: 1; border-radius: 18px; background-color: #FBFCFE; background-image: linear-gradient(#E6EAF3 1px, transparent 1px), linear-gradient(90deg, #E6EAF3 1px, transparent 1px); background-size: 28px 28px; position: relative; overflow: hidden">
+        <svg width="360" height="420" viewBox="0 0 360 420" aria-hidden="true" style="position: absolute; left: 0; top: 0">
+          <path d="M40 60 L70 20 L100 60 Z" fill="none" stroke="#1B2340" stroke-width="5" stroke-linejoin="round"></path>
+          <circle cx="150" cy="42" r="20" fill="none" stroke="#1B2340" stroke-width="5"></circle>
+          <rect x="190" y="22" width="40" height="40" fill="none" stroke="#1B2340" stroke-width="5"></rect>
+          <path d="M30 90 C 90 110, 170 110, 245 88" fill="none" stroke="#F28C28" stroke-width="5" stroke-linecap="round"></path>
+          <path d="M40 160 L70 120 L100 160 Z" fill="none" stroke="#1B2340" stroke-width="5" stroke-linejoin="round"></path>
+          <circle cx="150" cy="142" r="20" fill="none" stroke="#1B2340" stroke-width="5"></circle>
+          <path d="M195 128 l12 14 l22 -26" fill="none" stroke="#1F9D55" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span style="position: absolute; left: 16px; bottom: 14px; font-size: 14px; font-weight: 700; color: #4D5675">Desenhe com o dedo</span>
+      </div>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { escolha: null };
+  }
+  renderVals() {
+    const base = [
+      { letra: 'A', nome: 'círculo', tipo: 'circulo' },
+      { letra: 'B', nome: 'quadrado', tipo: 'quadrado' },
+      { letra: 'C', nome: 'triângulo', tipo: 'triangulo' },
+      { letra: 'D', nome: 'estrela', tipo: 'estrela' },
+      { letra: 'E', nome: 'losango', tipo: 'losango' }
+    ];
+    const escolha = this.state.escolha;
+    const alternativas = base.map((a) => {
+      const selected = escolha === a.letra;
+      return {
+        letra: a.letra,
+        nome: a.nome,
+        selected: selected ? 'true' : 'false',
+        borda: selected ? '#2F6FED' : '#E3E8F4',
+        fundo: selected ? '#E3EBFD' : '#FFFFFF',
+        isCirculo: a.tipo === 'circulo',
+        isQuadrado: a.tipo === 'quadrado',
+        isTriangulo: a.tipo === 'triangulo',
+        isEstrela: a.tipo === 'estrela',
+        isLosango: a.tipo === 'losango',
+        pick: () => this.setState({ escolha: a.letra })
+      };
+    });
+    const passos = [];
+    for (let i = 0; i < 10; i++) {
+      passos.push({ cor: i < 3 ? '#1F9D55' : (i === 3 ? '#2F6FED' : '#D9DEEA') });
+    }
+    return { alternativas, passos, temEscolha: escolha !== null, semEscolha: escolha === null };
+  }
+}
+</script>
+</body>
+</html>

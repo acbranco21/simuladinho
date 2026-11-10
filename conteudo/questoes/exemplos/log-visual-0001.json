@@ -1,0 +1,37 @@
+{
+  "id": "log-visual-0001",
+  "trilha": "logica",
+  "bloco": "log-visual",
+  "habilidade": "Sequências de figuras e números",
+  "nivel": "base",
+  "dificuldade": 2,
+  "pontos": 3,
+  "formato": "sequencia_visual",
+  "positivo_unidade": null,
+  "texto_apoio": null,
+  "enunciado": "Qual figura continua a sequência?",
+  "figura": {
+    "tipo": "sequencia_formas",
+    "parametros": {
+      "itens": ["triangulo", "circulo", "quadrado", "triangulo", "circulo"],
+      "lacuna": true
+    }
+  },
+  "alternativas": [
+    { "letra": "A", "texto": "Círculo", "figura": { "tipo": "forma", "parametros": { "forma": "circulo" } }, "erro_tipico": "Repetiu a última figura em vez de seguir o padrão" },
+    { "letra": "B", "texto": "Quadrado", "figura": { "tipo": "forma", "parametros": { "forma": "quadrado" } }, "erro_tipico": null },
+    { "letra": "C", "texto": "Triângulo", "figura": { "tipo": "forma", "parametros": { "forma": "triangulo" } }, "erro_tipico": "Recomeçou o grupo antes de terminá-lo" },
+    { "letra": "D", "texto": "Estrela", "figura": { "tipo": "forma", "parametros": { "forma": "estrela" } }, "erro_tipico": "Escolheu uma figura que não aparece na sequência" },
+    { "letra": "E", "texto": "Losango", "figura": { "tipo": "forma", "parametros": { "forma": "losango" } }, "erro_tipico": "Escolheu uma figura que não aparece na sequência" }
+  ],
+  "gabarito": "B",
+  "explicacao": "A sequência repete o grupo triângulo, círculo, quadrado. Depois de triângulo e círculo, vem o quadrado.",
+  "dica": "Procure o pedaço que se repete e conte quantas figuras ele tem.",
+  "pilula_id": "pilula-sequencias-padroes",
+  "revisao": {
+    "status": "aprovada_automatica",
+    "resposta_revisor": "B",
+    "checagens_codigo": ["5 alternativas", "1 única correta", "padrão de período 3 confere com o gabarito"],
+    "taxa_acerto": null
+  }
+}

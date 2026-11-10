@@ -1,0 +1,17 @@
+# Dependências e builds
+node_modules/
+dist/
+build/
+.vite/
+
+# Variáveis de ambiente e chaves (NUNCA versionar chave de API)
+.env
+.env.*
+!.env.example
+
+# Sistema
+.DS_Store
+*.log
+
+# Dados reais da aluna (histórico, redações) ficam fora do repositório
+dados-locais/

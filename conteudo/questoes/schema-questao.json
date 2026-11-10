@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Questão do Simulador de Bolsa",
+  "type": "object",
+  "required": ["id", "trilha", "bloco", "habilidade", "nivel", "dificuldade", "formato", "enunciado", "alternativas", "gabarito", "explicacao", "revisao"],
+  "properties": {
+    "id": { "type": "string", "description": "Identificador único, ex.: log-visual-0001" },
+    "trilha": { "enum": ["portugues", "matematica", "logica", "conhecimentos"] },
+    "bloco": { "type": "string", "description": "id do bloco em matriz-curricular.json" },
+    "habilidade": { "type": "string", "description": "Texto da habilidade, igual ao da matriz" },
+    "nivel": { "enum": ["base", "avanco", "desafio"] },
+    "dificuldade": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "pontos": { "enum": [3, 4, 5], "description": "3 = fácil (1-2), 4 = média (3), 5 = difícil (4-5)" },
+    "formato": { "enum": ["multipla_escolha", "sequencia_visual", "associar", "ordenar", "numerica", "ditado"] },
+    "positivo_unidade": { "type": ["string", "null"], "description": "Volume/unidade do Positivo, preenchido pelo administrador" },
+    "texto_apoio": { "type": ["string", "null"], "description": "Texto curto de leitura, quando houver" },
+    "enunciado": { "type": "string", "maxLength": 280 },
+    "figura": {
+      "type": ["object", "null"],
+      "description": "Parâmetros para o app desenhar a figura em SVG (nunca imagem pronta)",
+      "properties": {
+        "tipo": { "type": "string", "description": "ex.: sequencia_formas, contagem_quadrados, balanca, relogio" },
+        "parametros": { "type": "object" }
+      }
+    },
+    "alternativas": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["letra", "texto", "erro_tipico"],
+        "properties": {
+          "letra": { "enum": ["A", "B", "C", "D", "E"] },
+          "texto": { "type": "string" },
+          "figura": { "type": ["object", "null"] },
+          "erro_tipico": { "type": ["string", "null"], "description": "Que erro leva a esta alternativa (null na correta)" }
+        }
+      }
+    },
+    "gabarito": { "enum": ["A", "B", "C", "D", "E"] },
+    "explicacao": { "type": "string", "description": "Por que a correta está certa, em linguagem de 9 anos" },
+    "dica": { "type": ["string", "null"] },
+    "pilula_id": { "type": ["string", "null"] },
+    "revisao": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["gerada", "aprovada_automatica", "aprovada_admin", "contestada", "desativada"] },
+        "resposta_revisor": { "type": ["string", "null"], "description": "Letra escolhida pela revisão independente" },
+        "checagens_codigo": { "type": "array", "items": { "type": "string" } },
+        "taxa_acerto": { "type": ["number", "null"] }
+      }
+    }
+  }
+}
