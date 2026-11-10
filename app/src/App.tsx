@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { Painel } from './admin/Painel'
+import { Pin } from './admin/Pin'
 import { Correcao } from './aluna/Correcao'
 import { Fim } from './aluna/Fim'
 import { Inicio } from './aluna/Inicio'
 import type { EstadoPasso } from './aluna/Progresso'
 import { QuestaoTela } from './aluna/QuestaoTela'
-import { MISTURA_PADRAO, NIVEL_POR_TRILHA, TRILHAS_ATIVAS } from './config'
-import { acertoPorTrilha, contestar, idsContestados, idsParaCacaAosErros, lerPerfil, salvarSessao, type Perfil } from './dados/db'
+import type { Configuracao } from './config'
+import { acertoPorTrilha, contestar, hashPin, idsBloqueados, idsParaCacaAosErros, lerConfig, lerPerfil, salvarConfig, salvarSessao, sessoesDeHoje, type Perfil } from './dados/db'
+import { minutosNoDia } from './motor/painel'
 import exemplos from './dados/questoes-exemplo.json'
 import lote1 from './dados/questoes-lote1.json'
 import { XP, xpDaResposta } from './motor/gamificacao'
@@ -18,7 +21,7 @@ import type { Letra, Questao, RespostaRegistro, Trilha } from './tipos'
 const BANCO = [...exemplos, ...lote1] as Questao[]
 
 type Modo = 'treino' | 'caca_erros'
-type Tela = 'inicio' | 'questao' | 'correcao' | 'fim'
+type Tela = 'inicio' | 'questao' | 'correcao' | 'fim' | 'pin' | 'painel'
 
 interface Sessao {
   modo: Modo
@@ -39,6 +42,7 @@ interface Resultado {
   sequencia: number
   novosRecordes: Trilha[]
   erros: number
+  subiuDeNivel: Trilha[]
 }
 
 export default function App() {
@@ -48,11 +52,15 @@ export default function App() {
   const [errosPendentes, setErrosPendentes] = useState<string[]>([])
   const [sessao, setSessao] = useState<Sessao | null>(null)
   const [resultado, setResultado] = useState<Resultado | null>(null)
+  const [config, setConfig] = useState<Configuracao | null>(null)
+  const [minutosHoje, setMinutosHoje] = useState(0)
   const salvando = useRef(false)
 
   const recarregar = useCallback(async () => {
-    const [p, a, e] = await Promise.all([lerPerfil(), acertoPorTrilha(), idsParaCacaAosErros()])
+    const [p, a, e, c, hoje] = await Promise.all([lerPerfil(), acertoPorTrilha(), idsParaCacaAosErros(), lerConfig(), sessoesDeHoje()])
     setPerfil(p)
+    setConfig(c)
+    setMinutosHoje(minutosNoDia(hoje, new Date()))
     setAcerto(a)
     setErrosPendentes(e)
   }, [])
@@ -70,13 +78,15 @@ export default function App() {
 
   const iniciarTreino = async () => {
     const p = perfil ?? (await lerPerfil())
-    const excluir = await idsContestados()
-    comecar('treino', montarSessao(BANCO, { tamanho: p.tamanhoTreino, trilhas: TRILHAS_ATIVAS, nivelPorTrilha: NIVEL_POR_TRILHA, mistura: MISTURA_PADRAO, excluir }))
+    const c = config ?? (await lerConfig())
+    const excluir = await idsBloqueados()
+    const tamanho = c.iaAjustaTamanho ? p.tamanhoTreino : c.tamanhoTreinoFixo
+    comecar('treino', montarSessao(BANCO, { tamanho, trilhas: c.trilhasAtivas, nivelPorTrilha: c.nivelPorTrilha, mistura: c.mistura, excluir }))
   }
 
   const iniciarCaca = async () => {
     const ids = await idsParaCacaAosErros()
-    const excluir = await idsContestados()
+    const excluir = await idsBloqueados()
     comecar('caca_erros', montarCacaAosErros(BANCO.filter((q) => !excluir.has(q.id)), ids, TAMANHO.cacaAosErros))
   }
 
@@ -94,14 +104,14 @@ export default function App() {
 
       if (s.respostas.length) {
         const salvo = await salvarSessao(
-          { modo: s.modo, inicio: s.inicio, fim: Date.now(), nota, concluida, sinais: s.sinais.size, xpGanho, questoes: s.respostas.length },
+          { modo: s.modo, inicio: s.inicio, fim: Date.now(), nota, concluida, sinais: s.sinais.size, xpGanho, questoes: s.respostas.length, nivelPorTrilha: config?.nivelPorTrilha },
           s.respostas,
           notaPorTrilha,
         )
         await recarregar()
         if (concluida) {
           const erros = await idsParaCacaAosErros()
-          setResultado({ nota, resumo, xpGanho, sequencia: salvo.perfil.sequencia, novosRecordes: salvo.novosRecordes, erros: Math.min(TAMANHO.cacaAosErros, erros.length) })
+          setResultado({ nota, resumo, xpGanho, sequencia: salvo.perfil.sequencia, novosRecordes: salvo.novosRecordes, erros: Math.min(TAMANHO.cacaAosErros, erros.length), subiuDeNivel: salvo.subiuDeNivel })
           setSessao(null)
           setTela('fim')
           return
@@ -157,7 +167,41 @@ export default function App() {
     setSessao({ ...sessao, questoes, inicioQuestao: Date.now() })
   }
 
-  if (!perfil) return <div className="carregando">Carregando…</div>
+  if (!perfil || !config) return <div className="carregando">Carregando…</div>
+
+  if (tela === 'pin') {
+    return (
+      <Pin
+        criar={!config.pinHash}
+        onVoltar={() => setTela('inicio')}
+        onConfirmar={async (pin) => {
+          const h = await hashPin(pin)
+          if (!config.pinHash) {
+            const nova = { ...config, pinHash: h }
+            await salvarConfig(nova)
+            setConfig(nova)
+          } else if (h !== config.pinHash) {
+            return false
+          }
+          setTela('painel')
+          return true
+        }}
+      />
+    )
+  }
+
+  if (tela === 'painel') {
+    return (
+      <Painel
+        banco={BANCO}
+        onConfigSalva={setConfig}
+        onSair={() => {
+          void recarregar()
+          setTela('inicio')
+        }}
+      />
+    )
+  }
 
   if (tela === 'fim' && resultado) {
     return <Fim {...resultado} onCacaAosErros={() => void iniciarCaca()} onInicio={() => setTela('inicio')} />
@@ -203,5 +247,17 @@ export default function App() {
     )
   }
 
-  return <Inicio perfil={perfil} acerto={acerto} errosPendentes={errosPendentes.length} onTreino={() => void iniciarTreino()} onCacaAosErros={() => void iniciarCaca()} />
+  const limiteAtingido = config.limiteDiarioMin > 0 && minutosHoje >= config.limiteDiarioMin
+  return (
+    <Inicio
+      perfil={perfil}
+      config={config}
+      acerto={acerto}
+      errosPendentes={errosPendentes.length}
+      limiteAtingido={limiteAtingido}
+      onTreino={() => void iniciarTreino()}
+      onCacaAosErros={() => void iniciarCaca()}
+      onAreaPais={() => setTela('pin')}
+    />
+  )
 }

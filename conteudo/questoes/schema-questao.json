@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Questão do Simulador de Bolsa",
+  "title": "Questão do Simuladinho",
   "type": "object",
   "required": ["id", "trilha", "bloco", "habilidade", "nivel", "dificuldade", "formato", "enunciado", "alternativas", "gabarito", "explicacao", "revisao"],
   "properties": {

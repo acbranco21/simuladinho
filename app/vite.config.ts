@@ -4,20 +4,20 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // Publicado em https://acbranco21.github.io/simulador-bolsa/
-  base: '/simulador-bolsa/',
+  // Publicado em https://acbranco21.github.io/simuladinho/
+  base: '/simuladinho/',
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'Simulador de Bolsa',
-        short_name: 'Simulador',
+        name: 'Simuladinho',
+        short_name: 'Simuladinho',
         description: 'Treino gamificado para provas de bolsa',
         lang: 'pt-BR',
-        start_url: '/simulador-bolsa/',
-        scope: '/simulador-bolsa/',
+        start_url: '/simuladinho/',
+        scope: '/simuladinho/',
         display: 'standalone',
         orientation: 'landscape',
         background_color: '#F4F6FB',

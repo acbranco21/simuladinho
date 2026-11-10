@@ -1,7 +1,10 @@
 import Dexie, { type EntityTable } from 'dexie'
-import type { RespostaRegistro, Trilha } from '../tipos'
+import { CONFIG_PADRAO, type Configuracao } from '../config'
+import type { Nivel, RespostaRegistro, Trilha } from '../tipos'
 import { atualizarSequencia, diaLocal } from '../motor/gamificacao'
+import { avaliarProgressao } from '../motor/progressao'
 import { TAMANHO, proximoTamanhoTreino } from '../motor/tamanho'
+import { notasPorTrilhaPorSessao } from '../motor/painel'
 
 export interface SessaoRegistro {
   id?: number
@@ -13,6 +16,8 @@ export interface SessaoRegistro {
   sinais: number
   xpGanho: number
   questoes: number
+  /** Nível de cada trilha no momento da sessão (para a regra de progressão). */
+  nivelPorTrilha?: Partial<Record<Trilha, Nivel>>
 }
 
 export interface RespostaDb extends RespostaRegistro {
@@ -35,12 +40,24 @@ export interface Contestacao {
   em: number
 }
 
-/** Banco local no tablet (IndexedDB). Tudo funciona sem internet. */
+/** Decisão do administrador sobre uma questão (sobrepõe o status do banco). */
+export interface StatusQuestao {
+  questaoId: string
+  status: 'aprovada_admin' | 'desativada'
+  em: number
+}
+
+/**
+ * Banco local no tablet (IndexedDB). Tudo funciona sem internet.
+ * O nome 'simulador-bolsa' é mantido de propósito: o histórico continua após a troca do nome do app.
+ */
 export const db = new Dexie('simulador-bolsa') as Dexie & {
   sessoes: EntityTable<SessaoRegistro, 'id'>
   respostas: EntityTable<RespostaDb, 'id'>
   perfil: EntityTable<Perfil, 'id'>
   contestacoes: EntityTable<Contestacao, 'id'>
+  config: EntityTable<Configuracao, 'id'>
+  statusQuestoes: EntityTable<StatusQuestao, 'questaoId'>
 }
 
 db.version(1).stores({
@@ -49,6 +66,10 @@ db.version(1).stores({
   perfil: 'id',
   contestacoes: '++id, questaoId',
 })
+db.version(2).stores({
+  config: 'id',
+  statusQuestoes: 'questaoId',
+})
 
 const PERFIL_INICIAL: Perfil = { id: 'aluna', xp: 0, sequencia: 0, ultimoDia: null, tamanhoTreino: TAMANHO.inicialTreino, recordes: {} }
 
@@ -56,18 +77,28 @@ export async function lerPerfil(): Promise<Perfil> {
   return (await db.perfil.get('aluna')) ?? PERFIL_INICIAL
 }
 
+export async function lerConfig(): Promise<Configuracao> {
+  const salva = await db.config.get('config')
+  return { ...CONFIG_PADRAO, ...salva, id: 'config' }
+}
+
+export async function salvarConfig(c: Configuracao): Promise<void> {
+  await db.config.put(c)
+}
+
 export interface ResultadoSalvo {
   perfil: Perfil
   novosRecordes: Trilha[]
+  subiuDeNivel: Trilha[]
 }
 
-/** Salva a sessão, as respostas e atualiza XP, sequência, recordes e tamanho do próximo treino. */
+/** Salva a sessão, as respostas e atualiza XP, sequência, recordes, tamanho do treino e nível (se automático). */
 export async function salvarSessao(
   sessao: Omit<SessaoRegistro, 'id'>,
   respostas: RespostaRegistro[],
   notaPorTrilha: Partial<Record<Trilha, number>>,
 ): Promise<ResultadoSalvo> {
-  return db.transaction('rw', db.sessoes, db.respostas, db.perfil, async () => {
+  return db.transaction('rw', [db.sessoes, db.respostas, db.perfil, db.config], async () => {
     const sessaoId = (await db.sessoes.add(sessao)) as number
     await db.respostas.bulkAdd(respostas.map((r) => ({ ...r, sessaoId })))
 
@@ -80,7 +111,8 @@ export async function salvarSessao(
         if (recordes[t] === undefined || nota > recordes[t]!) recordes[t] = nota
       }
     }
-    const historico = (await db.sessoes.where('modo').equals('treino').sortBy('inicio')).map((s) => ({ concluida: s.concluida, sinais: s.sinais }))
+    const todasSessoes = await db.sessoes.orderBy('inicio').toArray()
+    const historico = todasSessoes.filter((s) => s.modo === 'treino').map((s) => ({ concluida: s.concluida, sinais: s.sinais }))
     const hoje = diaLocal(new Date(sessao.fim))
     const atualizado: Perfil = {
       ...perfil,
@@ -91,7 +123,31 @@ export async function salvarSessao(
       tamanhoTreino: sessao.modo === 'treino' ? proximoTamanhoTreino(perfil.tamanhoTreino, historico) : perfil.tamanhoTreino,
     }
     await db.perfil.put(atualizado)
-    return { perfil: atualizado, novosRecordes }
+
+    // Progressão automática: 3 notas seguidas ≥ 8 na trilha, dentro do nível atual.
+    const config = await lerConfig()
+    const subiuDeNivel: Trilha[] = []
+    if (config.progressao === 'automatica' && sessao.concluida) {
+      const todasRespostas = await db.respostas.toArray()
+      const notas = notasPorTrilhaPorSessao(
+        todasSessoes.filter((s) => s.concluida).map((s) => ({ ...s, id: s.id! })),
+        todasRespostas,
+      )
+      const nivelPorTrilha = { ...config.nivelPorTrilha }
+      const historicoNiveis = [...config.historicoNiveis]
+      for (const t of Object.keys(notaPorTrilha) as Trilha[]) {
+        const atual = nivelPorTrilha[t] ?? 'base'
+        const doNivel = (notas.get(t) ?? []).filter((n) => (n.nivel ?? 'base') === atual).map((n) => n.nota)
+        const novo = avaliarProgressao(atual, doNivel, 'automatica')
+        if (novo !== atual) {
+          nivelPorTrilha[t] = novo
+          historicoNiveis.push({ trilha: t, de: atual, para: novo, em: sessao.fim, motivo: 'automatica' })
+          subiuDeNivel.push(t)
+        }
+      }
+      if (subiuDeNivel.length) await db.config.put({ ...config, nivelPorTrilha, historicoNiveis })
+    }
+    return { perfil: atualizado, novosRecordes, subiuDeNivel }
   })
 }
 
@@ -125,6 +181,63 @@ export async function contestar(questaoId: string): Promise<void> {
   await db.contestacoes.add({ questaoId, em: Date.now() })
 }
 
-export async function idsContestados(): Promise<Set<string>> {
-  return new Set((await db.contestacoes.toArray()).map((c) => c.questaoId))
+/** Questões fora de circulação: contestadas (sem aprovação posterior) ou desativadas pelo administrador. */
+export async function idsBloqueados(): Promise<Set<string>> {
+  const [contest, status] = await Promise.all([db.contestacoes.toArray(), db.statusQuestoes.toArray()])
+  const decisao = new Map(status.map((s) => [s.questaoId, s]))
+  const bloqueados = new Set<string>()
+  for (const c of contest) {
+    const d = decisao.get(c.questaoId)
+    if (!d || (d.status === 'aprovada_admin' && d.em < c.em)) bloqueados.add(c.questaoId)
+  }
+  for (const s of status) if (s.status === 'desativada') bloqueados.add(s.questaoId)
+  return bloqueados
+}
+
+export async function decidirQuestao(questaoId: string, status: StatusQuestao['status']): Promise<void> {
+  await db.statusQuestoes.put({ questaoId, status, em: Date.now() })
+}
+
+/** Minutos de uso hoje. */
+export async function sessoesDeHoje(): Promise<SessaoRegistro[]> {
+  const agora = new Date()
+  const inicioDia = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate()).getTime()
+  return db.sessoes.where('inicio').aboveOrEqual(inicioDia).toArray()
+}
+
+/** Cópia de segurança completa (sem o PIN). */
+export async function exportarDados(): Promise<string> {
+  const [sessoes, respostas, perfil, contestacoes, config, statusQuestoes] = await Promise.all([
+    db.sessoes.toArray(),
+    db.respostas.toArray(),
+    db.perfil.toArray(),
+    db.contestacoes.toArray(),
+    db.config.toArray(),
+    db.statusQuestoes.toArray(),
+  ])
+  const configSemPin = config.map((c) => ({ ...c, pinHash: null }))
+  return JSON.stringify({ app: 'simuladinho', versao: 1, exportadoEm: new Date().toISOString(), sessoes, respostas, perfil, contestacoes, config: configSemPin, statusQuestoes }, null, 1)
+}
+
+/** Restaura uma cópia de segurança (substitui os dados atuais; mantém o PIN atual). */
+export async function importarDados(json: string): Promise<void> {
+  const d = JSON.parse(json)
+  if (d.app !== 'simuladinho' || !Array.isArray(d.sessoes) || !Array.isArray(d.respostas)) throw new Error('Arquivo não é uma cópia do Simuladinho')
+  const pinAtual = (await lerConfig()).pinHash
+  await db.transaction('rw', [db.sessoes, db.respostas, db.perfil, db.contestacoes, db.config, db.statusQuestoes], async () => {
+    await Promise.all([db.sessoes.clear(), db.respostas.clear(), db.perfil.clear(), db.contestacoes.clear(), db.config.clear(), db.statusQuestoes.clear()])
+    await db.sessoes.bulkAdd(d.sessoes)
+    await db.respostas.bulkAdd(d.respostas)
+    await db.perfil.bulkAdd(d.perfil ?? [])
+    await db.contestacoes.bulkAdd(d.contestacoes ?? [])
+    await db.statusQuestoes.bulkAdd(d.statusQuestoes ?? [])
+    for (const c of d.config ?? []) await db.config.put({ ...c, pinHash: pinAtual })
+  })
+}
+
+/** PIN guardado só como hash SHA-256. É uma trava simples para a criança, não proteção forte. */
+export async function hashPin(pin: string): Promise<string> {
+  const dados = new TextEncoder().encode(`simuladinho:${pin}`)
+  const h = await crypto.subtle.digest('SHA-256', dados)
+  return [...new Uint8Array(h)].map((b) => b.toString(16).padStart(2, '0')).join('')
 }

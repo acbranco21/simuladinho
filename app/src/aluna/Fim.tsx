@@ -8,12 +8,13 @@ interface Props {
   xpGanho: number
   sequencia: number
   novosRecordes: Trilha[]
+  subiuDeNivel: Trilha[]
   erros: number
   onCacaAosErros: () => void
   onInicio: () => void
 }
 
-export function Fim({ nota, resumo, xpGanho, sequencia, novosRecordes, erros, onCacaAosErros, onInicio }: Props) {
+export function Fim({ nota, resumo, xpGanho, sequencia, novosRecordes, subiuDeNivel, erros, onCacaAosErros, onInicio }: Props) {
   return (
     <div className="tela fim">
       <section className="celebracao">
@@ -27,6 +28,11 @@ export function Fim({ nota, resumo, xpGanho, sequencia, novosRecordes, erros, on
         {novosRecordes.map((t) => (
           <span key={t} className="selo-recorde">
             Novo recorde em {NOMES_TRILHA[t]}!
+          </span>
+        ))}
+        {subiuDeNivel.map((t) => (
+          <span key={`n-${t}`} className="selo-recorde">
+            Você subiu de nível em {NOMES_TRILHA[t]}!
           </span>
         ))}
       </section>

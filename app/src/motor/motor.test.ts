@@ -125,3 +125,52 @@ describe('banco de questões', () => {
     }
   })
 })
+
+import { desempenhoPorTrilha, habilidadeMaisFraca, indicadores, minutosNoDia, questoesAtipicas, tendencia } from './painel'
+
+describe('painel do administrador', () => {
+  const agora = new Date(2026, 10, 10, 20, 0)
+  const h = (hora: number, min = 0) => new Date(2026, 10, 10, hora, min).getTime()
+  it('soma minutos de hoje e ignora outros dias', () => {
+    const s = [
+      { inicio: h(9), fim: h(9, 12) },
+      { inicio: h(18), fim: h(18, 8) },
+      { inicio: new Date(2026, 10, 9, 18).getTime(), fim: new Date(2026, 10, 9, 19).getTime() },
+    ]
+    expect(minutosNoDia(s, agora)).toBe(20)
+  })
+  it('calcula indicadores', () => {
+    const s = [
+      { id: 1, inicio: h(9), fim: h(9, 10), nota: 6, concluida: true, sinais: 0 },
+      { id: 2, inicio: h(10), fim: h(10, 5), nota: 8, concluida: true, sinais: 2 },
+      { id: 3, inicio: h(11), fim: h(11, 2), nota: 0, concluida: false, sinais: 0 },
+    ]
+    const i = indicadores(s, 25, agora)
+    expect(i).toEqual({ sessoes7d: 3, notaMedia5: 7, minutosHoje: 17, sessoesComCansaco7d: 2, questoesRespondidas: 25 })
+  })
+  it('tendência compara as 3 últimas com as 3 anteriores', () => {
+    expect(tendencia([5, 5, 5, 7, 7, 7])).toBe('subindo')
+    expect(tendencia([8, 8, 8, 6, 6, 6])).toBe('caindo')
+    expect(tendencia([7, 7, 7, 7.2, 7, 7])).toBe('estavel')
+    expect(tendencia([7, 8])).toBe('poucos_dados')
+  })
+  it('habilidade mais fraca exige 3 respostas', () => {
+    const r = [
+      ...Array(3).fill({ habilidade: 'a', correta: false }),
+      ...Array(2).fill({ habilidade: 'b', correta: false }),
+      ...Array(3).fill({ habilidade: 'c', correta: true }),
+    ]
+    expect(habilidadeMaisFraca(r)).toEqual({ habilidade: 'a', acerto: 0, total: 3 })
+  })
+  it('questões atípicas: 5+ respostas e menos de 20% de acerto', () => {
+    const r = [...Array(5).fill({ questaoId: 'x', correta: false }), ...Array(5).fill({ questaoId: 'y', correta: true })]
+    expect(questoesAtipicas(r).map((q) => q.questaoId)).toEqual(['x'])
+  })
+  it('sugere subir quando há 3 notas ≥ 8 no nível atual', () => {
+    const sessoes = [1, 2, 3].map((id) => ({ id, inicio: h(8 + id), fim: h(8 + id, 5), nota: 9, concluida: true, sinais: 0, nivelPorTrilha: { matematica: 'base' as const } }))
+    const respostas = sessoes.map((s) => ({ sessaoId: s.id, questaoId: 'q', trilha: 'matematica' as const, habilidade: 'h', pontos: 3 as const, correta: true, em: s.inicio }))
+    const [linha] = desempenhoPorTrilha(['matematica'], { matematica: 'base' }, 'manual', sessoes, respostas)
+    expect(linha.sugestao).toBe('Pronta para subir de nível')
+    expect(linha.media5).toBe(10)
+  })
+})
