@@ -8,7 +8,7 @@ Aplicativo de treino gamificado para provas de bolsa de colégios de alto padrã
 | --- | --- |
 | 1. Avaliação pedagógica | Concluída (ver `docs/`) |
 | 2. Escopo do MVP e telas | Telas desenhadas (ver `design/`) |
-| 3. Banco inicial de questões gerado por IA | A fazer (ver `ia/` e `conteudo/`) |
+| 3. Banco inicial de questões gerado por IA | Lote 1 pronto: 151 questões revisadas às cegas (ver `ia/LOTES.md`) |
 | 4. Desenvolvimento do app (aluna + administrador) | Em andamento — v0.1 com fluxo da aluna (ver `app/README.md`) |
 | 5. Teste com ela por 2–3 semanas | A fazer |
 
@@ -30,6 +30,10 @@ simulador-bolsa/
 └── app/                       ← código do aplicativo (a iniciar)
 ```
 
+## App publicado
+
+**https://acbranco21.github.io/simulador-bolsa/** — publicado automaticamente pelo GitHub Actions (`.github/workflows/deploy.yml`) a cada envio para a branch `main`. Os testes rodam antes; se falharem, nada é publicado.
+
 ## Links de trabalho
 
 - Avaliação pedagógica (documento vivo): https://claude.ai/artifact/4nsiZiT4NvzAcmkviYQyV9
@@ -37,4 +41,4 @@ simulador-bolsa/
 
 ## Próximo passo
 
-Publicar o app num endereço HTTPS para instalar no tablet, e depois: banco de questões gerado por IA, painel do administrador e telas restantes.
+Instalar no tablet e testar com ela; depois, painel do administrador, Simulado de prova, Estudar e Minha evolução.
