@@ -1,0 +1,1244 @@
+[
+ {
+  "id": "mat-add-0001",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-add-0002",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-add-0003",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-add-0004",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-add-0005",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-add-0006",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-add-0007",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-add-0008",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-add-0009",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-add-0010",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0001",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0002",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0003",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0004",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0005",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0006",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0007",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0008",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0009",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-sub-0010",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-mult-0001",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-mult-0002",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": true,
+  "inadequada": false,
+  "problemas": [
+   "Erro de concordância: 'Quantos balas' (correto: 'Quantas balas')."
+  ]
+ },
+ {
+  "id": "mat-mult-0003",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": true,
+  "inadequada": false,
+  "problemas": [
+   "Erro de concordância: 'Quantos cadeiras' (correto: 'Quantas cadeiras')."
+  ]
+ },
+ {
+  "id": "mat-mult-0004",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-mult-0005",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": true,
+  "inadequada": false,
+  "problemas": [
+   "Erro de concordância: 'Quantos flores' (correto: 'Quantas flores')."
+  ]
+ },
+ {
+  "id": "mat-mult-0006",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": true,
+  "inadequada": false,
+  "problemas": [
+   "Erro de concordância: 'Quantos rodas' (correto: 'Quantas rodas')."
+  ]
+ },
+ {
+  "id": "mat-mult-0007",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-mult-0008",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": true,
+  "inadequada": false,
+  "problemas": [
+   "Erro de concordância: 'Quantos laranjas' (correto: 'Quantas laranjas')."
+  ]
+ },
+ {
+  "id": "mat-div-0001",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": true,
+  "inadequada": false,
+  "problemas": [
+   "Erro de concordância: 'balas foram repartidos' (correto: 'repartidas').",
+   "'Quantos cada um recebeu?' deveria ser 'Quantas balas cada uma recebeu?' (crianças).",
+   "Frase começa com numeral em algarismos."
+  ]
+ },
+ {
+  "id": "mat-div-0002",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": true,
+  "inadequada": false,
+  "problemas": [
+   "Erro de concordância: 'figurinhas foram repartidos' (correto: 'repartidas').",
+   "'Quantos cada um recebeu?' deveria ser 'Quantas cada um recebeu?' (figurinhas).",
+   "Frase começa com numeral em algarismos."
+  ]
+ },
+ {
+  "id": "mat-div-0003",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": [
+   "Frase começa com numeral em algarismos; 'cada um recebeu' para estojos soa estranho (melhor 'quantos lápis ficaram em cada estojo')."
+  ]
+ },
+ {
+  "id": "mat-div-0004",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": true,
+  "inadequada": false,
+  "problemas": [
+   "Erro de concordância: 'maçãs foram repartidos' (correto: 'repartidas').",
+   "'Quantos cada um recebeu?' deveria ser 'Quantas cada uma recebeu?' (maçãs/cestas).",
+   "Frase começa com numeral em algarismos."
+  ]
+ },
+ {
+  "id": "mat-div-0005",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": [
+   "Frase começa com numeral em algarismos."
+  ]
+ },
+ {
+  "id": "mat-div-0006",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": true,
+  "inadequada": false,
+  "problemas": [
+   "Erro de concordância: 'bolinhas foram repartidos' (correto: 'repartidas').",
+   "'Quantos cada um recebeu?' deveria ser 'Quantas bolinhas cada pote recebeu?'.",
+   "Frase começa com numeral em algarismos."
+  ]
+ },
+ {
+  "id": "mat-dmt-0001",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-dmt-0002",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-dmt-0003",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-dmt-0004",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-dmt-0005",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-dmt-0006",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-dmt-0007",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-dmt-0008",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-dmt-0009",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-din-0001",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-din-0002",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-din-0003",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-din-0004",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-din-0005",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-din-0006",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-din-0007",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-din-0008",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0001",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0002",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0003",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0004",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0005",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0006",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0007",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0008",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0009",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "mat-hora-0010",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0001",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0002",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0003",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0004",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0005",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0006",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0007",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0008",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0009",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0010",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0011",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0012",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0013",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0014",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-seq-0015",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0001",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0002",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0003",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0004",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0005",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0006",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0007",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0008",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0009",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0010",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0011",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0012",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0013",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0014",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-num-0015",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-bal-0001",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-bal-0002",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-bal-0003",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-bal-0004",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-bal-0005",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": [
+   "Situação pouco realista: 2 moedas pesando o mesmo que um livro."
+  ]
+ },
+ {
+  "id": "log-bal-0006",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-bal-0007",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "log-bal-0008",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-mpb-0001",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-mpb-0002",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-mpb-0003",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-mpb-0004",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-mpb-0005",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-mpb-0006",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ss-0001",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ss-0002",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ss-0003",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ss-0004",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ss-0005",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ss-0006",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-rr-0001",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-rr-0002",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-rr-0003",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-rr-0004",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lu-0001",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lu-0002",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lu-0003",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lu-0004",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ac-0001",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ac-0002",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ac-0003",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-ac-0004",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-cl-0001",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-cl-0002",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-cl-0003",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-cl-0004",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-cl-0005",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-cl-0006",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-cl-0007",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-pl-0001",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-pl-0002",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-pl-0003",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-po-0001",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-po-0002",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-po-0003",
+  "letra": "E",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-a001",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-a002",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-a003",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-b001",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-b002",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-b003",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-c001",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-c002",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-c003",
+  "letra": "D",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-c004",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-d001",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-d002",
+  "letra": "B",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-lei-d003",
+  "letra": "A",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": [
+   "Habilidade marcada como 'Identificar o assunto do texto', mas a questão trata de rima."
+  ]
+ },
+ {
+  "id": "pt-inf-0001",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ },
+ {
+  "id": "pt-inf-0002",
+  "letra": "C",
+  "mais_de_uma_correta": false,
+  "ambigua": false,
+  "inadequada": false,
+  "problemas": []
+ }
+]

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import banco from '../dados/questoes-exemplo.json'
+import exemplos from '../dados/questoes-exemplo.json'
+import lote1 from '../dados/questoes-lote1.json'
 import type { Questao, RespostaRegistro } from '../tipos'
 import { atualizarSequencia, nivelDoXp, xpDaResposta } from './gamificacao'
 import { calcularNota, formatarNota, pontosDaQuestao, resumoPorTrilha } from './pontuacao'
@@ -8,7 +9,7 @@ import { montarCacaAosErros, montarSessao } from './sessao'
 import { deveProporEncerrar, detectarSinais } from './sinais'
 import { proximoTamanhoTreino } from './tamanho'
 
-const questoes = banco as Questao[]
+const questoes = [...exemplos, ...lote1] as Questao[]
 
 function resp(p: Partial<RespostaRegistro>): RespostaRegistro {
   return { questaoId: 'x', trilha: 'matematica', habilidade: 'h', pontos: 3, escolha: 'A', correta: true, tempoMs: 10000, em: 0, ...p }
@@ -107,7 +108,13 @@ describe('gamificação', () => {
   })
 })
 
-describe('banco de exemplo', () => {
+describe('banco de questões', () => {
+  it('ids únicos', () => {
+    expect(new Set(questoes.map((q) => q.id)).size).toBe(questoes.length)
+  })
+  it('alternativas com textos diferentes', () => {
+    for (const q of questoes) expect(new Set(q.alternativas.map((a) => a.texto)).size).toBe(5)
+  })
   it('cada questão tem 5 alternativas e gabarito válido', () => {
     for (const q of questoes) {
       expect(q.alternativas.map((a) => a.letra)).toEqual(['A', 'B', 'C', 'D', 'E'])

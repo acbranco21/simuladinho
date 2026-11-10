@@ -6,7 +6,8 @@ import type { EstadoPasso } from './aluna/Progresso'
 import { QuestaoTela } from './aluna/QuestaoTela'
 import { MISTURA_PADRAO, NIVEL_POR_TRILHA, TRILHAS_ATIVAS } from './config'
 import { acertoPorTrilha, contestar, idsContestados, idsParaCacaAosErros, lerPerfil, salvarSessao, type Perfil } from './dados/db'
-import bancoJson from './dados/questoes-exemplo.json'
+import exemplos from './dados/questoes-exemplo.json'
+import lote1 from './dados/questoes-lote1.json'
 import { XP, xpDaResposta } from './motor/gamificacao'
 import { calcularNota, pontosDaQuestao, resumoPorTrilha, type ResumoTrilha } from './motor/pontuacao'
 import { montarCacaAosErros, montarSessao } from './motor/sessao'
@@ -14,7 +15,7 @@ import { deveProporEncerrar, detectarSinais, type Sinal } from './motor/sinais'
 import { TAMANHO } from './motor/tamanho'
 import type { Letra, Questao, RespostaRegistro, Trilha } from './tipos'
 
-const BANCO = bancoJson as Questao[]
+const BANCO = [...exemplos, ...lote1] as Questao[]
 
 type Modo = 'treino' | 'caca_erros'
 type Tela = 'inicio' | 'questao' | 'correcao' | 'fim'

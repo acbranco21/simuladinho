@@ -4,6 +4,8 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Publicado em https://acbranco21.github.io/simulador-bolsa/
+  base: '/simulador-bolsa/',
   plugins: [
     react(),
     VitePWA({
@@ -14,7 +16,8 @@ export default defineConfig({
         short_name: 'Simulador',
         description: 'Treino gamificado para provas de bolsa',
         lang: 'pt-BR',
-        start_url: '/',
+        start_url: '/simulador-bolsa/',
+        scope: '/simulador-bolsa/',
         display: 'standalone',
         orientation: 'landscape',
         background_color: '#F4F6FB',
