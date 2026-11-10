@@ -1,0 +1,238 @@
+[
+  {
+    "id": "log-visual-0001",
+    "trilha": "logica",
+    "bloco": "log-visual",
+    "habilidade": "Sequências de figuras e números",
+    "nivel": "base",
+    "dificuldade": 2,
+    "formato": "sequencia_visual",
+    "enunciado": "Qual figura continua a sequência?",
+    "figura": { "tipo": "sequencia_formas", "parametros": { "itens": ["triangulo", "circulo", "quadrado", "triangulo", "circulo"] } },
+    "alternativas": [
+      { "letra": "A", "texto": "Círculo", "figura": { "tipo": "forma", "parametros": { "forma": "circulo" } }, "erro_tipico": "Repetiu a última figura em vez de seguir o padrão" },
+      { "letra": "B", "texto": "Quadrado", "figura": { "tipo": "forma", "parametros": { "forma": "quadrado" } }, "erro_tipico": null },
+      { "letra": "C", "texto": "Triângulo", "figura": { "tipo": "forma", "parametros": { "forma": "triangulo" } }, "erro_tipico": "Recomeçou o grupo antes de terminá-lo" },
+      { "letra": "D", "texto": "Estrela", "figura": { "tipo": "forma", "parametros": { "forma": "estrela" } }, "erro_tipico": "Escolheu uma figura que não aparece na sequência" },
+      { "letra": "E", "texto": "Losango", "figura": { "tipo": "forma", "parametros": { "forma": "losango" } }, "erro_tipico": "Escolheu uma figura que não aparece na sequência" }
+    ],
+    "gabarito": "B",
+    "explicacao": "A sequência repete o grupo triângulo, círculo, quadrado. Depois de triângulo e círculo, vem o quadrado.",
+    "dica": "Procure o pedaço que se repete e conte quantas figuras ele tem.",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "log-visual-0002",
+    "trilha": "logica",
+    "bloco": "log-visual",
+    "habilidade": "Padrões de cor e forma",
+    "nivel": "base",
+    "dificuldade": 1,
+    "formato": "sequencia_visual",
+    "enunciado": "Qual figura entra no lugar do ponto de interrogação?",
+    "figura": { "tipo": "sequencia_formas", "parametros": { "itens": ["circulo", "circulo", "quadrado", "circulo", "circulo"] } },
+    "alternativas": [
+      { "letra": "A", "texto": "Triângulo", "figura": { "tipo": "forma", "parametros": { "forma": "triangulo" } }, "erro_tipico": "Escolheu uma figura que não aparece na sequência" },
+      { "letra": "B", "texto": "Círculo", "figura": { "tipo": "forma", "parametros": { "forma": "circulo" } }, "erro_tipico": "Repetiu a última figura sem olhar o padrão" },
+      { "letra": "C", "texto": "Quadrado", "figura": { "tipo": "forma", "parametros": { "forma": "quadrado" } }, "erro_tipico": null },
+      { "letra": "D", "texto": "Estrela", "figura": { "tipo": "forma", "parametros": { "forma": "estrela" } }, "erro_tipico": "Escolheu uma figura que não aparece na sequência" },
+      { "letra": "E", "texto": "Losango", "figura": { "tipo": "forma", "parametros": { "forma": "losango" } }, "erro_tipico": "Escolheu uma figura que não aparece na sequência" }
+    ],
+    "gabarito": "C",
+    "explicacao": "O grupo que se repete é círculo, círculo, quadrado. Depois de dois círculos, sempre vem um quadrado.",
+    "dica": "Quantos círculos aparecem antes de cada quadrado?",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "log-balanca-0001",
+    "trilha": "logica",
+    "bloco": "log-visual",
+    "habilidade": "Balanças e equivalências",
+    "nivel": "avanco",
+    "dificuldade": 3,
+    "formato": "multipla_escolha",
+    "enunciado": "Na balança, 2 maçãs pesam o mesmo que 1 abacaxi. Quantas maçãs pesam o mesmo que 3 abacaxis?",
+    "alternativas": [
+      { "letra": "A", "texto": "3", "erro_tipico": "Repetiu o número de abacaxis" },
+      { "letra": "B", "texto": "5", "erro_tipico": "Somou 2 + 3 em vez de multiplicar" },
+      { "letra": "C", "texto": "6", "erro_tipico": null },
+      { "letra": "D", "texto": "4", "erro_tipico": "Contou só 2 abacaxis" },
+      { "letra": "E", "texto": "9", "erro_tipico": "Multiplicou 3 × 3" }
+    ],
+    "gabarito": "C",
+    "explicacao": "Cada abacaxi vale 2 maçãs. Para 3 abacaxis: 2 + 2 + 2 = 6 maçãs.",
+    "dica": "Troque cada abacaxi por 2 maçãs e conte.",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "mat-num-0001",
+    "trilha": "matematica",
+    "bloco": "mat-numeros",
+    "habilidade": "Adição e subtração com reagrupamento",
+    "nivel": "base",
+    "dificuldade": 2,
+    "formato": "multipla_escolha",
+    "enunciado": "Quanto é 248 + 175?",
+    "alternativas": [
+      { "letra": "A", "texto": "313", "erro_tipico": "Não fez nenhum \"vai um\"" },
+      { "letra": "B", "texto": "413", "erro_tipico": "Esqueceu o \"vai um\" das unidades" },
+      { "letra": "C", "texto": "423", "erro_tipico": null },
+      { "letra": "D", "texto": "323", "erro_tipico": "Esqueceu o \"vai um\" das dezenas" },
+      { "letra": "E", "texto": "73", "erro_tipico": "Fez subtração em vez de adição" }
+    ],
+    "gabarito": "C",
+    "explicacao": "8 + 5 = 13: fica 3 e vai 1. 4 + 7 + 1 = 12: fica 2 e vai 1. 2 + 1 + 1 = 4. Resultado: 423.",
+    "dica": "Comece pelas unidades e não esqueça o \"vai um\".",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "mat-num-0002",
+    "trilha": "matematica",
+    "bloco": "mat-numeros",
+    "habilidade": "Dobro, metade e terço",
+    "nivel": "base",
+    "dificuldade": 1,
+    "formato": "multipla_escolha",
+    "enunciado": "Pedro tinha 18 figurinhas e deu a metade para a irmã. Com quantas figurinhas Pedro ficou?",
+    "alternativas": [
+      { "letra": "A", "texto": "36", "erro_tipico": "Calculou o dobro em vez da metade" },
+      { "letra": "B", "texto": "16", "erro_tipico": "Tirou só 2 figurinhas" },
+      { "letra": "C", "texto": "8", "erro_tipico": "Errou a divisão por 2" },
+      { "letra": "D", "texto": "9", "erro_tipico": null },
+      { "letra": "E", "texto": "10", "erro_tipico": "Errou a divisão por 2" }
+    ],
+    "gabarito": "D",
+    "explicacao": "Metade é dividir em 2 partes iguais: 18 ÷ 2 = 9. Ele deu 9 e ficou com 9.",
+    "dica": "Metade de 10 é 5 e metade de 8 é 4. Junte as duas metades.",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "mat-gra-0001",
+    "trilha": "matematica",
+    "bloco": "mat-grandezas",
+    "habilidade": "Horas em relógio analógico e digital",
+    "nivel": "base",
+    "dificuldade": 2,
+    "formato": "multipla_escolha",
+    "enunciado": "Que horas o relógio está marcando?",
+    "figura": { "tipo": "relogio", "parametros": { "hora": 3, "minuto": 30 } },
+    "alternativas": [
+      { "letra": "A", "texto": "3 horas e 30 minutos", "erro_tipico": null },
+      { "letra": "B", "texto": "6 horas e 15 minutos", "erro_tipico": "Trocou o ponteiro das horas com o dos minutos" },
+      { "letra": "C", "texto": "3 horas e 6 minutos", "erro_tipico": "Leu o número 6 como se fossem 6 minutos" },
+      { "letra": "D", "texto": "4 horas e 30 minutos", "erro_tipico": "Arredondou a hora para o número seguinte" },
+      { "letra": "E", "texto": "3 horas e 15 minutos", "erro_tipico": "Contou os minutos de forma errada" }
+    ],
+    "gabarito": "A",
+    "explicacao": "O ponteiro pequeno está entre o 3 e o 4: são 3 horas. O ponteiro grande está no 6: 6 × 5 = 30 minutos.",
+    "dica": "No ponteiro grande, cada número vale 5 minutos.",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "mat-gra-0002",
+    "trilha": "matematica",
+    "bloco": "mat-grandezas",
+    "habilidade": "Dinheiro",
+    "nivel": "base",
+    "dificuldade": 3,
+    "formato": "multipla_escolha",
+    "enunciado": "Ana tinha R$ 7,50 e gastou R$ 2,75 num lanche. Quanto dinheiro sobrou?",
+    "alternativas": [
+      { "letra": "A", "texto": "R$ 5,25", "erro_tipico": "Inverteu a subtração dos centavos (75 − 50)" },
+      { "letra": "B", "texto": "R$ 10,25", "erro_tipico": "Somou em vez de subtrair" },
+      { "letra": "C", "texto": "R$ 4,75", "erro_tipico": null },
+      { "letra": "D", "texto": "R$ 5,75", "erro_tipico": "Não trocou 1 real por 100 centavos" },
+      { "letra": "E", "texto": "R$ 4,25", "erro_tipico": "Errou a conta dos centavos" }
+    ],
+    "gabarito": "C",
+    "explicacao": "Não dá para tirar 75 centavos de 50. Troque 1 real por 100 centavos: 150 − 75 = 75 centavos, e 6 − 2 = 4 reais. Sobrou R$ 4,75.",
+    "dica": "Confira: R$ 4,75 + R$ 2,75 dá R$ 7,50?",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "pt-gra-0001",
+    "trilha": "portugues",
+    "bloco": "pt-gramatica",
+    "habilidade": "M antes de P e B",
+    "nivel": "base",
+    "dificuldade": 1,
+    "formato": "multipla_escolha",
+    "enunciado": "Qual palavra está escrita do jeito certo?",
+    "alternativas": [
+      { "letra": "A", "texto": "canpo", "erro_tipico": "Usou N antes de P" },
+      { "letra": "B", "texto": "campo", "erro_tipico": null },
+      { "letra": "C", "texto": "canpu", "erro_tipico": "Usou N antes de P e U no lugar de O" },
+      { "letra": "D", "texto": "kampo", "erro_tipico": "Usou K no lugar de C" },
+      { "letra": "E", "texto": "campu", "erro_tipico": "Escreveu como fala, com U no final" }
+    ],
+    "gabarito": "B",
+    "explicacao": "Antes de P e de B, usamos M, nunca N. Por isso: campo, tempo, sombra.",
+    "dica": "Lembre de outras palavras: tampa, bomba, pomba.",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "pt-gra-0002",
+    "trilha": "portugues",
+    "bloco": "pt-gramatica",
+    "habilidade": "S/SS e R/RR",
+    "nivel": "base",
+    "dificuldade": 2,
+    "formato": "multipla_escolha",
+    "enunciado": "Qual opção completa a palavra PÁ__ARO (a ave que voa)?",
+    "alternativas": [
+      { "letra": "A", "texto": "S", "erro_tipico": "Esqueceu que S sozinho entre vogais tem som de Z" },
+      { "letra": "B", "texto": "SS", "erro_tipico": null },
+      { "letra": "C", "texto": "Ç", "erro_tipico": "Confundiu com palavras como 'caça'" },
+      { "letra": "D", "texto": "C", "erro_tipico": "C antes de A tem som de K" },
+      { "letra": "E", "texto": "Z", "erro_tipico": "Trocou o som de S pelo de Z" }
+    ],
+    "gabarito": "B",
+    "explicacao": "Entre duas vogais, um S sozinho tem som de Z (como em casa). Para ter som de S entre vogais, usamos SS: pássaro.",
+    "dica": "Fale devagar: pá-ssa-ro. O som é de S ou de Z?",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "pt-lei-0001",
+    "trilha": "portugues",
+    "bloco": "pt-leitura",
+    "habilidade": "Localizar informação explícita",
+    "nivel": "base",
+    "dificuldade": 1,
+    "formato": "multipla_escolha",
+    "texto_apoio": "Lia acordou cedo, calçou as botas e foi ao pomar com o avô. Juntos, colheram maçãs vermelhas e encheram duas cestas.",
+    "enunciado": "O que Lia e o avô colheram no pomar?",
+    "alternativas": [
+      { "letra": "A", "texto": "Peras", "erro_tipico": "Não voltou ao texto para conferir" },
+      { "letra": "B", "texto": "Laranjas", "erro_tipico": "Não voltou ao texto para conferir" },
+      { "letra": "C", "texto": "Uvas", "erro_tipico": "Não voltou ao texto para conferir" },
+      { "letra": "D", "texto": "Morangos", "erro_tipico": "Pensou em fruta vermelha sem conferir no texto" },
+      { "letra": "E", "texto": "Maçãs", "erro_tipico": null }
+    ],
+    "gabarito": "E",
+    "explicacao": "O texto diz: 'colheram maçãs vermelhas'. A resposta está escrita no próprio texto.",
+    "dica": "Volte ao texto e procure a palavra 'colheram'.",
+    "revisao": { "status": "exemplo_manual" }
+  },
+  {
+    "id": "pt-lei-0002",
+    "trilha": "portugues",
+    "bloco": "pt-leitura",
+    "habilidade": "Localizar informação explícita",
+    "nivel": "base",
+    "dificuldade": 2,
+    "formato": "multipla_escolha",
+    "texto_apoio": "Lia acordou cedo, calçou as botas e foi ao pomar com o avô. Juntos, colheram maçãs vermelhas e encheram duas cestas.",
+    "enunciado": "Quantas cestas Lia e o avô encheram?",
+    "alternativas": [
+      { "letra": "A", "texto": "Uma", "erro_tipico": "Leu rápido demais" },
+      { "letra": "B", "texto": "Duas", "erro_tipico": null },
+      { "letra": "C", "texto": "Três", "erro_tipico": "Somou Lia, o avô e a cesta" },
+      { "letra": "D", "texto": "Quatro", "erro_tipico": "Chutou sem voltar ao texto" },
+      { "letra": "E", "texto": "Nenhuma", "erro_tipico": "Não encontrou a informação no texto" }
+    ],
+    "gabarito": "B",
+    "explicacao": "No fim do texto está escrito: 'encheram duas cestas'.",
+    "dica": "Leia a última frase do texto com calma.",
+    "revisao": { "status": "exemplo_manual" }
+  }
+]

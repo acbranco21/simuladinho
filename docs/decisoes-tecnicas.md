@@ -1,6 +1,6 @@
 # Decisões técnicas
 
-> Proposta inicial para discussão. Nada aqui foi instalado ou confirmado ainda.
+> Stack aprovada em 10/11/2026 e instalada em `app/` (v0.1). Itens de backend e hospedagem continuam em aberto.
 
 ## Proposta de arquitetura
 
@@ -17,7 +17,7 @@ Confira nomes de bibliotecas e versões na documentação atual antes de instala
 
 ## Decisões em aberto
 
-- [ ] Confirmar a stack acima (ou preferir app nativo Android, Flutter etc.).
+- [x] Stack do app aprovada: PWA em React + TypeScript + Vite, Dexie (IndexedDB), vite-plugin-pwa, fonte Nunito embutida, testes com Vitest.
 - [ ] Onde hospedar o backend de IA e o backup.
 - [ ] Qual provedor/modelo de IA para geração e revisão (e orçamento mensal).
 - [ ] Voz para o "ouvir enunciado": síntese de voz do próprio Android/navegador ou serviço externo.

@@ -9,7 +9,7 @@ Aplicativo de treino gamificado para provas de bolsa de colégios de alto padrã
 | 1. Avaliação pedagógica | Concluída (ver `docs/`) |
 | 2. Escopo do MVP e telas | Telas desenhadas (ver `design/`) |
 | 3. Banco inicial de questões gerado por IA | A fazer (ver `ia/` e `conteudo/`) |
-| 4. Desenvolvimento do app (aluna + administrador) | A fazer (ver `app/`) |
+| 4. Desenvolvimento do app (aluna + administrador) | Em andamento — v0.1 com fluxo da aluna (ver `app/README.md`) |
 | 5. Teste com ela por 2–3 semanas | A fazer |
 
 ## Estrutura de pastas
@@ -37,4 +37,4 @@ simulador-bolsa/
 
 ## Próximo passo
 
-Confirmar a stack proposta em `docs/decisoes-tecnicas.md` e iniciar o app em `app/`.
+Publicar o app num endereço HTTPS para instalar no tablet, e depois: banco de questões gerado por IA, painel do administrador e telas restantes.
