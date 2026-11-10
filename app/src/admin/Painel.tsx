@@ -304,6 +304,25 @@ export function Painel({ banco, onSair, onConfigSalva }: Props) {
             </div>
 
             <div className="cartao controle">
+              <h3>Simulado de prova</h3>
+              {(
+                [
+                  [10, 'Treino de resistência', '10 questões (5 Português + 5 Matemática), 45 minutos'],
+                  [20, 'Prova completa', '20 questões (10 + 10), 90 minutos, como no bolsão'],
+                ] as const
+              ).map(([v, nome, desc]) => (
+                <label key={v} className="radio">
+                  <input type="radio" name="simulado" checked={rascunho.simulado.questoes === v} onChange={() => alterar({ simulado: { questoes: v } })} />
+                  <span>
+                    <strong>{nome}</strong>
+                    <small>{desc}</small>
+                  </span>
+                </label>
+              ))}
+              <p className="secundario pequeno-texto">Sugestão: comece pela resistência e passe para a prova completa quando ela terminar o de 10 com tranquilidade.</p>
+            </div>
+
+            <div className="cartao controle">
               <h3>Sessão e tempo de tela</h3>
               <label className="campo">
                 Limite diário (minutos, 0 = sem limite)

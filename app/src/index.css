@@ -242,3 +242,88 @@ button:disabled { cursor: default; }
 .desativadas .linha-controle { padding: 8px 0; border-bottom: 1px solid var(--borda); font-weight: 700; }
 .rodape-painel { text-align: center; }
 .texto-apoio { white-space: pre-line; }
+
+/* ---------- Simulado ---------- */
+.relogio-prova { background: #fff; border-radius: 14px; padding: 12px 16px; font-size: 18px; font-weight: 900; min-width: 88px; text-align: center; }
+.relogio-prova.pouco { background: var(--laranja-claro); color: var(--laranja-texto); }
+.grade-questoes { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+.grade-questoes h2 { font-size: 22px; font-weight: 900; }
+.grade-numeros { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 10px; width: 100%; }
+.numero-questao { border-radius: 16px; min-height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: #fff; border: 3px solid var(--borda); }
+.numero-questao span { font-size: 22px; font-weight: 900; }
+.numero-questao small { font-size: 14px; font-weight: 800; color: var(--texto-2); }
+.numero-questao.respondida { background: var(--azul-claro); border-color: var(--azul-claro); }
+.numero-questao.branco { border-style: dashed; border-color: #8a93ad; }
+.numero-questao.atual { border-color: var(--azul); border-style: solid; }
+.fundo-modal { position: fixed; inset: 0; background: rgba(27, 35, 64, 0.45); display: grid; place-items: center; padding: 20px; z-index: 10; }
+.modal { width: min(460px, 100%); display: flex; flex-direction: column; gap: 14px; }
+.modal h2 { font-size: 24px; font-weight: 900; }
+.modal p { font-size: 18px; font-weight: 700; }
+.resultado-simulado .celebracao.compacta { flex: none; padding: 28px; gap: 10px; }
+.celebracao.compacta h1 { font-size: 40px; }
+.celebracao.compacta .nota-valor { font-size: 72px; }
+.linha-resumo { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.linha-resumo span { background: var(--azul-escuro); border-radius: 99px; padding: 8px 14px; font-size: 16px; font-weight: 800; }
+.resultado-simulado h2 { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+.lista-correcao { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.item-correcao { border-radius: 16px; border: 3px solid var(--borda); padding: 12px 16px; }
+.item-correcao.ok { border-color: #bfe5cf; }
+.item-correcao.erro { border-color: #f6cfa8; }
+.item-correcao summary { display: flex; align-items: center; gap: 12px; cursor: pointer; list-style: none; min-height: 44px; }
+.item-correcao summary::-webkit-details-marker { display: none; }
+.item-correcao .num { width: 36px; height: 36px; border-radius: 10px; background: var(--cinza); display: inline-flex; align-items: center; justify-content: center; font-weight: 900; flex-shrink: 0; }
+.item-correcao .enun { flex: 1; font-size: 17px; font-weight: 800; min-width: 0; }
+.item-correcao .estado { font-size: 15px; font-weight: 900; padding: 6px 12px; border-radius: 99px; flex-shrink: 0; }
+.item-correcao.ok .estado { background: var(--verde-claro); color: var(--verde-texto); }
+.item-correcao.erro .estado { background: var(--laranja-claro); color: var(--laranja-texto); }
+.item-correcao.branco .estado { background: var(--cinza); color: var(--texto-2); }
+.detalhe-correcao { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; font-size: 17px; font-weight: 700; line-height: 1.45; }
+.botoes-fim-simulado { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+
+/* ---------- Estudar e pílulas ---------- */
+.grade-pilulas { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.pilula-cartao { border: 3px solid transparent; text-align: left; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.pilula-cartao strong { font-size: 19px; font-weight: 900; }
+.pilula-cartao > span:not(.etiqueta) { font-size: 15px; font-weight: 700; color: var(--texto-2); line-height: 1.4; }
+.pilula-cartao.aprendida { border-color: #bfe5cf; }
+.etiqueta.verde { background: var(--verde-claro); color: var(--verde-texto); }
+.titulo-pilula { flex: 1; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.corpo-pilula { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; flex: 1; }
+.explicacao-pilula, .exemplo-pilula { display: flex; flex-direction: column; gap: 14px; border-radius: 28px; }
+.resumo-pilula { font-size: 20px; font-weight: 800; line-height: 1.4; }
+.regras { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px; font-size: 18px; font-weight: 700; line-height: 1.4; }
+.exemplo-pilula h2 { font-size: 22px; font-weight: 900; }
+.pergunta-exemplo { font-size: 20px; font-weight: 800; }
+.passos { margin: 0; padding-left: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 18px; font-weight: 700; }
+.rodape-pilula { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 16px; font-weight: 700; }
+
+/* ---------- Minha evolução ---------- */
+.corpo-evolucao { display: flex; gap: 20px; flex: 1; }
+.grafico { flex: 1 1 0; min-width: 0; border-radius: 28px; align-self: flex-start; }
+.grafico h2, .lateral-evolucao h2 { font-size: 20px; font-weight: 900; margin: 0; }
+.legenda { display: flex; gap: 16px; flex-wrap: wrap; font-size: 15px; font-weight: 800; }
+.legenda span { display: flex; align-items: center; gap: 6px; }
+.legenda i { width: 18px; height: 5px; border-radius: 3px; display: inline-block; }
+.vazio { padding: 60px 0; text-align: center; font-size: 18px; font-weight: 700; }
+.lateral-evolucao { width: 420px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+.lateral-evolucao .cartao { display: flex; flex-direction: column; gap: 12px; }
+.abas { display: flex; gap: 8px; flex-wrap: wrap; }
+.abas button { border: 0; border-radius: 99px; padding: 8px 14px; min-height: 40px; background: var(--cinza); font-size: 15px; font-weight: 800; }
+.abas button.ativa { background: var(--azul); color: #fff; }
+.mapa { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.casa-mapa { border-radius: 14px; padding: 10px 12px; min-height: 52px; display: flex; align-items: center; font-size: 14px; font-weight: 800; background: var(--cinza); color: var(--texto-2); }
+.casa-mapa.acesa { background: var(--azul); color: #fff; }
+.medalhas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.medalha { border-radius: 14px; padding: 10px 12px; background: var(--cinza); display: flex; flex-direction: column; gap: 2px; }
+.medalha strong { font-size: 15px; font-weight: 900; color: var(--texto-2); }
+.medalha small { font-size: 12px; font-weight: 700; color: var(--texto-2); }
+.medalha.ganha { background: var(--laranja-claro); }
+.medalha.ganha strong { color: var(--laranja-texto); }
+
+@media (max-width: 1000px), (orientation: portrait) {
+  .corpo-pilula { grid-template-columns: 1fr; }
+  .corpo-evolucao { flex-direction: column; }
+  .lateral-evolucao { width: 100%; }
+  .relogio-prova { min-width: 0; }
+  .simulado .topo-sessao { flex-wrap: wrap; }
+}

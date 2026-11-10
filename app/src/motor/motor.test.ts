@@ -174,3 +174,43 @@ describe('painel do administrador', () => {
     expect(linha.media5).toBe(10)
   })
 })
+
+import { minutosDoSimulado, montarSimulado } from './simulado'
+import { calcularMedalhas, mapaDeConquistas, pilulasSugeridas } from './conquistas'
+import { PILULAS } from '../conteudo/pilulas'
+
+describe('simulado', () => {
+  it('tem metade Português, metade Matemática, em ordem crescente de dificuldade', () => {
+    const s = montarSimulado(questoes, { questoes: 20 }, {}, { facil: 40, media: 40, dificil: 20 }, new Set(), 3)
+    expect(s).toHaveLength(20)
+    expect(s.slice(0, 10).every((q) => q.trilha === 'portugues')).toBe(true)
+    expect(s.slice(10).every((q) => q.trilha === 'matematica')).toBe(true)
+    const pts = (q: Questao) => (q.dificuldade <= 2 ? 3 : q.dificuldade === 3 ? 4 : 5)
+    for (const bloco of [s.slice(0, 10), s.slice(10)]) for (let i = 1; i < bloco.length; i++) expect(pts(bloco[i])).toBeGreaterThanOrEqual(pts(bloco[i - 1]))
+    expect(minutosDoSimulado({ questoes: 20 })).toBe(90)
+    expect(minutosDoSimulado({ questoes: 10 })).toBe(45)
+  })
+})
+
+describe('conquistas', () => {
+  it('medalhas por esforço e domínio', () => {
+    const r = Array(10).fill({ trilha: 'logica', habilidade: 'Sequências de figuras e números', correta: true })
+    const m = calcularMedalhas([{ modo: 'simulado', concluida: true, nota: 10, questoes: 10 }], r, 2, 0)
+    const ganhas = m.filter((x) => x.conquistada).map((x) => x.id)
+    expect(ganhas).toEqual(['primeira-missao', 'detetive-padroes', 'primeiro-simulado', 'nota-10'])
+  })
+  it('mapa acende por pílula ou por 80% de acerto em 5+', () => {
+    const r = [...Array(4).fill({ habilidade: 'a', correta: true }), { habilidade: 'a', correta: false }, ...Array(4).fill({ habilidade: 'b', correta: true })]
+    expect(mapaDeConquistas(['a', 'b', 'c'], r, new Set(['c'])).map((x) => x.motivo)).toEqual(['acerto', null, 'pilula'])
+  })
+  it('sugere pílulas das habilidades erradas', () => {
+    const r = [{ habilidade: 'x', correta: false }, { habilidade: 'y', correta: true }, { habilidade: 'x', correta: false }, { habilidade: 'z', correta: false }]
+    expect(pilulasSugeridas(r, new Set(['x', 'z']))).toEqual(['x', 'z'])
+  })
+  it('toda habilidade do banco tem pílula e toda pílula tem questões', () => {
+    const habs = new Set(questoes.map((q) => q.habilidade))
+    const pils = new Set(PILULAS.map((p) => p.habilidade))
+    for (const h of habs) expect(pils.has(h), h).toBe(true)
+    for (const p of pils) expect(habs.has(p), p).toBe(true)
+  })
+})

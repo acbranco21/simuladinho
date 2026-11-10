@@ -2,26 +2,50 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Painel } from './admin/Painel'
 import { Pin } from './admin/Pin'
 import { Correcao } from './aluna/Correcao'
+import { Estudar } from './aluna/Estudar'
+import { Evolucao } from './aluna/Evolucao'
 import { Fim } from './aluna/Fim'
 import { Inicio } from './aluna/Inicio'
+import { PilulaTela } from './aluna/PilulaTela'
 import type { EstadoPasso } from './aluna/Progresso'
 import { QuestaoTela } from './aluna/QuestaoTela'
+import { Simulado } from './aluna/Simulado'
+import { SimuladoResultado } from './aluna/SimuladoResultado'
 import type { Configuracao } from './config'
-import { acertoPorTrilha, contestar, hashPin, idsBloqueados, idsParaCacaAosErros, lerConfig, lerPerfil, salvarConfig, salvarSessao, sessoesDeHoje, type Perfil } from './dados/db'
-import { minutosNoDia } from './motor/painel'
+import { PILULA_POR_HABILIDADE } from './conteudo/pilulas'
+import {
+  acertoPorTrilha,
+  contestar,
+  db,
+  hashPin,
+  idsBloqueados,
+  idsParaCacaAosErros,
+  lerConfig,
+  lerPerfil,
+  marcarPilula,
+  pilulasAprendidas,
+  salvarConfig,
+  salvarSessao,
+  sessoesDeHoje,
+  type Perfil,
+} from './dados/db'
 import exemplos from './dados/questoes-exemplo.json'
 import lote1 from './dados/questoes-lote1.json'
+import { pilulasSugeridas } from './motor/conquistas'
 import { XP, xpDaResposta } from './motor/gamificacao'
+import { habilidadeMaisFraca, minutosNoDia } from './motor/painel'
 import { calcularNota, pontosDaQuestao, resumoPorTrilha, type ResumoTrilha } from './motor/pontuacao'
-import { montarCacaAosErros, montarSessao } from './motor/sessao'
+import { criarSorteio, montarCacaAosErros, montarSessao } from './motor/sessao'
+import { minutosDoSimulado, montarSimulado } from './motor/simulado'
 import { deveProporEncerrar, detectarSinais, type Sinal } from './motor/sinais'
 import { TAMANHO } from './motor/tamanho'
 import type { Letra, Questao, RespostaRegistro, Trilha } from './tipos'
 
 const BANCO = [...exemplos, ...lote1] as Questao[]
+const HABILIDADES_COM_PILULA = new Set(PILULA_POR_HABILIDADE.keys())
 
-type Modo = 'treino' | 'caca_erros'
-type Tela = 'inicio' | 'questao' | 'correcao' | 'fim' | 'pin' | 'painel'
+type Modo = 'treino' | 'caca_erros' | 'pilula'
+type Tela = 'inicio' | 'questao' | 'correcao' | 'fim' | 'pin' | 'painel' | 'simulado' | 'resultadoSimulado' | 'estudar' | 'pilula' | 'evolucao'
 
 interface Sessao {
   modo: Modo
@@ -33,6 +57,8 @@ interface Sessao {
   sinais: Set<Sinal>
   propostaFeita: boolean
   proporEncerrar: boolean
+  /** Habilidade praticada, no modo 'pilula'. */
+  habilidade?: string
 }
 
 interface Resultado {
@@ -43,6 +69,32 @@ interface Resultado {
   novosRecordes: Trilha[]
   erros: number
   subiuDeNivel: Trilha[]
+  sugeridas: { habilidade: string; titulo: string }[]
+  aprendeu: string | null
+  modo: Modo
+}
+
+interface SimuladoAtivo {
+  questoes: Questao[]
+  minutos: number
+  inicio: number
+}
+
+interface ResultadoSimulado {
+  questoes: Questao[]
+  escolhas: (Letra | null)[]
+  nota: number
+  resumo: ResumoTrilha[]
+  minutosUsados: number
+  minutosTotal: number
+  porTempo: boolean
+  xpGanho: number
+  novosRecordes: Trilha[]
+  sugeridas: { habilidade: string; titulo: string }[]
+}
+
+function comTitulo(habs: string[]) {
+  return habs.map((h) => ({ habilidade: h, titulo: PILULA_POR_HABILIDADE.get(h)!.titulo }))
 }
 
 export default function App() {
@@ -54,25 +106,39 @@ export default function App() {
   const [resultado, setResultado] = useState<Resultado | null>(null)
   const [config, setConfig] = useState<Configuracao | null>(null)
   const [minutosHoje, setMinutosHoje] = useState(0)
+  const [aprendidas, setAprendidas] = useState<Set<string>>(new Set())
+  const [recomendadas, setRecomendadas] = useState<Set<string>>(new Set())
+  const [simulado, setSimulado] = useState<SimuladoAtivo | null>(null)
+  const [resultadoSimulado, setResultadoSimulado] = useState<ResultadoSimulado | null>(null)
+  const [pilulaAtual, setPilulaAtual] = useState<string | null>(null)
   const salvando = useRef(false)
 
   const recarregar = useCallback(async () => {
-    const [p, a, e, c, hoje] = await Promise.all([lerPerfil(), acertoPorTrilha(), idsParaCacaAosErros(), lerConfig(), sessoesDeHoje()])
+    const [p, a, e, c, hoje, apr, respostas] = await Promise.all([lerPerfil(), acertoPorTrilha(), idsParaCacaAosErros(), lerConfig(), sessoesDeHoje(), pilulasAprendidas(), db.respostas.toArray()])
     setPerfil(p)
     setConfig(c)
     setMinutosHoje(minutosNoDia(hoje, new Date()))
     setAcerto(a)
     setErrosPendentes(e)
+    setAprendidas(apr)
+    // Recomendadas: a habilidade mais fraca de cada trilha (abaixo de 60%) e as erradas recentemente.
+    const rec = new Set<string>()
+    for (const t of c.trilhasAtivas) {
+      const f = habilidadeMaisFraca(respostas.filter((r) => r.trilha === t))
+      if (f && f.acerto < 0.6) rec.add(f.habilidade)
+    }
+    for (const h of pilulasSugeridas(respostas.slice(-20), HABILIDADES_COM_PILULA, 5)) rec.add(h)
+    setRecomendadas(rec)
   }, [])
 
   useEffect(() => {
     void recarregar()
   }, [recarregar])
 
-  const comecar = (modo: Modo, questoes: Questao[]) => {
+  const comecar = (modo: Modo, questoes: Questao[], habilidade?: string) => {
     if (!questoes.length) return
     const agora = Date.now()
-    setSessao({ modo, questoes, indice: 0, respostas: [], inicio: agora, inicioQuestao: agora, sinais: new Set(), propostaFeita: false, proporEncerrar: false })
+    setSessao({ modo, questoes, indice: 0, respostas: [], inicio: agora, inicioQuestao: agora, sinais: new Set(), propostaFeita: false, proporEncerrar: false, habilidade })
     setTela('questao')
   }
 
@@ -90,6 +156,34 @@ export default function App() {
     comecar('caca_erros', montarCacaAosErros(BANCO.filter((q) => !excluir.has(q.id)), ids, TAMANHO.cacaAosErros))
   }
 
+  const questoesDaPilula = async (habilidade: string) => {
+    const excluir = await idsBloqueados()
+    const sorteio = criarSorteio()
+    return BANCO.filter((q) => q.habilidade === habilidade && !excluir.has(q.id))
+      .map((q) => ({ q, r: sorteio() }))
+      .sort((a, b) => a.r - b.r)
+      .slice(0, 3)
+      .map((x) => x.q)
+  }
+
+  const iniciarPratica = async (habilidade: string) => {
+    comecar('pilula', await questoesDaPilula(habilidade), habilidade)
+  }
+
+  const iniciarSimulado = async () => {
+    const c = config ?? (await lerConfig())
+    const excluir = await idsBloqueados()
+    const questoes = montarSimulado(BANCO, c.simulado, c.nivelPorTrilha, c.mistura, excluir)
+    if (!questoes.length) return
+    setSimulado({ questoes, minutos: minutosDoSimulado(c.simulado), inicio: Date.now() })
+    setTela('simulado')
+  }
+
+  const abrirPilula = (habilidade: string) => {
+    setPilulaAtual(habilidade)
+    setTela('pilula')
+  }
+
   const finalizar = async (s: Sessao, concluida: boolean) => {
     if (salvando.current) return
     salvando.current = true
@@ -103,22 +197,87 @@ export default function App() {
       for (const r of resumo) notaPorTrilha[r.trilha] = calcularNota(s.respostas.filter((x) => x.trilha === r.trilha))
 
       if (s.respostas.length) {
+        // Prática de pílula não conta para recordes nem para subir de nível (são poucas questões, de um assunto só).
         const salvo = await salvarSessao(
           { modo: s.modo, inicio: s.inicio, fim: Date.now(), nota, concluida, sinais: s.sinais.size, xpGanho, questoes: s.respostas.length, nivelPorTrilha: config?.nivelPorTrilha },
           s.respostas,
-          notaPorTrilha,
+          s.modo === 'pilula' ? {} : notaPorTrilha,
         )
+        let aprendeu: string | null = null
+        if (concluida && s.modo === 'pilula' && s.habilidade) {
+          const acertos = s.respostas.filter((r) => r.correta).length
+          if (acertos >= Math.ceil((s.respostas.length * 2) / 3)) {
+            await marcarPilula(s.habilidade, acertos, s.respostas.length)
+            aprendeu = PILULA_POR_HABILIDADE.get(s.habilidade)?.titulo ?? s.habilidade
+          }
+        }
         await recarregar()
         if (concluida) {
           const erros = await idsParaCacaAosErros()
-          setResultado({ nota, resumo, xpGanho, sequencia: salvo.perfil.sequencia, novosRecordes: salvo.novosRecordes, erros: Math.min(TAMANHO.cacaAosErros, erros.length), subiuDeNivel: salvo.subiuDeNivel })
+          setResultado({
+            nota,
+            resumo,
+            xpGanho,
+            sequencia: salvo.perfil.sequencia,
+            novosRecordes: salvo.novosRecordes,
+            erros: Math.min(TAMANHO.cacaAosErros, erros.length),
+            subiuDeNivel: salvo.subiuDeNivel,
+            sugeridas: s.modo === 'pilula' ? [] : comTitulo(pilulasSugeridas(s.respostas, HABILIDADES_COM_PILULA)),
+            aprendeu,
+            modo: s.modo,
+          })
           setSessao(null)
           setTela('fim')
           return
         }
       }
       setSessao(null)
-      setTela('inicio')
+      setTela(s.modo === 'pilula' ? 'pilula' : 'inicio')
+    } finally {
+      salvando.current = false
+    }
+  }
+
+  const entregarSimulado = async (escolhas: (Letra | null)[], temposMs: number[], porTempo: boolean) => {
+    if (!simulado || salvando.current) return
+    salvando.current = true
+    try {
+      const agora = Date.now()
+      const respostas: RespostaRegistro[] = simulado.questoes.map((q, i) => ({
+        questaoId: q.id,
+        trilha: q.trilha,
+        habilidade: q.habilidade,
+        pontos: pontosDaQuestao(q),
+        escolha: escolhas[i],
+        correta: escolhas[i] === q.gabarito,
+        tempoMs: temposMs[i],
+        em: agora,
+      }))
+      const nota = calcularNota(respostas)
+      const resumo = resumoPorTrilha(respostas)
+      const notaPorTrilha: Partial<Record<Trilha, number>> = {}
+      for (const r of resumo) notaPorTrilha[r.trilha] = calcularNota(respostas.filter((x) => x.trilha === r.trilha))
+      const xpGanho = respostas.reduce((t, r) => t + (r.escolha ? xpDaResposta(r.correta) : 0), 0) + XP.bonusSessao
+      const salvo = await salvarSessao(
+        { modo: 'simulado', inicio: simulado.inicio, fim: agora, nota, concluida: true, sinais: 0, xpGanho, questoes: respostas.length, nivelPorTrilha: config?.nivelPorTrilha },
+        respostas,
+        notaPorTrilha,
+      )
+      await recarregar()
+      setResultadoSimulado({
+        questoes: simulado.questoes,
+        escolhas,
+        nota,
+        resumo,
+        minutosUsados: Math.max(1, Math.round((agora - simulado.inicio) / 60000)),
+        minutosTotal: simulado.minutos,
+        porTempo,
+        xpGanho,
+        novosRecordes: salvo.novosRecordes,
+        sugeridas: comTitulo(pilulasSugeridas(respostas, HABILIDADES_COM_PILULA)),
+      })
+      setSimulado(null)
+      setTela('resultadoSimulado')
     } finally {
       salvando.current = false
     }
@@ -141,7 +300,7 @@ export default function App() {
     const medias: Partial<Record<Trilha, number>> = {}
     for (const [t, v] of Object.entries(acerto)) if (v && v.total >= 8) medias[t as Trilha] = v.acerto
     const sinais = new Set([...sessao.sinais, ...detectarSinais(respostas, medias)])
-    const propor = !sessao.propostaFeita && deveProporEncerrar([...sinais])
+    const propor = sessao.modo !== 'pilula' && !sessao.propostaFeita && deveProporEncerrar([...sinais])
     setSessao({ ...sessao, respostas, sinais, proporEncerrar: propor, propostaFeita: sessao.propostaFeita || propor })
     setTela('correcao')
   }
@@ -203,12 +362,59 @@ export default function App() {
     )
   }
 
+  if (tela === 'simulado' && simulado) {
+    return (
+      <Simulado
+        questoes={simulado.questoes}
+        minutos={simulado.minutos}
+        onEntregar={(e, t, porTempo) => void entregarSimulado(e, t, porTempo)}
+        onSair={() => {
+          setSimulado(null)
+          setTela('inicio')
+        }}
+      />
+    )
+  }
+
+  if (tela === 'resultadoSimulado' && resultadoSimulado) {
+    return <SimuladoResultado {...resultadoSimulado} onEstudar={abrirPilula} onInicio={() => setTela('inicio')} />
+  }
+
+  if (tela === 'estudar') {
+    return <Estudar trilhas={config.trilhasAtivas} aprendidas={aprendidas} recomendadas={recomendadas} onAbrir={abrirPilula} onVoltar={() => setTela('inicio')} />
+  }
+
+  if (tela === 'pilula' && pilulaAtual) {
+    const p = PILULA_POR_HABILIDADE.get(pilulaAtual)!
+    return (
+      <PilulaTela
+        key={p.id}
+        pilula={p}
+        aprendida={aprendidas.has(p.habilidade)}
+        questoesDisponiveis={BANCO.filter((q) => q.habilidade === p.habilidade).length}
+        onPraticar={() => void iniciarPratica(p.habilidade)}
+        onVoltar={() => setTela('estudar')}
+      />
+    )
+  }
+
+  if (tela === 'evolucao') {
+    return <Evolucao config={config} perfil={perfil} onVoltar={() => setTela('inicio')} />
+  }
+
   if (tela === 'fim' && resultado) {
-    return <Fim {...resultado} onCacaAosErros={() => void iniciarCaca()} onInicio={() => setTela('inicio')} />
+    return (
+      <Fim
+        {...resultado}
+        onCacaAosErros={() => void iniciarCaca()}
+        onEstudar={abrirPilula}
+        onInicio={() => setTela(resultado.modo === 'pilula' ? 'estudar' : 'inicio')}
+      />
+    )
   }
 
   if (sessao && (tela === 'questao' || tela === 'correcao')) {
-    const titulo = sessao.modo === 'treino' ? 'Treino do dia' : 'Caça aos erros'
+    const titulo = sessao.modo === 'treino' ? 'Treino do dia' : sessao.modo === 'caca_erros' ? 'Caça aos erros' : `Praticar: ${PILULA_POR_HABILIDADE.get(sessao.habilidade ?? '')?.titulo ?? ''}`
     const passos: EstadoPasso[] = sessao.questoes.map((_, i) => {
       const r = sessao.respostas[i]
       if (r) return r.correta ? 'certo' : 'errado'
@@ -233,7 +439,7 @@ export default function App() {
     return (
       <Correcao
         questao={q}
-        escolha={r.escolha}
+        escolha={r.escolha as Letra}
         xp={xpDaResposta(r.correta, sessao.modo === 'caca_erros')}
         titulo={titulo}
         passos={passos}
@@ -255,8 +461,12 @@ export default function App() {
       acerto={acerto}
       errosPendentes={errosPendentes.length}
       limiteAtingido={limiteAtingido}
+      recomendadas={recomendadas.size}
       onTreino={() => void iniciarTreino()}
       onCacaAosErros={() => void iniciarCaca()}
+      onSimulado={() => void iniciarSimulado()}
+      onEstudar={() => setTela('estudar')}
+      onEvolucao={() => setTela('evolucao')}
       onAreaPais={() => setTela('pin')}
     />
   )

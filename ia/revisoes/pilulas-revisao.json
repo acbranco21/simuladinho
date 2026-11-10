@@ -1,0 +1,35 @@
+[
+ {"id": "pilula-m-antes-p-b", "ok": true, "problemas": []},
+ {"id": "pilula-s-ss-r-rr", "ok": false, "problemas": [
+  "Passo 3 do exemplo ('Som de S entre vogais pede SS') está escrito como regra geral, e não é: Ç e C também dão som de S entre vogais (cabeça, maçã, que estão na própria pílula). Isso pode levar a escrever 'cabessa'. Sugestão: 'Entre S e SS, o som de S entre vogais pede SS.'",
+  "Detalhe: o R também é forte depois de L e S (guelra, Israel), não só depois de N. Opcional: 'depois de N, L ou S'."
+ ]},
+ {"id": "pilula-l-u", "ok": false, "problemas": [
+  "O título fala em 'fim da sílaba', mas o truque do plural só funciona no fim da palavra. Não serve para L/U no meio da palavra (alto, calça, auto) nem para verbos. Sugestão: trocar o título para 'L ou U no fim da palavra' ou incluir a regra: 'Verbo no passado termina com U: cantou, bebeu, partiu.'"
+ ]},
+ {"id": "pilula-silaba-tonica", "ok": true, "problemas": []},
+ {"id": "pilula-classes", "ok": true, "problemas": []},
+ {"id": "pilula-plural", "ok": false, "problemas": [
+  "A regra 'Terminadas em R, S ou Z ganham ES' está incompleta e induz a erro: palavras terminadas em S cuja sílaba forte não é a última não mudam (o lápis → os lápis, o ônibus → os ônibus, o pires → os pires). A criança pode escrever 'lápises', e lápis aparece em outras pílulas. Sugestão: 'Se a sílaba forte não é a última, a palavra com S fica igual: o lápis → os lápis.'",
+  "Falta a regra do M → NS (homem → homens, jardim → jardins). Seguindo 'só acrescentamos S', a criança escreveria 'homems'. Sugestão: 'Terminadas em M trocam o M por NS: homem → homens.'"
+ ]},
+ {"id": "pilula-pontuacao", "ok": true, "problemas": []},
+ {"id": "pilula-localizar", "ok": true, "problemas": []},
+ {"id": "pilula-assunto", "ok": true, "problemas": []},
+ {"id": "pilula-generos", "ok": true, "problemas": []},
+ {"id": "pilula-inferir", "ok": true, "problemas": []},
+ {"id": "pilula-reagrupamento", "ok": false, "problemas": [
+  "A regra da subtração confunde: 'troque 1 da casa vizinha por 10 e diminua 1 na vizinha' diz a mesma coisa duas vezes, e a criança pode tirar 2 da vizinha. Também não diz qual é a vizinha. Sugestão: 'Se o número de cima for menor, pegue 1 da casa da esquerda (ela fica com 1 a menos). Esse 1 vale 10 na sua casa.'"
+ ]},
+ {"id": "pilula-mult-div", "ok": true, "problemas": []},
+ {"id": "pilula-dobro-metade", "ok": false, "problemas": [
+  "Problema leve de linguagem: 'Terço de 12' soa estranho. A escola usa 'a terça parte de 12' ou 'um terço de 12'. Sugestão: 'A terça parte de 12 = 12 ÷ 3 = 4' e, no resumo, 'Terça parte é dividir em 3 partes iguais.'"
+ ]},
+ {"id": "pilula-dinheiro", "ok": true, "problemas": []},
+ {"id": "pilula-horas", "ok": false, "problemas": [
+  "Problema leve de linguagem: 'Cada número no ponteiro grande vale 5 minutos' dá a ideia de que os números estão no ponteiro. Sugestão: 'Quando o ponteiro grande aponta para um número, cada número vale 5 minutos: no 3 são 15, no 6 são 30, no 9 são 45.'"
+ ]},
+ {"id": "pilula-sequencias", "ok": true, "problemas": []},
+ {"id": "pilula-padroes", "ok": true, "problemas": []},
+ {"id": "pilula-balancas", "ok": true, "problemas": []}
+]

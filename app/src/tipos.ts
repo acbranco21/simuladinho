@@ -43,7 +43,8 @@ export interface RespostaRegistro {
   trilha: Trilha
   habilidade: string
   pontos: 3 | 4 | 5
-  escolha: Letra
+  /** null = deixada em branco (só no simulado). */
+  escolha: Letra | null
   correta: boolean
   tempoMs: number
   em: number

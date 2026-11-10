@@ -1,4 +1,5 @@
 import type { Configuracao } from '../config'
+import { minutosDoSimulado } from '../motor/simulado'
 import { nivelDoXp } from '../motor/gamificacao'
 import type { Perfil } from '../dados/db'
 import { NOMES_TRILHA, type Trilha } from '../tipos'
@@ -11,11 +12,15 @@ interface Props {
   onAreaPais: () => void
   acerto: Partial<Record<Trilha, { acerto: number; total: number }>>
   errosPendentes: number
+  recomendadas: number
   onTreino: () => void
   onCacaAosErros: () => void
+  onSimulado: () => void
+  onEstudar: () => void
+  onEvolucao: () => void
 }
 
-export function Inicio({ perfil, config, limiteAtingido, onAreaPais, acerto, errosPendentes, onTreino, onCacaAosErros }: Props) {
+export function Inicio({ perfil, config, limiteAtingido, onAreaPais, acerto, errosPendentes, recomendadas, onTreino, onCacaAosErros, onSimulado, onEstudar, onEvolucao }: Props) {
   const { nivel, progresso } = nivelDoXp(perfil.xp)
   const nomes = config.trilhasAtivas.map((t) => NOMES_TRILHA[t])
   const listaTrilhas = nomes.length > 1 ? `${nomes.slice(0, -1).join(', ')} e ${nomes.at(-1)}` : nomes[0]
@@ -82,7 +87,7 @@ export function Inicio({ perfil, config, limiteAtingido, onAreaPais, acerto, err
               <span>{errosPendentes > 0 ? `${Math.min(5, errosPendentes)} questões para revisar · XP em dobro` : 'Nenhum erro para revisar ainda'}</span>
             </span>
           </button>
-          <button type="button" className="atalho" disabled>
+          <button type="button" className="atalho" onClick={onSimulado} disabled={limiteAtingido}>
             <span className="atalho-icone laranja" aria-hidden="true">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
                 <circle cx="12" cy="13" r="8" />
@@ -91,10 +96,12 @@ export function Inicio({ perfil, config, limiteAtingido, onAreaPais, acerto, err
             </span>
             <span className="atalho-texto">
               <strong>Simulado de prova</strong>
-              <span>Em breve</span>
+              <span>
+                {config.simulado.questoes} questões de Português e Matemática · {minutosDoSimulado(config.simulado)} min
+              </span>
             </span>
           </button>
-          <button type="button" className="atalho" disabled>
+          <button type="button" className="atalho" onClick={onEstudar}>
             <span className="atalho-icone azul" aria-hidden="true">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" />
@@ -103,14 +110,19 @@ export function Inicio({ perfil, config, limiteAtingido, onAreaPais, acerto, err
             </span>
             <span className="atalho-texto">
               <strong>Estudar</strong>
-              <span>Em breve</span>
+              <span>{recomendadas > 0 ? `${recomendadas} ${recomendadas === 1 ? 'assunto recomendado' : 'assuntos recomendados'} para você` : 'Explicações curtas com exemplos'}</span>
             </span>
           </button>
         </div>
       </main>
 
       <section>
-        <h2 className="titulo-secao">Minhas trilhas</h2>
+        <div className="secao-topo">
+          <h2 className="titulo-secao">Minhas trilhas</h2>
+          <button type="button" className="link" onClick={onEvolucao}>
+            Ver minha evolução
+          </button>
+        </div>
         <div className="trilhas">
           {config.trilhasAtivas.map((t) => {
             const a = acerto[t]

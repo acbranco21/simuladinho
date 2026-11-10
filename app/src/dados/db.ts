@@ -8,7 +8,7 @@ import { notasPorTrilhaPorSessao } from '../motor/painel'
 
 export interface SessaoRegistro {
   id?: number
-  modo: 'treino' | 'caca_erros'
+  modo: 'treino' | 'caca_erros' | 'simulado' | 'pilula'
   inicio: number
   fim: number
   nota: number
@@ -47,6 +47,14 @@ export interface StatusQuestao {
   em: number
 }
 
+/** Pílula (assunto) marcada como aprendida na área Estudar. */
+export interface PilulaAprendida {
+  habilidade: string
+  em: number
+  acertos: number
+  total: number
+}
+
 /**
  * Banco local no tablet (IndexedDB). Tudo funciona sem internet.
  * O nome 'simulador-bolsa' é mantido de propósito: o histórico continua após a troca do nome do app.
@@ -58,6 +66,7 @@ export const db = new Dexie('simulador-bolsa') as Dexie & {
   contestacoes: EntityTable<Contestacao, 'id'>
   config: EntityTable<Configuracao, 'id'>
   statusQuestoes: EntityTable<StatusQuestao, 'questaoId'>
+  pilulas: EntityTable<PilulaAprendida, 'habilidade'>
 }
 
 db.version(1).stores({
@@ -69,6 +78,9 @@ db.version(1).stores({
 db.version(2).stores({
   config: 'id',
   statusQuestoes: 'questaoId',
+})
+db.version(3).stores({
+  pilulas: 'habilidade',
 })
 
 const PERFIL_INICIAL: Perfil = { id: 'aluna', xp: 0, sequencia: 0, ultimoDia: null, tamanhoTreino: TAMANHO.inicialTreino, recordes: {} }
@@ -205,18 +217,27 @@ export async function sessoesDeHoje(): Promise<SessaoRegistro[]> {
   return db.sessoes.where('inicio').aboveOrEqual(inicioDia).toArray()
 }
 
+export async function marcarPilula(habilidade: string, acertos: number, total: number): Promise<void> {
+  await db.pilulas.put({ habilidade, em: Date.now(), acertos, total })
+}
+
+export async function pilulasAprendidas(): Promise<Set<string>> {
+  return new Set((await db.pilulas.toArray()).map((p) => p.habilidade))
+}
+
 /** Cópia de segurança completa (sem o PIN). */
 export async function exportarDados(): Promise<string> {
-  const [sessoes, respostas, perfil, contestacoes, config, statusQuestoes] = await Promise.all([
+  const [sessoes, respostas, perfil, contestacoes, config, statusQuestoes, pilulas] = await Promise.all([
     db.sessoes.toArray(),
     db.respostas.toArray(),
     db.perfil.toArray(),
     db.contestacoes.toArray(),
     db.config.toArray(),
     db.statusQuestoes.toArray(),
+    db.pilulas.toArray(),
   ])
   const configSemPin = config.map((c) => ({ ...c, pinHash: null }))
-  return JSON.stringify({ app: 'simuladinho', versao: 1, exportadoEm: new Date().toISOString(), sessoes, respostas, perfil, contestacoes, config: configSemPin, statusQuestoes }, null, 1)
+  return JSON.stringify({ app: 'simuladinho', versao: 2, exportadoEm: new Date().toISOString(), sessoes, respostas, perfil, contestacoes, config: configSemPin, statusQuestoes, pilulas }, null, 1)
 }
 
 /** Restaura uma cópia de segurança (substitui os dados atuais; mantém o PIN atual). */
@@ -224,13 +245,14 @@ export async function importarDados(json: string): Promise<void> {
   const d = JSON.parse(json)
   if (d.app !== 'simuladinho' || !Array.isArray(d.sessoes) || !Array.isArray(d.respostas)) throw new Error('Arquivo não é uma cópia do Simuladinho')
   const pinAtual = (await lerConfig()).pinHash
-  await db.transaction('rw', [db.sessoes, db.respostas, db.perfil, db.contestacoes, db.config, db.statusQuestoes], async () => {
-    await Promise.all([db.sessoes.clear(), db.respostas.clear(), db.perfil.clear(), db.contestacoes.clear(), db.config.clear(), db.statusQuestoes.clear()])
+  await db.transaction('rw', [db.sessoes, db.respostas, db.perfil, db.contestacoes, db.config, db.statusQuestoes, db.pilulas], async () => {
+    await Promise.all([db.sessoes.clear(), db.respostas.clear(), db.perfil.clear(), db.contestacoes.clear(), db.config.clear(), db.statusQuestoes.clear(), db.pilulas.clear()])
     await db.sessoes.bulkAdd(d.sessoes)
     await db.respostas.bulkAdd(d.respostas)
     await db.perfil.bulkAdd(d.perfil ?? [])
     await db.contestacoes.bulkAdd(d.contestacoes ?? [])
     await db.statusQuestoes.bulkAdd(d.statusQuestoes ?? [])
+    await db.pilulas.bulkAdd(d.pilulas ?? [])
     for (const c of d.config ?? []) await db.config.put({ ...c, pinHash: pinAtual })
   })
 }

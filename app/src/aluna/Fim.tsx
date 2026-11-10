@@ -10,17 +10,21 @@ interface Props {
   novosRecordes: Trilha[]
   subiuDeNivel: Trilha[]
   erros: number
+  sugeridas: { habilidade: string; titulo: string }[]
+  aprendeu: string | null
+  modo: 'treino' | 'caca_erros' | 'pilula'
   onCacaAosErros: () => void
+  onEstudar: (habilidade: string) => void
   onInicio: () => void
 }
 
-export function Fim({ nota, resumo, xpGanho, sequencia, novosRecordes, subiuDeNivel, erros, onCacaAosErros, onInicio }: Props) {
+export function Fim({ nota, resumo, xpGanho, sequencia, novosRecordes, subiuDeNivel, erros, sugeridas, aprendeu, modo, onCacaAosErros, onEstudar, onInicio }: Props) {
   return (
     <div className="tela fim">
       <section className="celebracao">
         <Mascote tamanho={120} feliz claro />
         <h1>Missão cumprida!</h1>
-        <p>Você terminou o treino.</p>
+        <p>{modo === 'pilula' ? (aprendeu ? `Você aprendeu: ${aprendeu}!` : 'Boa prática! Leia a explicação de novo e tente mais uma vez.') : modo === 'caca_erros' ? 'Você revisou seus erros.' : 'Você terminou o treino.'}</p>
         <div className="nota">
           <span className="nota-valor">{formatarNota(nota)}</span>
           <span className="nota-legenda">nota com peso por dificuldade</span>
@@ -67,13 +71,18 @@ export function Fim({ nota, resumo, xpGanho, sequencia, novosRecordes, subiuDeNi
           </div>
         </div>
         <div className="botoes-coluna">
-          {erros > 0 && (
+          {sugeridas.map((s) => (
+            <button key={s.habilidade} type="button" className="botao-contorno pequeno" onClick={() => onEstudar(s.habilidade)}>
+              Estudar: {s.titulo}
+            </button>
+          ))}
+          {erros > 0 && modo !== 'pilula' && (
             <button type="button" className="botao-laranja" onClick={onCacaAosErros}>
               Revisar {erros} {erros === 1 ? 'erro' : 'erros'} · XP em dobro
             </button>
           )}
           <button type="button" className="botao-contorno" onClick={onInicio}>
-            Voltar ao início
+            {modo === 'pilula' ? 'Voltar para Estudar' : 'Voltar ao início'}
           </button>
         </div>
       </aside>

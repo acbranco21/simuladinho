@@ -1,6 +1,7 @@
 import type { Nivel, Trilha } from './tipos'
 import type { MisturaDificuldade } from './motor/sessao'
 import type { ModoProgressao } from './motor/progressao'
+import type { FormatoSimulado } from './motor/simulado'
 
 export const NOME_APP = 'Simuladinho'
 
@@ -17,6 +18,8 @@ export interface Configuracao {
   /** Se false, usa `tamanhoTreinoFixo`. */
   iaAjustaTamanho: boolean
   tamanhoTreinoFixo: number
+  /** Simulado de prova: 10 questões (treino de resistência, 45 min) ou 20 (prova completa, 90 min). */
+  simulado: FormatoSimulado
   /** Até onde a turma chegou no material Positivo, por trilha (texto livre). */
   positivoUnidade: Partial<Record<Trilha, string>>
   /** Hash do PIN do painel (SHA-256), ou null se ainda não foi criado. */
@@ -38,6 +41,7 @@ export const CONFIG_PADRAO: Configuracao = {
   limiteDiarioMin: 30,
   iaAjustaTamanho: true,
   tamanhoTreinoFixo: 10,
+  simulado: { questoes: 10 },
   positivoUnidade: {},
   pinHash: null,
   historicoNiveis: [],

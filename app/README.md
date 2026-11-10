@@ -4,12 +4,15 @@ App web instalável (PWA) em React + TypeScript + Vite. Funciona sem internet e 
 
 Publicado em **https://acbranco21.github.io/simuladinho/**.
 
-## O que já funciona (versão 0.2)
+## O que já funciona (versão 0.3)
 
 - **Início**: missão do dia, caça aos erros, XP/nível, sequência de dias, acerto por trilha.
 - **Questão**: múltipla escolha, figuras desenhadas por código (sequência de formas, relógio), texto de apoio, "ouvir enunciado" (voz do próprio aparelho), rascunho para o dedo com lápis/borracha/limpar, "Achei um erro".
 - **Correção comentada**: resposta dela × certa, explicação, erro provável, dica, XP. Propõe encerrar com "missão cumprida" quando detecta 2 sinais de cansaço.
 - **Fim da sessão**: nota 0–10 com peso por dificuldade, acertos por trilha, XP, sequência, recordes.
+- **Simulado de prova**: metade Português, metade Matemática, cada bloco em ordem crescente de dificuldade; tempo da prova real (4,5 min por questão); sem correção durante a prova; navegação livre, questões em branco e entrega com confirmação; entrega automática quando o tempo acaba; resultado com correção comentada. Formato (10 ou 20 questões) definido no painel.
+- **Estudar**: 19 pílulas, uma por habilidade do banco (explicação, regras, exemplo resolvido passo a passo, dica, ouvir em voz alta). Prática de até 3 questões; acertando 2 de 3, o assunto fica marcado como aprendido. Assuntos recomendados com base nos erros. Ao fim de treinos e simulados aparecem botões "Estudar: …" para os assuntos errados.
+- **Minha evolução**: gráfico das notas por trilha nos últimos 12 treinos e simulados, com marca de mudança de nível; mapa de conquistas por habilidade (acende com pílula aprendida ou 80% de acerto em 5+ questões); 9 medalhas de esforço e domínio.
 - **Painel do administrador** (cadeado na tela inicial, protegido por PIN de 4 números):
   - Indicadores: sessões em 7 dias, nota média, tempo de tela hoje, sessões com cansaço/abandono, questões respondidas.
   - Desempenho por trilha: nível, média das 5 últimas notas, tendência, habilidade mais fraca e sugestão.
@@ -18,7 +21,7 @@ Publicado em **https://acbranco21.github.io/simuladinho/**.
   - Cópia de segurança: baixar e restaurar o histórico (arquivo JSON).
 - **Motor** (`src/motor/`): montagem intercalada da sessão com mistura de dificuldade, pontuação, sinais de cansaço, tamanho adaptativo do treino, progressão de nível, gamificação. Coberto por testes.
 
-Ainda não: Simulado de prova, Estudar (pílulas), Minha evolução, correção de redação e edição de questões pelo painel. O banco tem 162 questões: 11 exemplos escritos à mão e o lote 1 (151, ver `../ia/LOTES.md`).
+Ainda não: produção de texto (redação) e edição de questões pelo painel. O banco tem 162 questões: 11 exemplos escritos à mão e o lote 1 (151, ver `../ia/LOTES.md`).
 
 ## Rodar no Mac
 
@@ -49,6 +52,7 @@ Para abrir no tablet na mesma rede Wi-Fi: `npm run dev -- --host` e acesse o end
 src/
 ├── aluna/      telas da aluna (Inicio, QuestaoTela, Correcao, Fim, Rascunho, Mascote, Progresso)
 ├── admin/      área dos pais (Pin, Painel)
+├── conteudo/   pílulas de estudo (pilulas.ts)
 ├── motor/      regras puras + testes (motor.test.ts)
 ├── figuras/    desenho SVG a partir de parâmetros
 ├── dados/      banco local (db.ts) e questões de exemplo
