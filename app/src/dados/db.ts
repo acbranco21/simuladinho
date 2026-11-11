@@ -2,6 +2,8 @@ import Dexie, { type EntityTable } from 'dexie'
 import { CONFIG_PADRAO, type Configuracao } from '../config'
 import type { Nivel, RespostaRegistro, Trilha } from '../tipos'
 import { atualizarSequencia, diaLocal } from '../motor/gamificacao'
+import { XP_LICAO } from '../motor/projetoVida'
+import type { ModuloPV } from '../conteudo/projeto-vida'
 import { avaliarProgressao } from '../motor/progressao'
 import { TAMANHO, proximoTamanhoTreino } from '../motor/tamanho'
 import { notasPorTrilhaPorSessao } from '../motor/painel'
@@ -55,6 +57,15 @@ export interface PilulaAprendida {
   total: number
 }
 
+/** Uma vez em que ela fez uma lição de Projeto de Vida. Não guarda as escolhas dela, só que a lição foi feita. */
+export interface LicaoFeita {
+  id?: number
+  licaoId: string
+  modulo: ModuloPV
+  inicio: number
+  fim: number
+}
+
 /**
  * Banco local no tablet (IndexedDB). Tudo funciona sem internet.
  * O nome 'simulador-bolsa' é mantido de propósito: o histórico continua após a troca do nome do app.
@@ -67,6 +78,7 @@ export const db = new Dexie('simulador-bolsa') as Dexie & {
   config: EntityTable<Configuracao, 'id'>
   statusQuestoes: EntityTable<StatusQuestao, 'questaoId'>
   pilulas: EntityTable<PilulaAprendida, 'habilidade'>
+  licoesPV: EntityTable<LicaoFeita, 'id'>
 }
 
 db.version(1).stores({
@@ -81,6 +93,9 @@ db.version(2).stores({
 })
 db.version(3).stores({
   pilulas: 'habilidade',
+})
+db.version(4).stores({
+  licoesPV: '++id, licaoId, inicio',
 })
 
 const PERFIL_INICIAL: Perfil = { id: 'aluna', xp: 0, sequencia: 0, ultimoDia: null, tamanhoTreino: TAMANHO.inicialTreino, recordes: {} }
@@ -225,9 +240,37 @@ export async function pilulasAprendidas(): Promise<Set<string>> {
   return new Set((await db.pilulas.toArray()).map((p) => p.habilidade))
 }
 
+/** Lição concluída → dia local da primeira conclusão. */
+export async function licoesConcluidas(): Promise<Map<string, string>> {
+  const todas = await db.licoesPV.orderBy('inicio').toArray()
+  const m = new Map<string, string>()
+  for (const l of todas) if (!m.has(l.licaoId)) m.set(l.licaoId, diaLocal(new Date(l.fim)))
+  return m
+}
+
+export async function licoesDeHoje(): Promise<LicaoFeita[]> {
+  const agora = new Date()
+  const inicioDia = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate()).getTime()
+  return db.licoesPV.where('inicio').aboveOrEqual(inicioDia).toArray()
+}
+
+/** Registra a lição. XP só na primeira vez; conta para a sequência de dias e para o tempo de tela. */
+export async function concluirLicao(licaoId: string, modulo: ModuloPV, inicio: number, fim: number): Promise<{ perfil: Perfil; xpGanho: number }> {
+  return db.transaction('rw', [db.licoesPV, db.perfil], async () => {
+    const primeira = (await db.licoesPV.where('licaoId').equals(licaoId).count()) === 0
+    await db.licoesPV.add({ licaoId, modulo, inicio, fim })
+    const perfil = await lerPerfil()
+    const xpGanho = primeira ? XP_LICAO : 0
+    const hoje = diaLocal(new Date(fim))
+    const atualizado: Perfil = { ...perfil, xp: perfil.xp + xpGanho, sequencia: atualizarSequencia(perfil.sequencia, perfil.ultimoDia, hoje), ultimoDia: hoje }
+    await db.perfil.put(atualizado)
+    return { perfil: atualizado, xpGanho }
+  })
+}
+
 /** Cópia de segurança completa (sem o PIN). */
 export async function exportarDados(): Promise<string> {
-  const [sessoes, respostas, perfil, contestacoes, config, statusQuestoes, pilulas] = await Promise.all([
+  const [sessoes, respostas, perfil, contestacoes, config, statusQuestoes, pilulas, licoesPV] = await Promise.all([
     db.sessoes.toArray(),
     db.respostas.toArray(),
     db.perfil.toArray(),
@@ -235,9 +278,10 @@ export async function exportarDados(): Promise<string> {
     db.config.toArray(),
     db.statusQuestoes.toArray(),
     db.pilulas.toArray(),
+    db.licoesPV.toArray(),
   ])
   const configSemPin = config.map((c) => ({ ...c, pinHash: null }))
-  return JSON.stringify({ app: 'simuladinho', versao: 2, exportadoEm: new Date().toISOString(), sessoes, respostas, perfil, contestacoes, config: configSemPin, statusQuestoes, pilulas }, null, 1)
+  return JSON.stringify({ app: 'simuladinho', versao: 3, exportadoEm: new Date().toISOString(), sessoes, respostas, perfil, contestacoes, config: configSemPin, statusQuestoes, pilulas, licoesPV }, null, 1)
 }
 
 /** Restaura uma cópia de segurança (substitui os dados atuais; mantém o PIN atual). */
@@ -245,14 +289,15 @@ export async function importarDados(json: string): Promise<void> {
   const d = JSON.parse(json)
   if (d.app !== 'simuladinho' || !Array.isArray(d.sessoes) || !Array.isArray(d.respostas)) throw new Error('Arquivo não é uma cópia do Simuladinho')
   const pinAtual = (await lerConfig()).pinHash
-  await db.transaction('rw', [db.sessoes, db.respostas, db.perfil, db.contestacoes, db.config, db.statusQuestoes, db.pilulas], async () => {
-    await Promise.all([db.sessoes.clear(), db.respostas.clear(), db.perfil.clear(), db.contestacoes.clear(), db.config.clear(), db.statusQuestoes.clear(), db.pilulas.clear()])
+  await db.transaction('rw', [db.sessoes, db.respostas, db.perfil, db.contestacoes, db.config, db.statusQuestoes, db.pilulas, db.licoesPV], async () => {
+    await Promise.all([db.sessoes.clear(), db.respostas.clear(), db.perfil.clear(), db.contestacoes.clear(), db.config.clear(), db.statusQuestoes.clear(), db.pilulas.clear(), db.licoesPV.clear()])
     await db.sessoes.bulkAdd(d.sessoes)
     await db.respostas.bulkAdd(d.respostas)
     await db.perfil.bulkAdd(d.perfil ?? [])
     await db.contestacoes.bulkAdd(d.contestacoes ?? [])
     await db.statusQuestoes.bulkAdd(d.statusQuestoes ?? [])
     await db.pilulas.bulkAdd(d.pilulas ?? [])
+    await db.licoesPV.bulkAdd(d.licoesPV ?? [])
     for (const c of d.config ?? []) await db.config.put({ ...c, pinHash: pinAtual })
   })
 }

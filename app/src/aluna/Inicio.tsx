@@ -13,6 +13,9 @@ interface Props {
   acerto: Partial<Record<Trilha, { acerto: number; total: number }>>
   errosPendentes: number
   recomendadas: number
+  /** Lições de Projeto de Vida disponíveis agora; null = trilha desligada. */
+  projetoVida: number | null
+  onProjetoVida: () => void
   onTreino: () => void
   onCacaAosErros: () => void
   onSimulado: () => void
@@ -20,7 +23,7 @@ interface Props {
   onEvolucao: () => void
 }
 
-export function Inicio({ perfil, config, limiteAtingido, onAreaPais, acerto, errosPendentes, recomendadas, onTreino, onCacaAosErros, onSimulado, onEstudar, onEvolucao }: Props) {
+export function Inicio({ perfil, config, limiteAtingido, onAreaPais, acerto, errosPendentes, recomendadas, projetoVida, onProjetoVida, onTreino, onCacaAosErros, onSimulado, onEstudar, onEvolucao }: Props) {
   const { nivel, progresso } = nivelDoXp(perfil.xp)
   const nomes = config.trilhasAtivas.map((t) => NOMES_TRILHA[t])
   const listaTrilhas = nomes.length > 1 ? `${nomes.slice(0, -1).join(', ')} e ${nomes.at(-1)}` : nomes[0]
@@ -113,6 +116,19 @@ export function Inicio({ perfil, config, limiteAtingido, onAreaPais, acerto, err
               <span>{recomendadas > 0 ? `${recomendadas} ${recomendadas === 1 ? 'assunto recomendado' : 'assuntos recomendados'} para você` : 'Explicações curtas com exemplos'}</span>
             </span>
           </button>
+          {projetoVida !== null && (
+            <button type="button" className="atalho" onClick={onProjetoVida}>
+              <span className="atalho-icone roxo" aria-hidden="true">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z" />
+                </svg>
+              </span>
+              <span className="atalho-texto">
+                <strong>Projeto de Vida</strong>
+                <span>{projetoVida > 0 ? `${projetoVida} ${projetoVida === 1 ? 'lição nova' : 'lições novas'} · sonhos, dinheiro, ideias e emoções` : 'Sonhos, dinheiro, ideias e emoções'}</span>
+              </span>
+            </button>
+          )}
         </div>
       </main>
 

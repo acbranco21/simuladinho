@@ -47,6 +47,7 @@ button:disabled { cursor: default; }
 .botao-laranja { background: var(--laranja); color: var(--texto); }
 .botao-azul { background: var(--azul); color: #fff; }
 .botao-azul:disabled { background: #d9deea; color: var(--texto-2); }
+.botao-laranja:disabled { background: #d9deea; color: var(--texto-2); }
 .botao-contorno { background: #fff; border: 3px solid #d9deea; }
 .pequeno { font-size: 17px; padding: 10px 18px; min-height: 48px; }
 .botao-pequeno { height: 48px; border-radius: 14px; border: 0; background: var(--cinza); padding: 0 14px; font-size: 15px; font-weight: 800; }
@@ -327,3 +328,62 @@ button:disabled { cursor: default; }
   .relogio-prova { min-width: 0; }
   .simulado .topo-sessao { flex-wrap: wrap; }
 }
+
+/* ---------- Projeto de Vida ---------- */
+.atalho-icone.roxo, .etiqueta.roxo { background: #efedff; color: #5b3fd1; }
+.etiqueta.verde { background: var(--verde-claro); color: var(--verde-texto); }
+.etiqueta.grande { font-size: 20px; padding: 8px 20px; }
+.grade-modulos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.modulo-pv { display: flex; flex-direction: column; gap: 10px; border-top: 6px solid var(--azul); }
+.modulo-pv.roxo { border-top-color: #7a5cf0; }
+.modulo-pv.verde { border-top-color: var(--verde); }
+.modulo-pv.laranja { border-top-color: var(--laranja); }
+.modulo-pv.fechado { opacity: 0.75; }
+.modulo-topo { display: flex; justify-content: space-between; align-items: center; }
+.modulo-pv h2 { font-size: 24px; font-weight: 900; }
+.modulo-desc { font-size: 16px; font-weight: 700; color: var(--texto-2); line-height: 1.4; }
+.licoes-pv { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.licao-pv { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 2px solid var(--borda); background: #fff; border-radius: 16px; padding: 12px 16px; min-height: 52px; font-size: 18px; font-weight: 800; text-align: left; }
+.licao-pv .licao-estado { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 800; color: var(--texto-2); white-space: nowrap; }
+.licao-pv.disponivel { border-color: var(--laranja); background: var(--laranja-claro); }
+.licao-pv.disponivel .licao-estado { color: var(--laranja-texto); }
+.licao-pv.concluida .licao-estado { color: var(--verde-texto); }
+.licao-pv:disabled { color: var(--texto-2); background: var(--cinza); border-color: var(--cinza); }
+.pontos-licao { display: flex; gap: 6px; }
+.pontos-licao span { width: 14px; height: 14px; border-radius: 99px; background: #d9deea; }
+.pontos-licao span.feito { background: var(--verde); }
+.pontos-licao span.atual { background: var(--azul); }
+.corpo-licao { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; flex: 1; align-items: start; }
+.historia-pv { display: flex; flex-direction: column; gap: 14px; border-radius: 28px; }
+.historia-pv p { font-size: 21px; font-weight: 700; line-height: 1.55; }
+.historia-topo { display: flex; justify-content: space-between; align-items: center; }
+.ideia-pv, .com-adulto { display: flex; flex-direction: column; gap: 10px; background: #efedff; border-radius: 28px; }
+.ideia-pv p, .com-adulto p { font-size: 20px; font-weight: 800; line-height: 1.45; }
+.rotulo-pv { font-size: 14px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #5b3fd1; }
+.atividade-pv { display: flex; flex-direction: column; gap: 16px; border-radius: 28px; flex: 1; }
+.pergunta-pv { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.pergunta-pv h2 { font-size: 26px; font-weight: 900; line-height: 1.35; }
+.opcoes-pv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.opcao-pv { border: 3px solid var(--borda); background: #fff; border-radius: 18px; padding: 16px 18px; min-height: 72px; font-size: 19px; font-weight: 800; text-align: left; line-height: 1.35; }
+.opcao-pv.certa { border-color: var(--verde); background: var(--verde-claro); }
+.opcao-pv.escolhida { border-color: var(--azul); background: var(--azul-claro); }
+.opcao-pv.tentada { border-color: #f6c79a; background: var(--laranja-claro); color: var(--texto-2); }
+.opcao-pv:disabled:not(.certa):not(.escolhida):not(.tentada) { opacity: 0.55; }
+.retorno-pv { border-radius: 18px; padding: 16px 20px; font-size: 19px; font-weight: 700; line-height: 1.45; }
+.retorno-pv.verde { background: var(--verde-claro); color: var(--verde-texto); }
+.retorno-pv.azul { background: var(--azul-claro); color: var(--azul-escuro); }
+.retorno-pv.laranja { background: var(--laranja-claro); color: var(--laranja-texto); }
+.fim-licao { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; flex: 1; justify-content: center; max-width: 720px; margin: 0 auto; }
+.fim-licao h2 { font-size: 40px; font-weight: 900; }
+.ideia-fim { font-size: 22px; font-weight: 800; color: var(--texto-2); line-height: 1.45; }
+.com-adulto { text-align: left; width: 100%; }
+.controle-largo { grid-column: 1 / -1; }
+.tabela-pv { display: flex; flex-direction: column; gap: 10px; }
+.linha-pv { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--borda); }
+.linha-pv > div { display: flex; flex-direction: column; gap: 2px; }
+.linha-pv small { font-size: 13px; font-weight: 700; color: var(--texto-2); }
+@media (orientation: portrait), (max-width: 900px) {
+  .grade-modulos, .corpo-licao, .opcoes-pv { grid-template-columns: 1fr; }
+}
+.rever-historia { align-self: flex-start; font-size: 17px; }
+.historia-apoio { display: flex; flex-direction: column; gap: 8px; font-size: 18px; }

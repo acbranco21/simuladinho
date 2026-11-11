@@ -4,7 +4,7 @@ App web instalável (PWA) em React + TypeScript + Vite. Funciona sem internet e 
 
 Publicado em **https://acbranco21.github.io/simuladinho/**.
 
-## O que já funciona (versão 0.3)
+## O que já funciona (versão 0.4)
 
 - **Início**: missão do dia, caça aos erros, XP/nível, sequência de dias, acerto por trilha.
 - **Questão**: múltipla escolha, figuras desenhadas por código (sequência de formas, relógio), texto de apoio, "ouvir enunciado" (voz do próprio aparelho), rascunho para o dedo com lápis/borracha/limpar, "Achei um erro".
@@ -13,6 +13,7 @@ Publicado em **https://acbranco21.github.io/simuladinho/**.
 - **Simulado de prova**: metade Português, metade Matemática, cada bloco em ordem crescente de dificuldade; tempo da prova real (4,5 min por questão); sem correção durante a prova; navegação livre, questões em branco e entrega com confirmação; entrega automática quando o tempo acaba; resultado com correção comentada. Formato (10 ou 20 questões) definido no painel.
 - **Estudar**: 19 pílulas, uma por habilidade do banco (explicação, regras, exemplo resolvido passo a passo, dica, ouvir em voz alta). Prática de até 3 questões; acertando 2 de 3, o assunto fica marcado como aprendido. Assuntos recomendados com base nos erros. Ao fim de treinos e simulados aparecem botões "Estudar: …" para os assuntos errados.
 - **Minha evolução**: gráfico das notas por trilha nos últimos 12 treinos e simulados, com marca de mudança de nível; mapa de conquistas por habilidade (acende com pílula aprendida ou 80% de acerto em 5+ questões); 9 medalhas de esforço e domínio.
+- **Projeto de Vida** (fora da nota e do simulado): 4 módulos — Emoções e convivência, Meus sonhos e metas, Dinheiro e escolhas, Ideias que resolvem — com 3 lições cada (3º, 4º e 5º ano). Cada lição tem história curta, a grande ideia, 3 perguntas com retorno comentado (opções embaralhadas, "ver a história de novo") e um desafio fora da tela com um adulto. Liberação automática pelo avanço (uma lição nova por dia) ou manual pelo responsável no painel (automático / liberado / bloqueado). Só guarda que a lição foi feita, nunca as escolhas dela. Detalhes em `docs/projeto-de-vida.md`.
 - **Painel do administrador** (cadeado na tela inicial, protegido por PIN de 4 números):
   - Indicadores: sessões em 7 dias, nota média, tempo de tela hoje, sessões com cansaço/abandono, questões respondidas.
   - Desempenho por trilha: nível, média das 5 últimas notas, tendência, habilidade mais fraca e sugestão.

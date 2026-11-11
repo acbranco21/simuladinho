@@ -2,6 +2,7 @@ import type { Nivel, Trilha } from './tipos'
 import type { MisturaDificuldade } from './motor/sessao'
 import type { ModoProgressao } from './motor/progressao'
 import type { FormatoSimulado } from './motor/simulado'
+import { PV_PADRAO, type ConfigProjetoVida } from './motor/projetoVida'
 
 export const NOME_APP = 'Simuladinho'
 
@@ -26,6 +27,8 @@ export interface Configuracao {
   pinHash: string | null
   /** Registro das mudanças de nível, para o gráfico de evolução. */
   historicoNiveis: { trilha: Trilha; de: Nivel; para: Nivel; em: number; motivo: 'automatica' | 'manual' }[]
+  /** Trilha Projeto de Vida (fora da nota): ligada/desligada e controle de cada módulo. */
+  projetoVida: ConfigProjetoVida
 }
 
 /** Trilhas com questões objetivas disponíveis hoje. */
@@ -45,4 +48,5 @@ export const CONFIG_PADRAO: Configuracao = {
   positivoUnidade: {},
   pinHash: null,
   historicoNiveis: [],
+  projetoVida: PV_PADRAO,
 }

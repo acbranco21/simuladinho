@@ -6,6 +6,8 @@ import { Estudar } from './aluna/Estudar'
 import { Evolucao } from './aluna/Evolucao'
 import { Fim } from './aluna/Fim'
 import { Inicio } from './aluna/Inicio'
+import { LicaoTela } from './aluna/LicaoTela'
+import { ProjetoVida } from './aluna/ProjetoVida'
 import { PilulaTela } from './aluna/PilulaTela'
 import type { EstadoPasso } from './aluna/Progresso'
 import { QuestaoTela } from './aluna/QuestaoTela'
@@ -13,8 +15,10 @@ import { Simulado } from './aluna/Simulado'
 import { SimuladoResultado } from './aluna/SimuladoResultado'
 import type { Configuracao } from './config'
 import { PILULA_POR_HABILIDADE } from './conteudo/pilulas'
+import { MODULOS_PV, type LicaoPV } from './conteudo/projeto-vida'
 import {
   acertoPorTrilha,
+  concluirLicao,
   contestar,
   db,
   hashPin,
@@ -22,6 +26,8 @@ import {
   idsParaCacaAosErros,
   lerConfig,
   lerPerfil,
+  licoesConcluidas,
+  licoesDeHoje,
   marcarPilula,
   pilulasAprendidas,
   salvarConfig,
@@ -32,7 +38,8 @@ import {
 import exemplos from './dados/questoes-exemplo.json'
 import lote1 from './dados/questoes-lote1.json'
 import { pilulasSugeridas } from './motor/conquistas'
-import { XP, xpDaResposta } from './motor/gamificacao'
+import { XP, diaLocal, xpDaResposta } from './motor/gamificacao'
+import { licoesDisponiveis, type ProgressoAluna } from './motor/projetoVida'
 import { habilidadeMaisFraca, minutosNoDia } from './motor/painel'
 import { calcularNota, pontosDaQuestao, resumoPorTrilha, type ResumoTrilha } from './motor/pontuacao'
 import { criarSorteio, montarCacaAosErros, montarSessao } from './motor/sessao'
@@ -45,7 +52,7 @@ const BANCO = [...exemplos, ...lote1] as Questao[]
 const HABILIDADES_COM_PILULA = new Set(PILULA_POR_HABILIDADE.keys())
 
 type Modo = 'treino' | 'caca_erros' | 'pilula'
-type Tela = 'inicio' | 'questao' | 'correcao' | 'fim' | 'pin' | 'painel' | 'simulado' | 'resultadoSimulado' | 'estudar' | 'pilula' | 'evolucao'
+type Tela = 'inicio' | 'questao' | 'correcao' | 'fim' | 'pin' | 'painel' | 'simulado' | 'resultadoSimulado' | 'estudar' | 'pilula' | 'evolucao' | 'projetoVida' | 'licao'
 
 interface Sessao {
   modo: Modo
@@ -111,13 +118,27 @@ export default function App() {
   const [simulado, setSimulado] = useState<SimuladoAtivo | null>(null)
   const [resultadoSimulado, setResultadoSimulado] = useState<ResultadoSimulado | null>(null)
   const [pilulaAtual, setPilulaAtual] = useState<string | null>(null)
+  const [progressoPV, setProgressoPV] = useState<ProgressoAluna>({ sessoesConcluidas: 0, concluidas: new Map() })
+  const [licaoAtual, setLicaoAtual] = useState<{ licao: LicaoPV; inicio: number; xpGanho: number | null } | null>(null)
   const salvando = useRef(false)
 
   const recarregar = useCallback(async () => {
-    const [p, a, e, c, hoje, apr, respostas] = await Promise.all([lerPerfil(), acertoPorTrilha(), idsParaCacaAosErros(), lerConfig(), sessoesDeHoje(), pilulasAprendidas(), db.respostas.toArray()])
+    const [p, a, e, c, hoje, apr, respostas, licoesHoje, concluidas, sessoesConcluidas] = await Promise.all([
+      lerPerfil(),
+      acertoPorTrilha(),
+      idsParaCacaAosErros(),
+      lerConfig(),
+      sessoesDeHoje(),
+      pilulasAprendidas(),
+      db.respostas.toArray(),
+      licoesDeHoje(),
+      licoesConcluidas(),
+      db.sessoes.filter((s) => s.concluida).count(),
+    ])
     setPerfil(p)
     setConfig(c)
-    setMinutosHoje(minutosNoDia(hoje, new Date()))
+    setMinutosHoje(minutosNoDia([...hoje, ...licoesHoje], new Date()))
+    setProgressoPV({ sessoesConcluidas, matematica: a.matematica, concluidas })
     setAcerto(a)
     setErrosPendentes(e)
     setAprendidas(apr)
@@ -398,6 +419,45 @@ export default function App() {
     )
   }
 
+  if (tela === 'projetoVida') {
+    return (
+      <ProjetoVida
+        cfg={config.projetoVida}
+        progresso={progressoPV}
+        hoje={diaLocal(new Date())}
+        limiteAtingido={config.limiteDiarioMin > 0 && minutosHoje >= config.limiteDiarioMin}
+        onAbrir={(licao) => {
+          setLicaoAtual({ licao, inicio: Date.now(), xpGanho: null })
+          setTela('licao')
+        }}
+        onVoltar={() => setTela('inicio')}
+      />
+    )
+  }
+
+  if (tela === 'licao' && licaoAtual) {
+    const voltar = () => {
+      setLicaoAtual(null)
+      setTela('projetoVida')
+    }
+    return (
+      <LicaoTela
+        key={licaoAtual.licao.id}
+        licao={licaoAtual.licao}
+        xpGanho={licaoAtual.xpGanho}
+        onTerminar={() => {
+          const atual = licaoAtual
+          void concluirLicao(atual.licao.id, atual.licao.modulo, atual.inicio, Date.now()).then(async ({ xpGanho }) => {
+            setLicaoAtual((l) => (l && l.licao.id === atual.licao.id ? { ...l, xpGanho } : l))
+            await recarregar()
+          })
+        }}
+        onVoltar={voltar}
+        onSair={voltar}
+      />
+    )
+  }
+
   if (tela === 'evolucao') {
     return <Evolucao config={config} perfil={perfil} onVoltar={() => setTela('inicio')} />
   }
@@ -462,6 +522,8 @@ export default function App() {
       errosPendentes={errosPendentes.length}
       limiteAtingido={limiteAtingido}
       recomendadas={recomendadas.size}
+      projetoVida={config.projetoVida.ativo ? licoesDisponiveis(config.projetoVida, progressoPV, diaLocal(new Date()), MODULOS_PV.map((m) => m.id)) : null}
+      onProjetoVida={() => setTela('projetoVida')}
       onTreino={() => void iniciarTreino()}
       onCacaAosErros={() => void iniciarCaca()}
       onSimulado={() => void iniciarSimulado()}

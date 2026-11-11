@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TRILHAS_DISPONIVEIS, type Configuracao } from '../config'
-import { db, decidirQuestao, exportarDados, importarDados, lerConfig, salvarConfig, type StatusQuestao } from '../dados/db'
-import { desempenhoPorTrilha, indicadores, questoesAtipicas, type LinhaTrilha, type Tendencia } from '../motor/painel'
+import { LICOES_POR_MODULO, MODULOS_PV, type ModuloPV } from '../conteudo/projeto-vida'
+import { db, decidirQuestao, exportarDados, importarDados, lerConfig, licoesConcluidas, salvarConfig, type StatusQuestao } from '../dados/db'
+import { liberadoPeloAvanco, type EstadoModulo, type ProgressoAluna } from '../motor/projetoVida'
+import { desempenhoPorTrilha, indicadores, minutosNoDia, questoesAtipicas, type LinhaTrilha, type Tendencia } from '../motor/painel'
 import { formatarNota } from '../motor/pontuacao'
 import { criarSorteio } from '../motor/sessao'
 import { NOMES_TRILHA, type Nivel, type Questao, type Trilha } from '../tipos'
 
 const NOMES_NIVEL: Record<Nivel, string> = { base: 'Base · 3º ano', avanco: 'Avanço · 4º ano', desafio: 'Desafio · 5º ano' }
+const NOMES_ESTADO: Record<EstadoModulo, string> = { auto: 'Automático (pelo avanço)', liberado: 'Liberado agora', bloqueado: 'Bloqueado' }
 const NOMES_TENDENCIA: Record<Tendencia, string> = { subindo: 'Subindo', estavel: 'Estável', caindo: 'Caindo', poucos_dados: 'Poucos dados' }
 
 interface ItemFila {
@@ -29,12 +32,12 @@ function semanaDoAno(d: Date): number {
 export function Painel({ banco, onSair, onConfigSalva }: Props) {
   const [config, setConfig] = useState<Configuracao | null>(null)
   const [rascunho, setRascunho] = useState<Configuracao | null>(null)
-  const [dados, setDados] = useState<{ ind: ReturnType<typeof indicadores>; linhas: LinhaTrilha[]; fila: ItemFila[]; desativadas: Questao[] } | null>(null)
+  const [dados, setDados] = useState<{ ind: ReturnType<typeof indicadores>; linhas: LinhaTrilha[]; fila: ItemFila[]; desativadas: Questao[]; pv: ProgressoAluna } | null>(null)
   const [aviso, setAviso] = useState('')
   const porId = useMemo(() => new Map(banco.map((q) => [q.id, q])), [banco])
 
   const carregar = useCallback(async () => {
-    const [c, sessoes, respostas, contest, status] = await Promise.all([lerConfig(), db.sessoes.toArray(), db.respostas.toArray(), db.contestacoes.toArray(), db.statusQuestoes.toArray()])
+    const [c, sessoes, respostas, contest, status, licoes, concluidas] = await Promise.all([lerConfig(), db.sessoes.toArray(), db.respostas.toArray(), db.contestacoes.toArray(), db.statusQuestoes.toArray(), db.licoesPV.toArray(), licoesConcluidas()])
     const sess = sessoes.map((s) => ({ ...s, id: s.id! }))
     const decisao = new Map<string, StatusQuestao>(status.map((s) => [s.questaoId, s]))
     const fila: ItemFila[] = []
@@ -61,8 +64,16 @@ export function Painel({ banco, onSair, onConfigSalva }: Props) {
     const desativadas = status.filter((s) => s.status === 'desativada').map((s) => porId.get(s.questaoId)).filter((q): q is Questao => !!q)
     setConfig(c)
     setRascunho(c)
+    const mat = respostas.filter((r) => r.trilha === 'matematica')
+    const ind = indicadores(sess, respostas.length, new Date())
+    ind.minutosHoje = minutosNoDia([...sess, ...licoes], new Date())
     setDados({
-      ind: indicadores(sess, respostas.length, new Date()),
+      pv: {
+        sessoesConcluidas: sess.filter((x) => x.concluida).length,
+        matematica: mat.length ? { total: mat.length, acerto: mat.filter((r) => r.correta).length / mat.length } : undefined,
+        concluidas,
+      },
+      ind,
       linhas: desempenhoPorTrilha(c.trilhasAtivas, c.nivelPorTrilha, c.progressao, sess, respostas),
       fila,
       desativadas,
@@ -339,6 +350,51 @@ export function Painel({ banco, onSair, onConfigSalva }: Props) {
                 </label>
               )}
               {minutosRestantes !== null && <p className="secundario pequeno-texto">Restam {minutosRestantes} min hoje.</p>}
+            </div>
+
+            <div className="cartao controle controle-largo">
+              <h3>Projeto de Vida</h3>
+              <label className="check">
+                <input type="checkbox" checked={rascunho.projetoVida.ativo} onChange={(e) => alterar({ projetoVida: { ...rascunho.projetoVida, ativo: e.target.checked } })} />
+                Mostrar a trilha Projeto de Vida para ela (fora da nota e do simulado)
+              </label>
+              {rascunho.projetoVida.ativo && (
+                <div className="tabela-pv">
+                  {MODULOS_PV.map((m) => {
+                    const estado = rascunho.projetoVida.modulos[m.id] ?? 'auto'
+                    const licoesModulo = LICOES_POR_MODULO.get(m.id) ?? []
+                    const feitas = licoesModulo.filter((l) => dados.pv.concluidas.has(l.id)).length
+                    const peloAvanco = liberadoPeloAvanco(m.id, dados.pv)
+                    return (
+                      <div key={m.id} className="linha-pv">
+                        <div>
+                          <strong>{m.nome}</strong>
+                          <small>
+                            {m.tema} · {m.bncc}
+                          </small>
+                          <small>
+                            {feitas} de {licoesModulo.length} lições feitas · {peloAvanco ? 'já liberado pelo avanço' : `regra: ${m.comoLiberar.charAt(0).toLowerCase()}${m.comoLiberar.slice(1).replace(/você/g, 'ela')}`}
+                          </small>
+                        </div>
+                        <select
+                          aria-label={`Controle de ${m.nome}`}
+                          value={estado}
+                          onChange={(e) => alterar({ projetoVida: { ...rascunho.projetoVida, modulos: { ...rascunho.projetoVida.modulos, [m.id as ModuloPV]: e.target.value as EstadoModulo } } })}
+                        >
+                          {(Object.keys(NOMES_ESTADO) as EstadoModulo[]).map((k) => (
+                            <option key={k} value={k}>
+                              {NOMES_ESTADO[k]}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+              <p className="secundario pequeno-texto">
+                Automático: o módulo abre pelo avanço dela e libera uma lição nova por dia. Liberado: abre todas as lições agora. As respostas dela nessas lições não são guardadas, só que a lição foi feita. Na versão para escolas, o professor terá o mesmo controle.
+              </p>
             </div>
 
             <div className="cartao controle">
