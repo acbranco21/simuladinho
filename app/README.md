@@ -4,7 +4,7 @@ App web instalável (PWA) em React + TypeScript + Vite. Funciona sem internet e 
 
 Publicado em **https://acbranco21.github.io/simuladinho/**.
 
-## O que já funciona (versão 0.4)
+## O que já funciona (versão 0.5)
 
 - **Início**: missão do dia, caça aos erros, XP/nível, sequência de dias, acerto por trilha.
 - **Questão**: múltipla escolha, figuras desenhadas por código (sequência de formas, relógio), texto de apoio, "ouvir enunciado" (voz do próprio aparelho), rascunho para o dedo com lápis/borracha/limpar, "Achei um erro".
@@ -14,6 +14,7 @@ Publicado em **https://acbranco21.github.io/simuladinho/**.
 - **Estudar**: 19 pílulas, uma por habilidade do banco (explicação, regras, exemplo resolvido passo a passo, dica, ouvir em voz alta). Prática de até 3 questões; acertando 2 de 3, o assunto fica marcado como aprendido. Assuntos recomendados com base nos erros. Ao fim de treinos e simulados aparecem botões "Estudar: …" para os assuntos errados.
 - **Minha evolução**: gráfico das notas por trilha nos últimos 12 treinos e simulados, com marca de mudança de nível; mapa de conquistas por habilidade (acende com pílula aprendida ou 80% de acerto em 5+ questões); 9 medalhas de esforço e domínio.
 - **Projeto de Vida** (fora da nota e do simulado): 4 módulos — Emoções e convivência, Meus sonhos e metas, Dinheiro e escolhas, Ideias que resolvem — com 3 lições cada (3º, 4º e 5º ano). Cada lição tem história curta, a grande ideia, 3 perguntas com retorno comentado (opções embaralhadas, "ver a história de novo") e um desafio fora da tela com um adulto. Liberação automática pelo avanço (uma lição nova por dia) ou manual pelo responsável no painel (automático / liberado / bloqueado). Só guarda que a lição foi feita, nunca as escolhas dela. Detalhes em `docs/projeto-de-vida.md`.
+- **Dois visuais, à escolha:** *Caderno* (padrão: folha quadriculada, coruja e ícones desenhados a lápis de cor, molduras feitas à mão, títulos em letra de forma manuscrita) ou *Clássico* (o visual original). A aluna troca pelo botão na tela inicial; o responsável também pode trocar no painel. No caderno, a coruja se desenha sozinha ao acertar, ao concluir uma lição e no fim do treino ou simulado (desligado se o aparelho pede menos movimento). Arte em `../arte/`.
 - **Painel do administrador** (cadeado na tela inicial, protegido por PIN de 4 números):
   - Indicadores: sessões em 7 dias, nota média, tempo de tela hoje, sessões com cansaço/abandono, questões respondidas.
   - Desempenho por trilha: nível, média das 5 últimas notas, tendência, habilidade mais fraca e sugestão.

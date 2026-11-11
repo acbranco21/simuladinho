@@ -1,5 +1,19 @@
+import { ARTE } from '../arte'
+import { useTema } from '../tema'
+
+/** A coruja do app. No tema caderno, desenhada a lápis de cor (`tamanho` vira a altura, um pouco maior); no clássico, o desenho vetorial original. */
+/** `desenhar`: nos momentos especiais, a coruja feliz se desenha sozinha (2 s, uma vez). Desligado se o aparelho pede menos movimento. */
+export function Mascote({ tamanho = 64, feliz = false, claro = false, desenhar = false }: { tamanho?: number; feliz?: boolean; claro?: boolean; desenhar?: boolean }) {
+  const tema = useTema()
+  if (tema === 'classico') return <MascoteClassico tamanho={tamanho} feliz={feliz} claro={claro} />
+  const calmo = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  if (feliz && desenhar && !calmo)
+    return <video className="mascote" src={ARTE.corujaDesenhando} poster={ARTE.corujaFeliz} autoPlay muted playsInline aria-hidden="true" style={{ height: Math.round(tamanho * 1.25), width: 'auto' }} />
+  return <img className="mascote" src={feliz ? ARTE.corujaFeliz : ARTE.coruja} alt="" aria-hidden="true" style={{ height: Math.round(tamanho * 1.25), width: 'auto' }} draggable={false} />
+}
+
 /** `claro`: versão branca para usar sobre fundo azul. */
-export function Mascote({ tamanho = 64, feliz = false, claro = false }: { tamanho?: number; feliz?: boolean; claro?: boolean }) {
+function MascoteClassico({ tamanho = 64, feliz = false, claro = false }: { tamanho?: number; feliz?: boolean; claro?: boolean }) {
   const corpo = claro ? '#FFFFFF' : '#2F6FED'
   const olho = claro ? '#2F6FED' : '#FFFFFF'
   const pupila = claro ? '#FFFFFF' : '#1B2340'

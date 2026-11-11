@@ -24,7 +24,7 @@ export function SimuladoResultado({ questoes, escolhas, nota, resumo, minutosUsa
   return (
     <div className="tela resultado-simulado">
       <section className="celebracao compacta">
-        <Mascote tamanho={88} feliz claro />
+        <Mascote tamanho={88} feliz claro desenhar />
         <h1>Prova entregue!</h1>
         <div className="nota">
           <span className="nota-valor">{formatarNota(nota)}</span>

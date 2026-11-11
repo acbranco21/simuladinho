@@ -245,6 +245,22 @@ export function Painel({ banco, onSair, onConfigSalva }: Props) {
                 Nome que aparece no app
                 <input type="text" value={rascunho.nomeAluna} maxLength={30} placeholder="Ex.: Ana" onChange={(e) => alterar({ nomeAluna: e.target.value })} />
               </label>
+              <span className="campo">Visual do app</span>
+              {(
+                [
+                  ['caderno', 'Caderno', 'Folha quadriculada e desenhos a lápis de cor'],
+                  ['classico', 'Clássico', 'O visual original, com cores chapadas'],
+                ] as const
+              ).map(([v, nome, desc]) => (
+                <label key={v} className="radio">
+                  <input type="radio" name="tema" checked={rascunho.tema === v} onChange={() => alterar({ tema: v })} />
+                  <span>
+                    <strong>{nome}</strong>
+                    <small>{desc}</small>
+                  </span>
+                </label>
+              ))}
+              <p className="secundario pequeno-texto">Ela também pode trocar pelo botão na tela inicial.</p>
             </div>
 
             <div className="cartao controle">

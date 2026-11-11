@@ -75,7 +75,7 @@ export function Correcao({ questao, escolha, xp, titulo, passos, indice, ultima,
         <aside className="lateral-correcao">
           <div className="cartao explicacao">
             <div className="explicacao-topo">
-              <Mascote tamanho={56} feliz={acertou} />
+              <Mascote tamanho={56} feliz={acertou} desenhar />
               <strong>{acertou ? 'Muito bem!' : 'Quase lá!'}</strong>
             </div>
             <p>{questao.explicacao}</p>

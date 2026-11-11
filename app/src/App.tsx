@@ -14,6 +14,7 @@ import { QuestaoTela } from './aluna/QuestaoTela'
 import { Simulado } from './aluna/Simulado'
 import { SimuladoResultado } from './aluna/SimuladoResultado'
 import type { Configuracao } from './config'
+import { definirTema, type Tema } from './tema'
 import { PILULA_POR_HABILIDADE } from './conteudo/pilulas'
 import { MODULOS_PV, type LicaoPV } from './conteudo/projeto-vida'
 import {
@@ -155,6 +156,17 @@ export default function App() {
   useEffect(() => {
     void recarregar()
   }, [recarregar])
+
+  useEffect(() => {
+    if (config) definirTema(config.tema)
+  }, [config])
+
+  const trocarTema = async (tema: Tema) => {
+    if (!config) return
+    const nova = { ...config, tema }
+    await salvarConfig(nova)
+    setConfig(nova)
+  }
 
   const comecar = (modo: Modo, questoes: Questao[], habilidade?: string) => {
     if (!questoes.length) return
@@ -524,6 +536,7 @@ export default function App() {
       recomendadas={recomendadas.size}
       projetoVida={config.projetoVida.ativo ? licoesDisponiveis(config.projetoVida, progressoPV, diaLocal(new Date()), MODULOS_PV.map((m) => m.id)) : null}
       onProjetoVida={() => setTela('projetoVida')}
+      onTrocarTema={() => void trocarTema(config.tema === 'caderno' ? 'classico' : 'caderno')}
       onTreino={() => void iniciarTreino()}
       onCacaAosErros={() => void iniciarCaca()}
       onSimulado={() => void iniciarSimulado()}

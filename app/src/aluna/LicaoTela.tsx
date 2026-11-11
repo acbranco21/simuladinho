@@ -118,7 +118,7 @@ export function LicaoTela({ licao, xpGanho, onTerminar, onVoltar, onSair }: Prop
       <div className="tela licao">
         {topo}
         <div className="fim-licao">
-          <Mascote tamanho={96} />
+          <Mascote tamanho={96} feliz desenhar />
           <h2>Lição concluída!</h2>
           <p className="ideia-fim">{licao.ideia}</p>
           {!!xpGanho && <span className="etiqueta laranja grande">+{xpGanho} XP</span>}

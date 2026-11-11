@@ -387,3 +387,4 @@ button:disabled { cursor: default; }
 }
 .rever-historia { align-self: flex-start; font-size: 17px; }
 .historia-apoio { display: flex; flex-direction: column; gap: 8px; font-size: 18px; }
+.botao-tema { border: 0; color: var(--texto); min-height: 52px; }

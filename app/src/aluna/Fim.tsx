@@ -22,7 +22,7 @@ export function Fim({ nota, resumo, xpGanho, sequencia, novosRecordes, subiuDeNi
   return (
     <div className="tela fim">
       <section className="celebracao">
-        <Mascote tamanho={120} feliz claro />
+        <Mascote tamanho={120} feliz claro desenhar />
         <h1>Missão cumprida!</h1>
         <p>{modo === 'pilula' ? (aprendeu ? `Você aprendeu: ${aprendeu}!` : 'Boa prática! Leia a explicação de novo e tente mais uma vez.') : modo === 'caca_erros' ? 'Você revisou seus erros.' : 'Você terminou o treino.'}</p>
         <div className="nota">
