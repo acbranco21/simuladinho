@@ -434,7 +434,7 @@ export function Painel({ banco, onSair, onConfigSalva }: Props) {
                 </div>
               )}
               <p className="secundario pequeno-texto">
-                Automático: o módulo abre pelo avanço dela e libera uma lição nova por dia. Liberado: abre todas as lições agora. As respostas dela nessas lições não são guardadas, só que a lição foi feita. Na versão para escolas, o professor terá o mesmo controle.
+                Automático: o módulo abre pelo avanço dela e libera uma lição nova por dia, só até a série que ela já alcançou (lição de 4º ano com Matemática em Avanço, de 5º ano em Desafio, para quem está no 3º ano). Liberado: abre todas as lições agora. As respostas dela nessas lições não são guardadas, só que a lição foi feita. Na versão para escolas, o professor terá o mesmo controle.
               </p>
             </div>
 

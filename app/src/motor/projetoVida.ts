@@ -27,6 +27,16 @@ export interface ProgressoAluna {
   matematica?: { acerto: number; total: number }
   /** Lição concluída → dia local (AAAA-MM-DD) da primeira conclusão. */
   concluidas: Map<string, string>
+  /**
+   * Série que ela já alcançou (série atual + o quanto subiu em Matemática: Base +0, Avanço +1, Desafio +2).
+   * No modo automático, uma lição só abre se a série dela for no máximo esta. Sem valor: sem trava por série.
+   */
+  serieAlcancada?: number
+}
+
+/** Série alcançada a partir da série atual e do nível de Matemática. */
+export function serieAlcancada(serieAtual: number, nivelMatematica: 'base' | 'avanco' | 'desafio' = 'base'): number {
+  return serieAtual + { base: 0, avanco: 1, desafio: 2 }[nivelMatematica]
 }
 
 function moduloTemConcluida(m: ModuloPV, p: ProgressoAluna): boolean {
@@ -56,12 +66,13 @@ export function situacaoModulo(m: ModuloPV, cfg: ConfigProjetoVida, p: Progresso
   return liberadoPeloAvanco(m, p) ? 'aberto' : 'trancado'
 }
 
-export type SituacaoLicao = 'concluida' | 'disponivel' | 'amanha' | 'trancada'
+export type SituacaoLicao = 'concluida' | 'disponivel' | 'amanha' | 'trancada' | 'serie'
 
 /**
  * Situação de cada lição do módulo.
  * - Módulo trancado/bloqueado: todas trancadas (as concluídas continuam concluídas).
- * - Automático: em ordem, uma nova por dia (a próxima abre no dia seguinte à conclusão da anterior).
+ * - Automático: em ordem, uma nova por dia (a próxima abre no dia seguinte à conclusão da anterior),
+ *   e só até a série que ela alcançou ('serie': espera ela avançar em Matemática).
  * - Liberado manualmente: todas disponíveis.
  */
 export function situacaoLicoes(m: ModuloPV, cfg: ConfigProjetoVida, p: ProgressoAluna, hoje: string): { licao: LicaoPV; situacao: SituacaoLicao }[] {
@@ -71,7 +82,9 @@ export function situacaoLicoes(m: ModuloPV, cfg: ConfigProjetoVida, p: Progresso
   return licoes.map((licao, i) => {
     if (p.concluidas.has(licao.id)) return { licao, situacao: 'concluida' }
     if (sm !== 'aberto') return { licao, situacao: 'trancada' }
-    if (manual || i === 0) return { licao, situacao: 'disponivel' }
+    if (manual) return { licao, situacao: 'disponivel' }
+    if (p.serieAlcancada !== undefined && licao.serie > p.serieAlcancada) return { licao, situacao: 'serie' }
+    if (i === 0) return { licao, situacao: 'disponivel' }
     const anterior = p.concluidas.get(licoes[i - 1].id)
     if (!anterior) return { licao, situacao: 'trancada' }
     return { licao, situacao: anterior < hoje ? 'disponivel' : 'amanha' }

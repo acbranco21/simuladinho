@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { LICOES_PV, MODULOS_PV } from '../conteudo/projeto-vida'
-import { liberadoPeloAvanco, licoesDisponiveis, situacaoLicoes, situacaoModulo, type ConfigProjetoVida, type ProgressoAluna } from './projetoVida'
+import { liberadoPeloAvanco, licoesDisponiveis, serieAlcancada, situacaoLicoes, situacaoModulo, type ConfigProjetoVida, type ProgressoAluna } from './projetoVida'
 
 const AUTO: ConfigProjetoVida = { ativo: true, modulos: {} }
 const prog = (p: Partial<ProgressoAluna>): ProgressoAluna => ({ sessoesConcluidas: 0, concluidas: new Map(), ...p })
@@ -8,7 +8,7 @@ const TODOS = MODULOS_PV.map((m) => m.id)
 
 describe('Projeto de Vida: conteúdo', () => {
   it('cada lição tem história, 3 atividades e desafio com adulto', () => {
-    expect(LICOES_PV).toHaveLength(12)
+    expect(LICOES_PV).toHaveLength(13)
     for (const l of LICOES_PV) {
       expect(l.historia.length, l.id).toBeGreaterThan(0)
       expect(l.atividades, l.id).toHaveLength(3)
@@ -26,8 +26,33 @@ describe('Projeto de Vida: conteúdo', () => {
       }
   })
 
-  it('cada módulo tem uma lição de 3º, 4º e 5º ano', () => {
-    for (const m of TODOS) expect(LICOES_PV.filter((l) => l.modulo === m).map((l) => l.serie).sort()).toEqual([3, 4, 5])
+  it('cada módulo tem lições de 3º, 4º e 5º ano (emoções tem duas de 3º)', () => {
+    for (const m of TODOS) expect(LICOES_PV.filter((l) => l.modulo === m).map((l) => l.serie).sort()).toEqual(m === 'emocoes' ? [3, 3, 4, 5] : [3, 4, 5])
+  })
+
+  it('atividades "escolha" não começam com elogio genérico', () => {
+    for (const l of LICOES_PV)
+      for (const a of l.atividades.filter((x) => x.tipo === 'escolha'))
+        for (const o of a.opcoes) expect(o.retorno, o.texto).not.toMatch(/^(Boa|Ótimo|Legal|Que bonito)/)
+  })
+})
+
+describe('Projeto de Vida: liberação por série', () => {
+  const ontem = '2026-11-10'
+  const hoje = '2026-11-11'
+  it('aluna de 3º ano em Base: lições de 4º e 5º esperam ela avançar em Matemática', () => {
+    const p = prog({ sessoesConcluidas: 5, serieAlcancada: serieAlcancada(3, 'base'), concluidas: new Map([['pv-emo-1', ontem], ['pv-emo-prova', ontem]]) })
+    const sit = situacaoLicoes('emocoes', AUTO, p, hoje).map((x) => x.situacao)
+    expect(sit).toEqual(['concluida', 'concluida', 'serie', 'serie'])
+  })
+  it('com Matemática em Avanço, abre a de 4º; em Desafio, a de 5º', () => {
+    const base = { sessoesConcluidas: 5, concluidas: new Map([['pv-emo-1', ontem], ['pv-emo-prova', ontem], ['pv-emo-2', ontem]]) }
+    expect(situacaoLicoes('emocoes', AUTO, prog({ ...base, serieAlcancada: serieAlcancada(3, 'avanco') }), hoje).map((x) => x.situacao)).toEqual(['concluida', 'concluida', 'concluida', 'serie'])
+    expect(situacaoLicoes('emocoes', AUTO, prog({ ...base, serieAlcancada: serieAlcancada(3, 'desafio') }), hoje).at(-1)!.situacao).toBe('disponivel')
+  })
+  it('liberado pelo responsável ignora a série', () => {
+    const p = prog({ serieAlcancada: 3 })
+    expect(situacaoLicoes('dinheiro', { ativo: true, modulos: { dinheiro: 'liberado' } }, p, hoje).every((x) => x.situacao === 'disponivel')).toBe(true)
   })
 })
 
@@ -61,9 +86,9 @@ describe('Projeto de Vida: liberação', () => {
   it('no automático, uma lição nova por dia e em ordem', () => {
     const p = prog({ sessoesConcluidas: 1, concluidas: new Map([['pv-emo-1', '2026-11-10']]) })
     const hoje = situacaoLicoes('emocoes', AUTO, p, '2026-11-10').map((x) => x.situacao)
-    expect(hoje).toEqual(['concluida', 'amanha', 'trancada'])
+    expect(hoje).toEqual(['concluida', 'amanha', 'trancada', 'trancada'])
     const amanha = situacaoLicoes('emocoes', AUTO, p, '2026-11-11').map((x) => x.situacao)
-    expect(amanha).toEqual(['concluida', 'disponivel', 'trancada'])
+    expect(amanha).toEqual(['concluida', 'disponivel', 'trancada', 'trancada'])
   })
 
   it('liberado manualmente abre todas as lições de uma vez', () => {
@@ -74,7 +99,7 @@ describe('Projeto de Vida: liberação', () => {
   it('bloquear não apaga o que já foi concluído', () => {
     const p = prog({ sessoesConcluidas: 5, concluidas: new Map([['pv-emo-1', '2026-11-01']]) })
     const s = situacaoLicoes('emocoes', { ativo: true, modulos: { emocoes: 'bloqueado' } }, p, '2026-11-10').map((x) => x.situacao)
-    expect(s).toEqual(['concluida', 'trancada', 'trancada'])
+    expect(s).toEqual(['concluida', 'trancada', 'trancada', 'trancada'])
   })
 
   it('trilha desativada não mostra lições disponíveis', () => {

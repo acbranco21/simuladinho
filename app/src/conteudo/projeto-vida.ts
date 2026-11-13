@@ -21,12 +21,14 @@ export interface AtividadePV {
   tipo: 'certa' | 'escolha'
   pergunta: string
   opcoes: OpcaoPV[]
+  /** Só em "certa": trecho da história que tem a resposta, mostrado depois do 2º erro (para ela não acertar no chute). */
+  pista?: string
 }
 
 export interface LicaoPV {
   id: string
   modulo: ModuloPV
-  /** Série de referência (3º, 4º ou 5º ano). */
+  /** Série de referência (3º, 4º ou 5º ano). No modo automático, só abre quando a aluna alcança essa série. */
   serie: 3 | 4 | 5
   titulo: string
   historia: string[]
@@ -96,31 +98,33 @@ export const LICOES_PV: LicaoPV[] = [
     serie: 3,
     titulo: 'Dando nome ao que sente',
     historia: [
-      'Davi estava jogando um jogo de tabuleiro com a prima. No final, ela ganhou.',
-      'Davi ficou com o rosto vermelho, cruzou os braços e disse: "Esse jogo é chato!"',
-      'A avó chegou perto e perguntou, com calma: "Você está chateado porque perdeu?" Davi pensou um pouco e respondeu: "Estou frustrado." Só de dizer isso, ele já se sentiu um pouco melhor.',
+      'Davi estava jogando um jogo de tabuleiro com a prima. Ele se esforçou muito e ficou quase o jogo inteiro na frente. Na última rodada, ela passou e ganhou.',
+      'Ninguém riu dele, e a prima jogou direitinho, sem trapaça. Mesmo assim, Davi ficou com o rosto vermelho, cruzou os braços e disse: "Esse jogo é chato!"',
+      'A avó chegou perto e perguntou, com calma: "Você tentou tanto e não deu certo, né?" Davi pensou um pouco e respondeu: "Estou frustrado." Só de dizer isso, ele já se sentiu um pouco melhor.',
     ],
     ideia: 'Dar nome ao que a gente sente ajuda a entender o que está acontecendo por dentro.',
     atividades: [
       {
         tipo: 'certa',
-        pergunta: 'Depois de perder o jogo, como Davi estava se sentindo?',
+        pergunta: 'Depois de perder o jogo, qual palavra descreve melhor o que Davi sentia?',
         opcoes: [
-          { texto: 'Frustrado e chateado', retorno: 'Isso! O rosto vermelho e os braços cruzados mostram frustração.', correta: true },
-          { texto: 'Com sono', retorno: 'Olhe as pistas da história: rosto vermelho, braços cruzados e "esse jogo é chato". Isso parece sono?' },
-          { texto: 'Animado', retorno: 'Quem está animado costuma sorrir e querer jogar de novo. Davi fez o contrário.' },
-          { texto: 'Com medo', retorno: 'Medo aparece quando sentimos perigo. Aqui, o que aconteceu foi perder o jogo.' },
+          { texto: 'Frustrado', retorno: 'Isso! Frustração é o que a gente sente quando tenta muito e não consegue. Davi se esforçou e perdeu na última rodada.', correta: true },
+          { texto: 'Triste', retorno: 'Tristeza costuma deixar a gente quieto e sem energia, às vezes com vontade de chorar. Davi ficou vermelho e cheio de energia. Existe uma palavra mais certinha.' },
+          { texto: 'Com vergonha', retorno: 'Vergonha aparece quando achamos que os outros estão rindo ou olhando para nós. A história conta que ninguém riu dele.' },
+          { texto: 'Com raiva da prima', retorno: 'Raiva de alguém aparece quando achamos que a pessoa fez algo errado. A prima jogou direitinho, sem trapaça. O incômodo de Davi era outro.' },
         ],
+        pista: 'Releia: "Ele se esforçou muito e ficou quase o jogo inteiro na frente. Na última rodada, ela passou e ganhou." E a avó disse: "Você tentou tanto e não deu certo".',
       },
       {
         tipo: 'certa',
-        pergunta: 'Lia ganhou um desenho feito pela amiga e deu um sorriso enorme. O que ela sente?',
+        pergunta: 'A amiga da Lia passou a tarde fazendo um desenho para ela. Lia deu um sorriso enorme e um abraço apertado na amiga. O que Lia sente?',
         opcoes: [
-          { texto: 'Alegria e gratidão', retorno: 'Isso! Ganhar algo feito com carinho traz alegria e vontade de agradecer.', correta: true },
-          { texto: 'Raiva', retorno: 'O sorriso enorme é uma pista. Raiva costuma aparecer de outro jeito.' },
-          { texto: 'Vergonha', retorno: 'Às vezes a gente fica com vergonha ao ganhar presente, mas o sorriso enorme mostra outra emoção.' },
-          { texto: 'Tristeza', retorno: 'Tristeza não combina com um sorriso enorme. Tente de novo.' },
+          { texto: 'Gratidão', retorno: 'Isso! Gratidão é a alegria de perceber que alguém fez algo por nós. O abraço é o jeito dela de agradecer.', correta: true },
+          { texto: 'Orgulho', retorno: 'Orgulho é a alegria por algo que nós mesmos fizemos. Quem fez o desenho foi a amiga.' },
+          { texto: 'Surpresa', retorno: 'Talvez ela tenha se surpreendido, mas o abraço apertado na amiga mostra mais do que surpresa: ela está agradecendo.' },
+          { texto: 'Alívio', retorno: 'Alívio vem quando uma preocupação acaba. Lia não estava preocupada com nada.' },
         ],
+        pista: 'Olhe para quem fez o desenho e para o que Lia fez depois: deu um abraço apertado na amiga.',
       },
       {
         tipo: 'certa',
@@ -134,6 +138,53 @@ export const LICOES_PV: LicaoPV[] = [
       },
     ],
     comAdulto: 'Se quiser, conte para um adulto de confiança uma emoção que você sentiu hoje e o que aconteceu.',
+  },
+  {
+    id: 'pv-emo-prova',
+    modulo: 'emocoes',
+    serie: 3,
+    titulo: 'Nervoso antes da prova',
+    historia: [
+      'Amanhã tem prova de Matemática. Na hora de dormir, Maia sentiu a barriga gelada e o coração batendo rápido. Pensou: "E se eu errar tudo?"',
+      'O pai sentou na cama e explicou: "Isso se chama nervosismo. É o corpo avisando que a prova é importante para você. Até gente que estudou muito sente isso."',
+      'Os dois respiraram juntos: encher a barriga de ar contando até 4, soltar contando até 4, três vezes. Depois, o pai disse: "A prova mostra o que você já aprendeu e o que ainda vai aprender. Ela não mostra quem você é."',
+    ],
+    ideia: 'Ficar nervoso antes de uma prova é normal. Dá para perceber os sinais no corpo, respirar e fazer o seu melhor.',
+    atividades: [
+      {
+        tipo: 'certa',
+        pergunta: 'Quais sinais no corpo mostravam que Maia estava nervosa?',
+        opcoes: [
+          { texto: 'Barriga gelada e coração batendo rápido', retorno: 'Isso! O nervosismo muitas vezes aparece primeiro no corpo, antes de a gente perceber o que está pensando.', correta: true },
+          { texto: 'Bocejos e olhos pesados', retorno: 'Esses são sinais de sono. A história conta outros sinais que a Maia sentiu.' },
+          { texto: 'Vontade de rir sem parar', retorno: 'Isso costuma aparecer quando estamos alegres ou achando graça. Releia o começo da história.' },
+          { texto: 'Rosto vermelho e braços cruzados', retorno: 'Esses sinais apareceram no Davi, que estava frustrado. A Maia sentiu outros.' },
+        ],
+        pista: 'Releia o começo: "Maia sentiu a barriga gelada e o coração batendo rápido."',
+      },
+      {
+        tipo: 'certa',
+        pergunta: 'Na hora da prova, o nervoso voltou. O que pode ajudar Maia?',
+        opcoes: [
+          { texto: 'Respirar do jeito que treinou e começar por uma questão que ela sabe', retorno: 'Isso! A respiração acalma o corpo, e acertar a primeira questão dá confiança para as outras.', correta: true },
+          { texto: 'Responder tudo bem rápido para acabar logo', retorno: 'Com pressa a gente lê errado e erra o que sabia. Primeiro, acalmar o corpo.' },
+          { texto: 'Ficar pensando "vou errar tudo"', retorno: 'Esse pensamento deixa o nervoso maior. Existe algo que ela treinou com o pai.' },
+          { texto: 'Entregar a prova em branco', retorno: 'Desistir tira a chance de mostrar o que ela aprendeu. Tem um jeito de se acalmar e tentar.' },
+        ],
+        pista: 'O que Maia e o pai fizeram juntos na noite anterior? Releia a última parte da história.',
+      },
+      {
+        tipo: 'certa',
+        pergunta: 'Qual frase é verdadeira?',
+        opcoes: [
+          { texto: 'A prova mostra o que eu já aprendi e o que ainda vou aprender. Não mostra quem eu sou.', retorno: 'Exatamente! Errar uma questão só mostra um assunto para estudar mais.', correta: true },
+          { texto: 'Quem fica nervoso é porque não sabe a matéria.', retorno: 'Não é verdade. O pai da Maia explicou: até quem estudou muito fica nervoso.' },
+          { texto: 'Se eu errar uma questão, sou ruim em tudo.', retorno: 'Uma questão errada mostra só um assunto para treinar mais. Ninguém é ruim em tudo por causa de um erro.' },
+          { texto: 'Ficar nervoso é proibido.', retorno: 'Sentir nervoso é normal e não é proibido. O que ajuda é saber o que fazer com ele.' },
+        ],
+      },
+    ],
+    comAdulto: 'Antes da próxima prova, faça com um adulto a respiração do 4 e combinem uma frase de coragem, como "Eu me preparei e vou fazer o meu melhor".',
   },
   {
     id: 'pv-emo-2',
@@ -171,10 +222,10 @@ export const LICOES_PV: LicaoPV[] = [
         tipo: 'escolha',
         pergunta: 'Qual jeito de se acalmar você gostaria de experimentar um dia?',
         opcoes: [
-          { texto: 'Respirar contando até 4 para encher e até 4 para soltar', retorno: 'Boa escolha! Dá para fazer em qualquer lugar, até na sala de aula.' },
-          { texto: 'Beber um copo de água e dar uma pausa', retorno: 'Boa escolha! Uma pausa curta já ajuda a cabeça a esfriar.' },
-          { texto: 'Conversar com um adulto de confiança', retorno: 'Boa escolha! Falar com alguém que gosta de você ajuda muito.' },
-          { texto: 'Desenhar ou mexer o corpo um pouco', retorno: 'Boa escolha! Mexer o corpo ou desenhar ajuda a emoção a passar.' },
+          { texto: 'Respirar contando até 4 para encher e até 4 para soltar', retorno: 'Dá para fazer em qualquer lugar, até na sala de aula.' },
+          { texto: 'Beber um copo de água e dar uma pausa', retorno: 'Uma pausa curta já ajuda a cabeça a esfriar.' },
+          { texto: 'Conversar com um adulto de confiança', retorno: 'Falar com alguém que gosta de você ajuda muito.' },
+          { texto: 'Desenhar ou mexer o corpo um pouco', retorno: 'Mexer o corpo ou desenhar ajuda a emoção a passar.' },
         ],
       },
     ],
@@ -199,7 +250,7 @@ export const LICOES_PV: LicaoPV[] = [
           { texto: 'Sozinho e triste', retorno: 'Isso. Estar num lugar novo, sem amigos, e ouvir risadas sobre você deixa qualquer um triste.', correta: true },
           { texto: 'Orgulhoso', retorno: 'Pense: ele está sozinho e riem dele. Isso deixaria alguém orgulhoso?' },
           { texto: 'Entediado', retorno: 'Pode até ser, mas a história mostra algo mais forte: ele está sozinho e riem dele.' },
-          { texto: 'Bravo com o Téo', retorno: 'O Téo não fez nada com ele. Releia a história e tente de novo.' },
+          { texto: 'Bravo com o Téo', retorno: 'O Téo não fez nada com o Rafa: quem ria eram outros colegas. Pense em como é estar sozinho enquanto riem de você.' },
         ],
       },
       {
@@ -264,9 +315,9 @@ export const LICOES_PV: LicaoPV[] = [
         pergunta: 'Que tipo de sonho você gostaria de transformar em passos pequenos?',
         opcoes: [
           { texto: 'Aprender algo novo, como um instrumento ou um esporte', retorno: 'Que legal! Um primeiro passo pode ser praticar 10 minutos por dia.' },
-          { texto: 'Ler um livro inteiro sozinho', retorno: 'Ótimo! Comece escolhendo o livro e quantas páginas por dia dá para ler.' },
-          { texto: 'Juntar dinheiro para algo que eu quero', retorno: 'Boa! No módulo "Dinheiro e escolhas" você aprende a planejar isso.' },
-          { texto: 'Ajudar alguém ou cuidar de um animal', retorno: 'Que bonito! Pense em uma ajuda pequena que dá para fazer nesta semana.' },
+          { texto: 'Ler um livro inteiro sozinho', retorno: 'Comece escolhendo o livro e quantas páginas por dia dá para ler.' },
+          { texto: 'Juntar dinheiro para algo que eu quero', retorno: 'No módulo "Dinheiro e escolhas" você aprende a planejar isso.' },
+          { texto: 'Ajudar alguém ou cuidar de um animal', retorno: 'Pense em uma ajuda pequena que dá para fazer nesta semana.' },
         ],
       },
     ],
@@ -308,10 +359,10 @@ export const LICOES_PV: LicaoPV[] = [
         tipo: 'escolha',
         pergunta: 'Quando algo fica difícil, o que você acha que pode ajudar?',
         opcoes: [
-          { texto: 'Descansar um pouco e tentar de novo', retorno: 'Boa! Às vezes o corpo e a cabeça só precisam de uma pausa.' },
-          { texto: 'Pedir ajuda para alguém', retorno: 'Boa! Pedir ajuda é coisa de quem quer aprender, não de quem é fraco.' },
-          { texto: 'Dividir em partes menores', retorno: 'Boa! Foi o que a Bia fez ao contar de 10 em 10.' },
-          { texto: 'Tentar de um jeito diferente', retorno: 'Boa! Se um jeito não funciona, testar outro é uma ótima ideia.' },
+          { texto: 'Descansar um pouco e tentar de novo', retorno: 'Às vezes o corpo e a cabeça só precisam de uma pausa.' },
+          { texto: 'Pedir ajuda para alguém', retorno: 'Pedir ajuda é coisa de quem quer aprender, não de quem é fraco.' },
+          { texto: 'Dividir em partes menores', retorno: 'Foi o que a Bia fez ao contar de 10 em 10.' },
+          { texto: 'Tentar de um jeito diferente', retorno: 'Se um jeito não funciona, testar outro é uma ótima ideia.' },
         ],
       },
     ],
@@ -445,9 +496,9 @@ export const LICOES_PV: LicaoPV[] = [
         tipo: 'escolha',
         pergunta: 'Que ideia poderia ajudar Davi a chegar mais rápido na bola?',
         opcoes: [
-          { texto: 'Guardar um pouco mais por semana, se der', retorno: 'Boa! Guardando R$ 6,00, por exemplo, ele chegaria em 5 semanas.' },
-          { texto: 'Procurar a mesma bola mais barata em outra loja', retorno: 'Boa! Comparar preços pode diminuir a meta.' },
-          { texto: 'Combinar com a família uma tarefa extra para ganhar um pouco a mais', retorno: 'Boa! Sempre combinando antes com os adultos de casa.' },
+          { texto: 'Guardar um pouco mais por semana, se der', retorno: 'Guardando R$ 6,00, por exemplo, ele chegaria em 5 semanas.' },
+          { texto: 'Procurar a mesma bola mais barata em outra loja', retorno: 'Comparar preços pode diminuir a meta.' },
+          { texto: 'Combinar com a família uma tarefa extra para ganhar um pouco a mais', retorno: 'Sempre combinando antes com os adultos de casa.' },
           { texto: 'Pedir a bola de presente de aniversário', retorno: 'Também vale! E o dinheiro guardado pode virar outra meta.' },
         ],
       },
@@ -518,19 +569,20 @@ export const LICOES_PV: LicaoPV[] = [
         pergunta: 'Qual foi o problema que a Bia percebeu?',
         opcoes: [
           { texto: 'A fila do bebedouro demora muito no recreio', retorno: 'Isso! Ela observou e entendeu o que estava causando a fila.', correta: true },
-          { texto: 'Ela não gosta de água', retorno: 'Releia a história: o problema era outro.' },
-          { texto: 'O recreio é muito comprido', retorno: 'Na história, o recreio parece até curto, porque a fila toma tempo.' },
-          { texto: 'A escola é muito grande', retorno: 'O tamanho da escola não aparece na história. Olhe para o bebedouro.' },
+          { texto: 'O bebedouro está quebrado', retorno: 'A história não fala em bebedouro quebrado: ele funciona, mas tem gente demais na mesma hora. Releia o segundo parágrafo.' },
+          { texto: 'O recreio é muito comprido', retorno: 'Na história, o recreio parece até curto, porque a fila toma tempo de brincar.' },
+          { texto: 'As crianças não levam garrafinha', retorno: 'É o contrário: a história conta que elas levam a garrafinha e enchem inteira bem na hora do recreio.' },
         ],
+        pista: 'Releia o começo: "a fila do bebedouro fica enorme no recreio. Muita gente fica sem tempo de brincar."',
       },
       {
         tipo: 'escolha',
         pergunta: 'Que ideia você acha que poderia ajudar?',
         opcoes: [
-          { texto: 'Encher as garrafinhas antes da aula começar', retorno: 'Boa! Foi a ideia da Bia. Agora é testar para ver se funciona.' },
-          { texto: 'Um cartaz lembrando de encher a garrafinha antes do recreio', retorno: 'Boa! Um lembrete ajuda as pessoas a mudarem o hábito.' },
-          { texto: 'Pedir à escola para ver se dá para ter outro bebedouro', retorno: 'Boa! Às vezes a solução precisa da ajuda dos adultos.' },
-          { texto: 'Fazer uma fila só para quem quer encher garrafa', retorno: 'Boa! Separar as filas pode deixar tudo mais rápido.' },
+          { texto: 'Encher as garrafinhas antes da aula começar', retorno: 'Foi a ideia da Bia. Agora é testar para ver se funciona.' },
+          { texto: 'Um cartaz lembrando de encher a garrafinha antes do recreio', retorno: 'Um lembrete ajuda as pessoas a mudarem o hábito.' },
+          { texto: 'Pedir à escola para ver se dá para ter outro bebedouro', retorno: 'Às vezes a solução precisa da ajuda dos adultos.' },
+          { texto: 'Fazer uma fila só para quem quer encher garrafa', retorno: 'Separar as filas pode deixar tudo mais rápido.' },
         ],
       },
       {
@@ -570,7 +622,7 @@ export const LICOES_PV: LicaoPV[] = [
       },
       {
         tipo: 'certa',
-        pergunta: 'Cada copo custa R$ 3,00. No segundo dia, venderam 15 copos. Quanto arrecadaram?',
+        pergunta: 'Cada copo custa R$ 3,00. No segundo dia, venderam 15 copos. Quanto dinheiro ganharam com as vendas?',
         opcoes: [
           { texto: 'R$ 45,00', retorno: 'Isso! 15 × 3 = 45.', correta: true },
           { texto: 'R$ 18,00', retorno: '18 é 15 + 3. Como são 15 copos de R$ 3,00, é uma multiplicação.' },
@@ -605,7 +657,7 @@ export const LICOES_PV: LicaoPV[] = [
     atividades: [
       {
         tipo: 'certa',
-        pergunta: 'Qual foi a atitude empreendedora da Nina?',
+        pergunta: 'O que a Nina fez de diferente?',
         opcoes: [
           { texto: 'Percebeu uma necessidade, perguntou e organizou uma solução', retorno: 'Isso! Ela observou, ouviu a dona Cida e organizou um grupo.', correta: true },
           { texto: 'Esperou alguém do prédio resolver', retorno: 'Na história, foi a própria Nina que começou.' },
@@ -617,7 +669,7 @@ export const LICOES_PV: LicaoPV[] = [
         tipo: 'certa',
         pergunta: 'Para o grupo funcionar, o que é mais importante combinar?',
         opcoes: [
-          { texto: 'Quem ajuda em cada sexta-feira', retorno: 'Isso! Com tudo combinado, ninguém esquece e ninguém fica sobrecarregado.', correta: true },
+          { texto: 'Quem ajuda em cada sexta-feira', retorno: 'Isso! Com tudo combinado, ninguém esquece e ninguém fica com trabalho demais.', correta: true },
           { texto: 'Quem é o chefe que manda em todo mundo', retorno: 'Em um bom grupo, todos combinam juntos. Mais importante é dividir as tarefas.' },
           { texto: 'Quem vai ganhar mais elogios', retorno: 'O objetivo é ajudar a dona Cida, não ganhar elogios.' },
           { texto: 'Nada, cada um ajuda quando lembrar', retorno: 'Sem combinar, pode ser que ninguém apareça numa sexta.' },
@@ -627,10 +679,10 @@ export const LICOES_PV: LicaoPV[] = [
         tipo: 'escolha',
         pergunta: 'Que tipo de ideia você gostaria de criar um dia?',
         opcoes: [
-          { texto: 'Uma ideia para ajudar pessoas', retorno: 'Que bonito! Comece observando quem está perto de você.' },
-          { texto: 'Uma ideia para cuidar da natureza ou dos animais', retorno: 'Ótimo! Pequenas ações, como separar o lixo, já fazem diferença.' },
-          { texto: 'Uma invenção nova', retorno: 'Legal! Toda invenção começa com um desenho ou um teste simples.' },
-          { texto: 'Um pequeno negócio', retorno: 'Boa! Um negócio também resolve um problema de alguém, e sempre com um adulto junto.' },
+          { texto: 'Uma ideia para ajudar pessoas', retorno: 'Comece observando quem está perto de você.' },
+          { texto: 'Uma ideia para cuidar da natureza ou dos animais', retorno: 'Pequenas ações, como separar o lixo, já fazem diferença.' },
+          { texto: 'Uma invenção nova', retorno: 'Toda invenção começa com um desenho ou um teste simples.' },
+          { texto: 'Um pequeno negócio', retorno: 'Um negócio também resolve um problema de alguém, e sempre com um adulto junto.' },
         ],
       },
     ],

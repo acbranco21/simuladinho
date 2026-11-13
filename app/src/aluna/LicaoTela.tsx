@@ -174,6 +174,12 @@ export function LicaoTela({ licao, xpGanho, onTerminar, onVoltar, onSair }: Prop
             ))}
           </div>
         )}
+        {!resolvida && tentadas.length >= 2 && (
+          <div className="texto-apoio pista-pv" role="note">
+            <strong>Pista: </strong>
+            {atividade.pista ?? 'A resposta está na história. Toque em "Ver a história de novo" e procure o trecho que fala disso.'}
+          </div>
+        )}
         {opcao && (
           <div className={`retorno-pv ${resolvida ? (atividade.tipo === 'certa' ? 'verde' : 'azul') : 'laranja'}`} role="status">
             {opcao.retorno}

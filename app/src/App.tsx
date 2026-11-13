@@ -40,7 +40,7 @@ import {
 } from './dados/db'
 import { pilulasSugeridas } from './motor/conquistas'
 import { XP, diaLocal, xpDaResposta } from './motor/gamificacao'
-import { licoesDisponiveis, type ProgressoAluna } from './motor/projetoVida'
+import { licoesDisponiveis, serieAlcancada, type ProgressoAluna } from './motor/projetoVida'
 import { habilidadeMaisFraca, minutosNoDia } from './motor/painel'
 import { calcularNota, pontosDaQuestao, resumoPorTrilha, type ResumoTrilha } from './motor/pontuacao'
 import { colecaoDa, criarSorteio, montarCacaAosErros, montarSessao, serieDa } from './motor/sessao'
@@ -141,7 +141,7 @@ export default function App() {
     setPerfil(p)
     setConfig(c)
     setMinutosHoje(minutosNoDia([...hoje, ...licoesHoje], new Date()))
-    setProgressoPV({ sessoesConcluidas, matematica: a.matematica, concluidas })
+    setProgressoPV({ sessoesConcluidas, matematica: a.matematica, concluidas, serieAlcancada: serieAlcancada(c.serieAtual, c.nivelPorTrilha.matematica) })
     setAcerto(a)
     setErrosPendentes(e)
     setAprendidas(apr)

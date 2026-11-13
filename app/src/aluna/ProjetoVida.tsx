@@ -15,6 +15,7 @@ const ROTULO: Record<SituacaoLicao, string> = {
   disponivel: 'Começar',
   amanha: 'Abre amanhã',
   trancada: 'Trancada',
+  serie: 'Abre quando você avançar',
 }
 
 function Cadeado() {
@@ -67,7 +68,7 @@ export function ProjetoVida({ cfg, progresso, hoje, limiteAtingido, onAbrir, onV
                       <button type="button" className={`licao-pv ${situacao}`} disabled={!pode} onClick={() => onAbrir(licao)}>
                         <span className="licao-nome">{licao.titulo}</span>
                         <span className="licao-estado">
-                          {situacao === 'trancada' && <Cadeado />}
+                          {(situacao === 'trancada' || situacao === 'serie') && <Cadeado />}
                           {situacao === 'concluida' ? 'Feita · refazer' : ROTULO[situacao]}
                         </span>
                       </button>
