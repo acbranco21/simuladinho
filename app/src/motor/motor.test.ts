@@ -181,7 +181,7 @@ import { PILULAS } from '../conteudo/pilulas'
 
 describe('simulado', () => {
   it('tem metade Português, metade Matemática, em ordem crescente de dificuldade', () => {
-    const s = montarSimulado(questoes, { questoes: 20 }, {}, { facil: 40, media: 40, dificil: 20 }, new Set(), 3)
+    const s = montarSimulado(questoes, { questoes: 20 }, 3, undefined, new Set(), 3)
     expect(s).toHaveLength(20)
     expect(s.slice(0, 10).every((q) => q.trilha === 'portugues')).toBe(true)
     expect(s.slice(10).every((q) => q.trilha === 'matematica')).toBe(true)

@@ -21,6 +21,8 @@ export interface SessaoPainel {
   concluida: boolean
   sinais: number
   nivelPorTrilha?: Partial<Record<Trilha, Nivel>>
+  /** 'livre' fica fora das médias: a aluna escolhe séries acima da dela, e isso não mede o nível. */
+  modo?: string
 }
 
 const DIA = 86400000
@@ -43,7 +45,7 @@ export interface Indicadores {
 export function indicadores(sessoes: SessaoPainel[], totalRespostas: number, agora: Date): Indicadores {
   const desde = agora.getTime() - 7 * DIA
   const recentes = sessoes.filter((s) => s.inicio >= desde)
-  const ultimas = [...sessoes].filter((s) => s.concluida).sort((a, b) => a.inicio - b.inicio).slice(-5)
+  const ultimas = [...sessoes].filter((s) => s.concluida && s.modo !== 'livre').sort((a, b) => a.inicio - b.inicio).slice(-5)
   return {
     sessoes7d: recentes.length,
     notaMedia5: ultimas.length ? Math.round((ultimas.reduce((t, s) => t + s.nota, 0) / ultimas.length) * 10) / 10 : null,
@@ -58,7 +60,7 @@ export function notasPorTrilhaPorSessao(sessoes: SessaoPainel[], respostas: Resp
   const porSessao = new Map<number, RespostaPainel[]>()
   for (const r of respostas) porSessao.set(r.sessaoId, [...(porSessao.get(r.sessaoId) ?? []), r])
   const saida = new Map<Trilha, { sessaoId: number; nota: number; nivel?: Nivel }[]>()
-  for (const s of [...sessoes].sort((a, b) => a.inicio - b.inicio)) {
+  for (const s of [...sessoes].filter((x) => x.modo !== 'livre').sort((a, b) => a.inicio - b.inicio)) {
     const rs = porSessao.get(s.id) ?? []
     const trilhas = new Set(rs.map((r) => r.trilha))
     for (const t of trilhas) {

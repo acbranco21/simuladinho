@@ -12,7 +12,7 @@ interface Props {
   erros: number
   sugeridas: { habilidade: string; titulo: string }[]
   aprendeu: string | null
-  modo: 'treino' | 'caca_erros' | 'pilula'
+  modo: 'treino' | 'caca_erros' | 'pilula' | 'livre'
   onCacaAosErros: () => void
   onEstudar: (habilidade: string) => void
   onInicio: () => void
@@ -24,7 +24,7 @@ export function Fim({ nota, resumo, xpGanho, sequencia, novosRecordes, subiuDeNi
       <section className="celebracao">
         <Mascote tamanho={120} feliz claro desenhar />
         <h1>Missão cumprida!</h1>
-        <p>{modo === 'pilula' ? (aprendeu ? `Você aprendeu: ${aprendeu}!` : 'Boa prática! Leia a explicação de novo e tente mais uma vez.') : modo === 'caca_erros' ? 'Você revisou seus erros.' : 'Você terminou o treino.'}</p>
+        <p>{modo === 'pilula' ? (aprendeu ? `Você aprendeu: ${aprendeu}!` : 'Boa prática! Leia a explicação de novo e tente mais uma vez.') : modo === 'caca_erros' ? 'Você revisou seus erros.' : modo === 'livre' ? 'Você terminou o treino livre. Ele não muda seu nível: é só para treinar!' : 'Você terminou o treino.'}</p>
         <div className="nota">
           <span className="nota-valor">{formatarNota(nota)}</span>
           <span className="nota-legenda">nota com peso por dificuldade</span>
@@ -82,7 +82,7 @@ export function Fim({ nota, resumo, xpGanho, sequencia, novosRecordes, subiuDeNi
             </button>
           )}
           <button type="button" className="botao-contorno" onClick={onInicio}>
-            {modo === 'pilula' ? 'Voltar para Estudar' : 'Voltar ao início'}
+            {modo === 'pilula' ? 'Voltar para Estudar' : modo === 'livre' ? 'Escolher outra série' : 'Voltar ao início'}
           </button>
         </div>
       </aside>

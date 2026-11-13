@@ -1,4 +1,4 @@
-import type { Nivel, Questao, Trilha } from '../tipos'
+import type { Colecao, Nivel, Questao, Serie, Trilha } from '../tipos'
 import { pontosDaQuestao } from './pontuacao'
 
 export interface MisturaDificuldade {
@@ -16,7 +16,21 @@ export interface OpcoesSessao {
   excluir?: Set<string>
   /** Semente para sorteio reproduzível (testes). */
   semente?: number
+  /**
+   * Série em que a aluna está. Com ela, o nível da trilha vira um intervalo de séries:
+   * base = só a série atual; avanço = até 1 série acima; desafio = até 2 acima.
+   */
+  serieAtual?: Serie
+  /** Treino livre: só questões desta série (vale mais que serieAtual). */
+  serieFixa?: Serie
+  /** Coleções escolhidas. Se não houver questões suficientes nelas, completa com as outras coleções. */
+  colecoes?: Colecao[]
 }
+
+const SERIE_DO_NIVEL: Record<Nivel, Serie> = { base: 3, avanco: 4, desafio: 5 }
+const ACIMA: Record<Nivel, number> = { base: 0, avanco: 1, desafio: 2 }
+export const serieDa = (q: Questao): Serie => q.serie ?? SERIE_DO_NIVEL[q.nivel]
+export const colecaoDa = (q: Questao): Colecao => q.colecao ?? 'base'
 
 /** Gerador pseudoaleatório simples e determinístico (mulberry32). */
 export function criarSorteio(semente = Date.now()): () => number {
@@ -51,14 +65,18 @@ function nivelLiberado(questao: Nivel, daTrilha: Nivel): boolean {
  */
 export function montarSessao(banco: Questao[], op: OpcoesSessao): Questao[] {
   const sortear = criarSorteio(op.semente)
-  const elegiveis = banco.filter(
-    (q) =>
-      op.trilhas.includes(q.trilha) &&
-      nivelLiberado(q.nivel, op.nivelPorTrilha[q.trilha] ?? 'base') &&
-      !op.excluir?.has(q.id) &&
-      q.revisao.status !== 'desativada' &&
-      q.revisao.status !== 'contestada',
+  const serieOk = (q: Questao) => {
+    const s = serieDa(q)
+    if (op.serieFixa) return s === op.serieFixa
+    if (op.serieAtual) return s >= op.serieAtual && s <= op.serieAtual + ACIMA[op.nivelPorTrilha[q.trilha] ?? 'base']
+    return nivelLiberado(q.nivel, op.nivelPorTrilha[q.trilha] ?? 'base')
+  }
+  const possiveis = banco.filter(
+    (q) => op.trilhas.includes(q.trilha) && serieOk(q) && !op.excluir?.has(q.id) && q.revisao.status !== 'desativada' && q.revisao.status !== 'contestada',
   )
+  const naColecao = op.colecoes ? possiveis.filter((q) => op.colecoes!.includes(colecaoDa(q))) : possiveis
+  // a coleção escolhida vem primeiro; se faltar questão, completa com as outras coleções da mesma série
+  const elegiveis = naColecao.length >= op.tamanho ? naColecao : [...naColecao, ...embaralhar(possiveis.filter((q) => !naColecao.includes(q)), sortear).slice(0, op.tamanho - naColecao.length)]
   const tamanho = Math.min(op.tamanho, elegiveis.length)
 
   // Cotas por faixa de pontos.

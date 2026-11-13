@@ -6,7 +6,7 @@ import { liberadoPeloAvanco, type EstadoModulo, type ProgressoAluna } from '../m
 import { desempenhoPorTrilha, indicadores, minutosNoDia, questoesAtipicas, type LinhaTrilha, type Tendencia } from '../motor/painel'
 import { formatarNota } from '../motor/pontuacao'
 import { criarSorteio } from '../motor/sessao'
-import { NOMES_TRILHA, type Nivel, type Questao, type Trilha } from '../tipos'
+import { COLECOES, NOMES_TRILHA, SERIES, type Colecao, type Nivel, type Questao, type Serie, type Trilha } from '../tipos'
 
 const NOMES_NIVEL: Record<Nivel, string> = { base: 'Base · 3º ano', avanco: 'Avanço · 4º ano', desafio: 'Desafio · 5º ano' }
 const NOMES_ESTADO: Record<EstadoModulo, string> = { auto: 'Automático (pelo avanço)', liberado: 'Liberado agora', bloqueado: 'Bloqueado' }
@@ -245,6 +245,31 @@ export function Painel({ banco, onSair, onConfigSalva }: Props) {
                 Nome que aparece no app
                 <input type="text" value={rascunho.nomeAluna} maxLength={30} placeholder="Ex.: Ana" onChange={(e) => alterar({ nomeAluna: e.target.value })} />
               </label>
+              <label className="campo">
+                Série atual
+                <select value={rascunho.serieAtual} onChange={(e) => alterar({ serieAtual: Number(e.target.value) as Serie })}>
+                  {SERIES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}º ano
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <p className="secundario pequeno-texto">
+                O treino do dia fica na série dela (e um pouco acima ao subir de nível). O simulado oficial cobra o {Math.min(9, rascunho.serieAtual + 1)}º ano, com alta dificuldade. No treino livre ela escolhe qualquer série até o 9º ano.
+              </p>
+              <label className="campo">
+                Coleção de questões
+                <select value={rascunho.colecao} onChange={(e) => alterar({ colecao: e.target.value as Colecao | 'todas' })}>
+                  <option value="todas">Misturar todas</option>
+                  {COLECOES.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.nome}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <p className="secundario pequeno-texto">{rascunho.colecao === 'todas' ? 'Mistura Base BNCC, Prova de Bolsa e Desafio Olímpico.' : COLECOES.find((c) => c.id === rascunho.colecao)!.descricao + '.'} Coleções próprias do Simuladinho, no estilo de cada tipo de prova.</p>
               <span className="campo">Visual do app</span>
               {(
                 [

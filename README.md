@@ -9,7 +9,7 @@ Aplicativo de treino gamificado para provas de bolsa de colégios de alto padrã
 | 1. Avaliação pedagógica | Concluída (ver `docs/`) |
 | 2. Escopo do MVP e telas | Telas desenhadas (ver `design/`) |
 | 3. Banco inicial de questões gerado por IA | Lote 1 pronto: 151 questões revisadas às cegas (ver `ia/LOTES.md`) |
-| 4. Desenvolvimento do app (aluna + administrador) | v0.5: treino, simulado, estudar, evolução, Projeto de Vida, painel e visual caderno (ver `app/README.md`) |
+| 4. Desenvolvimento do app (aluna + administrador) | v0.6: treino, simulado oficial da série seguinte, treino livre do 3º ao 9º ano, três coleções próprias, estudar, evolução, Projeto de Vida, painel e dois visuais (ver `app/README.md`) |
 | 5. Teste com ela por 2–3 semanas | Em andamento (instalado no tablet em 10/11/2026) |
 
 ## Estrutura de pastas
@@ -42,4 +42,4 @@ simuladinho/
 
 ## Próximo passo
 
-Produção de texto (redação) com correção pelo painel e lote 2 de questões (Avanço e Desafio).
+Produção de texto (redação) com correção pelo painel e mais questões do 6º ao 9º ano. Antes de publicar ou vender: checar LGPD e ECA Digital e testar com a aluna.

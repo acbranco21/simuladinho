@@ -9,3 +9,7 @@ Arquivo usado pelo app: `app/src/dados/questoes-lote1.json`.
 
 Para gerar de novo: `python3 ia/scripts/gerar_lote1.py app/src/dados/questoes-lote1.json` (a semente fixa reproduz o mesmo lote).
 Observação: as correções de concordância foram feitas depois da revisão às cegas e conferidas manualmente, não por uma segunda revisão às cegas.
+
+## Lote 2 — séries 4º a 9º, três coleções (262 questões)
+
+Gerado por `scripts/gerar_lote2.py` (+ `scripts/lote2_portugues.py`), semente fixa 20261112. Coleções próprias: Base BNCC, Prova de Bolsa e Desafio Olímpico, escritas para o Simuladinho, sem material de sistemas de ensino nem questões de olimpíadas. 4º ano: 47 questões (13 Lógica, 17 Matemática, 17 Português); 5º ao 9º: 43 por série (13/15/15). Validação automática: 5 alternativas distintas e um único gabarito por questão; gabaritos revisados à mão. Arquivo: `app/src/dados/questoes-lote2.json`.

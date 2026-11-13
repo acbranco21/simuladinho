@@ -4,6 +4,7 @@ import type { ModoProgressao } from './motor/progressao'
 import type { FormatoSimulado } from './motor/simulado'
 import { PV_PADRAO, type ConfigProjetoVida } from './motor/projetoVida'
 import type { Tema } from './tema'
+import type { Colecao, Serie } from './tipos'
 
 export const NOME_APP = 'Simuladinho'
 
@@ -32,6 +33,12 @@ export interface Configuracao {
   projetoVida: ConfigProjetoVida
   /** Visual escolhido pela aluna ou pelo responsável. */
   tema: Tema
+  /** Série em que a aluna está matriculada. O simulado oficial cobra a série seguinte. */
+  serieAtual: Serie
+  /** Coleção escolhida pela aluna; 'todas' mistura as três. */
+  colecao: Colecao | 'todas'
+  /** Última série escolhida no treino livre (3º ao 9º). */
+  serieTreino: Serie
 }
 
 /** Trilhas com questões objetivas disponíveis hoje. */
@@ -53,4 +60,7 @@ export const CONFIG_PADRAO: Configuracao = {
   historicoNiveis: [],
   projetoVida: PV_PADRAO,
   tema: 'caderno',
+  serieAtual: 3,
+  colecao: 'todas',
+  serieTreino: 4,
 }

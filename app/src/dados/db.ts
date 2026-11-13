@@ -10,7 +10,7 @@ import { notasPorTrilhaPorSessao } from '../motor/painel'
 
 export interface SessaoRegistro {
   id?: number
-  modo: 'treino' | 'caca_erros' | 'simulado' | 'pilula'
+  modo: 'treino' | 'caca_erros' | 'simulado' | 'pilula' | 'livre'
   inicio: number
   fim: number
   nota: number

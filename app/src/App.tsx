@@ -1,3 +1,4 @@
+import { BANCO } from './dados/banco'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Painel } from './admin/Painel'
 import { Pin } from './admin/Pin'
@@ -13,6 +14,7 @@ import type { EstadoPasso } from './aluna/Progresso'
 import { QuestaoTela } from './aluna/QuestaoTela'
 import { Simulado } from './aluna/Simulado'
 import { SimuladoResultado } from './aluna/SimuladoResultado'
+import { TreinoLivre } from './aluna/TreinoLivre'
 import type { Configuracao } from './config'
 import { definirTema, type Tema } from './tema'
 import { PILULA_POR_HABILIDADE } from './conteudo/pilulas'
@@ -36,24 +38,22 @@ import {
   sessoesDeHoje,
   type Perfil,
 } from './dados/db'
-import exemplos from './dados/questoes-exemplo.json'
-import lote1 from './dados/questoes-lote1.json'
 import { pilulasSugeridas } from './motor/conquistas'
 import { XP, diaLocal, xpDaResposta } from './motor/gamificacao'
 import { licoesDisponiveis, type ProgressoAluna } from './motor/projetoVida'
 import { habilidadeMaisFraca, minutosNoDia } from './motor/painel'
 import { calcularNota, pontosDaQuestao, resumoPorTrilha, type ResumoTrilha } from './motor/pontuacao'
-import { criarSorteio, montarCacaAosErros, montarSessao } from './motor/sessao'
-import { minutosDoSimulado, montarSimulado } from './motor/simulado'
+import { colecaoDa, criarSorteio, montarCacaAosErros, montarSessao, serieDa } from './motor/sessao'
+import { minutosDoSimulado, montarSimulado, serieDoSimulado } from './motor/simulado'
 import { deveProporEncerrar, detectarSinais, type Sinal } from './motor/sinais'
 import { TAMANHO } from './motor/tamanho'
-import type { Letra, Questao, RespostaRegistro, Trilha } from './tipos'
+import type { Colecao, Letra, Questao, RespostaRegistro, Serie, Trilha } from './tipos'
 
-const BANCO = [...exemplos, ...lote1] as Questao[]
+// banco normalizado (série e coleção em todas as questões): ver dados/banco.ts
 const HABILIDADES_COM_PILULA = new Set(PILULA_POR_HABILIDADE.keys())
 
-type Modo = 'treino' | 'caca_erros' | 'pilula'
-type Tela = 'inicio' | 'questao' | 'correcao' | 'fim' | 'pin' | 'painel' | 'simulado' | 'resultadoSimulado' | 'estudar' | 'pilula' | 'evolucao' | 'projetoVida' | 'licao'
+type Modo = 'treino' | 'caca_erros' | 'pilula' | 'livre'
+type Tela = 'inicio' | 'questao' | 'correcao' | 'fim' | 'pin' | 'painel' | 'simulado' | 'resultadoSimulado' | 'estudar' | 'pilula' | 'evolucao' | 'projetoVida' | 'licao' | 'treinoLivre'
 
 interface Sessao {
   modo: Modo
@@ -67,6 +67,8 @@ interface Sessao {
   proporEncerrar: boolean
   /** Habilidade praticada, no modo 'pilula'. */
   habilidade?: string
+  /** Série escolhida, no modo 'livre'. */
+  serie?: Serie
 }
 
 interface Resultado {
@@ -168,10 +170,10 @@ export default function App() {
     setConfig(nova)
   }
 
-  const comecar = (modo: Modo, questoes: Questao[], habilidade?: string) => {
+  const comecar = (modo: Modo, questoes: Questao[], habilidade?: string, serie?: Serie) => {
     if (!questoes.length) return
     const agora = Date.now()
-    setSessao({ modo, questoes, indice: 0, respostas: [], inicio: agora, inicioQuestao: agora, sinais: new Set(), propostaFeita: false, proporEncerrar: false, habilidade })
+    setSessao({ modo, questoes, indice: 0, respostas: [], inicio: agora, inicioQuestao: agora, sinais: new Set(), propostaFeita: false, proporEncerrar: false, habilidade, serie })
     setTela('questao')
   }
 
@@ -180,8 +182,23 @@ export default function App() {
     const c = config ?? (await lerConfig())
     const excluir = await idsBloqueados()
     const tamanho = c.iaAjustaTamanho ? p.tamanhoTreino : c.tamanhoTreinoFixo
-    comecar('treino', montarSessao(BANCO, { tamanho, trilhas: c.trilhasAtivas, nivelPorTrilha: c.nivelPorTrilha, mistura: c.mistura, excluir }))
+    comecar('treino', montarSessao(BANCO, { tamanho, trilhas: c.trilhasAtivas, nivelPorTrilha: c.nivelPorTrilha, mistura: c.mistura, excluir, serieAtual: c.serieAtual, colecoes: c.colecao === 'todas' ? undefined : [c.colecao] }))
   }
+
+  /** Treino livre: série escolhida (3º ao 9º). Não mexe no nível nem nos recordes. */
+  const iniciarLivre = async (serie: Serie, colecao: Colecao | 'todas', trilhas: Trilha[]) => {
+    const p = perfil ?? (await lerPerfil())
+    const c = config ?? (await lerConfig())
+    const nova = { ...c, serieTreino: serie, colecao }
+    await salvarConfig(nova)
+    setConfig(nova)
+    const excluir = await idsBloqueados()
+    const tamanho = c.iaAjustaTamanho ? p.tamanhoTreino : c.tamanhoTreinoFixo
+    comecar('livre', montarSessao(BANCO, { tamanho, trilhas, nivelPorTrilha: {}, mistura: c.mistura, excluir, serieFixa: serie, colecoes: colecao === 'todas' ? undefined : [colecao] }), undefined, serie)
+  }
+
+  const contarLivre = (serie: Serie, colecao: Colecao | 'todas', trilhas: Trilha[]) =>
+    BANCO.filter((q) => serieDa(q) === serie && trilhas.includes(q.trilha) && (colecao === 'todas' || colecaoDa(q) === colecao)).length
 
   const iniciarCaca = async () => {
     const ids = await idsParaCacaAosErros()
@@ -206,7 +223,7 @@ export default function App() {
   const iniciarSimulado = async () => {
     const c = config ?? (await lerConfig())
     const excluir = await idsBloqueados()
-    const questoes = montarSimulado(BANCO, c.simulado, c.nivelPorTrilha, c.mistura, excluir)
+    const questoes = montarSimulado(BANCO, c.simulado, serieDoSimulado(c.serieAtual), c.colecao === 'todas' ? undefined : [c.colecao], excluir)
     if (!questoes.length) return
     setSimulado({ questoes, minutos: minutosDoSimulado(c.simulado), inicio: Date.now() })
     setTela('simulado')
@@ -230,11 +247,12 @@ export default function App() {
       for (const r of resumo) notaPorTrilha[r.trilha] = calcularNota(s.respostas.filter((x) => x.trilha === r.trilha))
 
       if (s.respostas.length) {
-        // Prática de pílula não conta para recordes nem para subir de nível (são poucas questões, de um assunto só).
+        // Pílula e treino livre não contam para recordes nem para subir de nível
+        // (pílula: poucas questões de um assunto só; livre: série escolhida pela própria aluna).
         const salvo = await salvarSessao(
           { modo: s.modo, inicio: s.inicio, fim: Date.now(), nota, concluida, sinais: s.sinais.size, xpGanho, questoes: s.respostas.length, nivelPorTrilha: config?.nivelPorTrilha },
           s.respostas,
-          s.modo === 'pilula' ? {} : notaPorTrilha,
+          s.modo === 'pilula' || s.modo === 'livre' ? {} : notaPorTrilha,
         )
         let aprendeu: string | null = null
         if (concluida && s.modo === 'pilula' && s.habilidade) {
@@ -265,7 +283,7 @@ export default function App() {
         }
       }
       setSessao(null)
-      setTela(s.modo === 'pilula' ? 'pilula' : 'inicio')
+      setTela(s.modo === 'pilula' ? 'pilula' : s.modo === 'livre' ? 'treinoLivre' : 'inicio')
     } finally {
       salvando.current = false
     }
@@ -470,6 +488,21 @@ export default function App() {
     )
   }
 
+  if (tela === 'treinoLivre') {
+    return (
+      <TreinoLivre
+        serieAtual={config.serieAtual}
+        serieInicial={config.serieTreino}
+        colecaoInicial={config.colecao}
+        trilhasIniciais={config.trilhasAtivas.filter((t) => t !== 'conhecimentos')}
+        contar={contarLivre}
+        limiteAtingido={config.limiteDiarioMin > 0 && minutosHoje >= config.limiteDiarioMin}
+        onComecar={(serie, colecao, trilhas) => void iniciarLivre(serie, colecao, trilhas)}
+        onVoltar={() => setTela('inicio')}
+      />
+    )
+  }
+
   if (tela === 'evolucao') {
     return <Evolucao config={config} perfil={perfil} onVoltar={() => setTela('inicio')} />
   }
@@ -480,13 +513,13 @@ export default function App() {
         {...resultado}
         onCacaAosErros={() => void iniciarCaca()}
         onEstudar={abrirPilula}
-        onInicio={() => setTela(resultado.modo === 'pilula' ? 'estudar' : 'inicio')}
+        onInicio={() => setTela(resultado.modo === 'pilula' ? 'estudar' : resultado.modo === 'livre' ? 'treinoLivre' : 'inicio')}
       />
     )
   }
 
   if (sessao && (tela === 'questao' || tela === 'correcao')) {
-    const titulo = sessao.modo === 'treino' ? 'Treino do dia' : sessao.modo === 'caca_erros' ? 'Caça aos erros' : `Praticar: ${PILULA_POR_HABILIDADE.get(sessao.habilidade ?? '')?.titulo ?? ''}`
+    const titulo = sessao.modo === 'treino' ? 'Treino do dia' : sessao.modo === 'caca_erros' ? 'Caça aos erros' : sessao.modo === 'livre' ? `Treino livre · ${sessao.serie}º ano` : `Praticar: ${PILULA_POR_HABILIDADE.get(sessao.habilidade ?? '')?.titulo ?? ''}`
     const passos: EstadoPasso[] = sessao.questoes.map((_, i) => {
       const r = sessao.respostas[i]
       if (r) return r.correta ? 'certo' : 'errado'
@@ -541,6 +574,7 @@ export default function App() {
       onCacaAosErros={() => void iniciarCaca()}
       onSimulado={() => void iniciarSimulado()}
       onEstudar={() => setTela('estudar')}
+      onTreinoLivre={() => setTela('treinoLivre')}
       onEvolucao={() => setTela('evolucao')}
       onAreaPais={() => setTela('pin')}
     />

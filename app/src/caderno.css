@@ -181,4 +181,14 @@ html.tema-caderno, html.tema-caderno body {
   .selo-recorde { position: relative; isolation: isolate; background-color: transparent; border: 2px solid #9a4a12; --l1: #fbe07a; --l2: #f3c13f; }
   .selo-recorde::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: linear-gradient(135deg, var(--l1) 30%, var(--l2)); -webkit-mask: var(--hachura) 0 0 / 240px 240px repeat; mask: var(--hachura) 0 0 / 240px 240px repeat; }
   .barra > div { background: #5d8ae6; }
+
+  /* Treino livre */
+  .atalho-icone.verde { --l1: #d3f0da; --l2: #a9dcb5; background-color: transparent; }
+  .serie-chip, .chip-escolha { border: 2.5px dashed var(--grafite-2); border-radius: var(--torto); background-color: rgba(255, 254, 250, 0.92); }
+  .serie-chip strong, .chip-escolha { font-family: 'Patrick Hand', cursive; font-weight: 400; }
+  .serie-chip strong { font-size: 26px; }
+  .chip-escolha { font-size: 21px; }
+  .serie-chip.ativa, .chip-escolha.ativa { position: relative; isolation: isolate; border-style: solid; border-color: var(--grafite); background-color: rgba(255, 254, 250, 0.92); color: var(--texto); --l1: #b9d0f7; --l2: #8eaeef; }
+  .serie-chip.ativa::before, .chip-escolha.ativa::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; background: linear-gradient(135deg, var(--l1) 30%, var(--l2)); -webkit-mask: var(--hachura) 0 0 / 240px 240px repeat; mask: var(--hachura) 0 0 / 240px 240px repeat; }
+  .serie-chip.ativa small { color: #22408f; }
 }
