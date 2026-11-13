@@ -4812,7 +4812,7 @@
   "formato": "multipla_escolha",
   "positivo_unidade": null,
   "texto_apoio": null,
-  "enunciado": "Bruno é maior que Flora. Ana é menor que Flora. Duda é maior que Bruno. Quem é a pessoa mais baixa?",
+  "enunciado": "Bruno é mais alto que Flora. Ana é mais baixa que Flora. Duda é mais alta que Bruno. Quem é a pessoa mais baixa?",
   "figura": null,
   "alternativas": [
    {
@@ -5462,7 +5462,7 @@
   "formato": "multipla_escolha",
   "positivo_unidade": null,
   "texto_apoio": null,
-  "enunciado": "Enzo é maior que Flora. Duda é menor que Flora. Bruno é maior que Enzo. Quem é a pessoa mais baixa?",
+  "enunciado": "Enzo é mais alto que Flora. Duda é mais baixa que Flora. Bruno é mais alto que Enzo. Quem é a pessoa mais baixa?",
   "figura": null,
   "alternativas": [
    {
@@ -6112,7 +6112,7 @@
   "formato": "multipla_escolha",
   "positivo_unidade": null,
   "texto_apoio": null,
-  "enunciado": "Enzo é maior que Bruno. Caio é menor que Bruno. Duda é maior que Enzo. Quem é a pessoa mais baixa?",
+  "enunciado": "Enzo é mais alto que Bruno. Caio é mais baixo que Bruno. Duda é mais alta que Enzo. Quem é a pessoa mais baixa?",
   "figura": null,
   "alternativas": [
    {
@@ -6762,7 +6762,7 @@
   "formato": "multipla_escolha",
   "positivo_unidade": null,
   "texto_apoio": null,
-  "enunciado": "Flora é maior que Ana. Duda é menor que Ana. Bruno é maior que Flora. Quem é a pessoa mais baixa?",
+  "enunciado": "Flora é mais alta que Ana. Duda é mais baixa que Ana. Bruno é mais alto que Flora. Quem é a pessoa mais baixa?",
   "figura": null,
   "alternativas": [
    {
@@ -7412,7 +7412,7 @@
   "formato": "multipla_escolha",
   "positivo_unidade": null,
   "texto_apoio": null,
-  "enunciado": "Flora é maior que Enzo. Bruno é menor que Enzo. Ana é maior que Flora. Quem é a pessoa mais baixa?",
+  "enunciado": "Flora é mais alta que Enzo. Bruno é mais baixo que Enzo. Ana é mais alta que Flora. Quem é a pessoa mais baixa?",
   "figura": null,
   "alternativas": [
    {
@@ -8062,7 +8062,7 @@
   "formato": "multipla_escolha",
   "positivo_unidade": null,
   "texto_apoio": null,
-  "enunciado": "Bruno é maior que Flora. Caio é menor que Flora. Ana é maior que Bruno. Quem é a pessoa mais baixa?",
+  "enunciado": "Bruno é mais alto que Flora. Caio é mais baixo que Flora. Ana é mais alta que Bruno. Quem é a pessoa mais baixa?",
   "figura": null,
   "alternativas": [
    {

@@ -432,7 +432,10 @@ def logica(serie):
     log(s, 'bolsa', 'Contagem', dif_base + 1, cont[0], cont[1], cont[2], cont[3])
     # ordenação (bolsa)
     pessoas = rng.sample(NOMES, 4)
-    pistas = f'{pessoas[0]} é maior que {pessoas[1]}. {pessoas[2]} é menor que {pessoas[1]}. {pessoas[3]} é maior que {pessoas[0]}.'
+    # "mais alto/baixo" (não "maior/menor", que a criança pode ler como "mais velho"), concordando com o nome.
+    FEM = {'Ana', 'Flora', 'Duda', 'Bia', 'Lia', 'Nina', 'Maia', 'Rita', 'Clara', 'Júlia', 'Luana', 'Sofia'}
+    alt = lambda n, adj: adj[:-1] + 'a' if n in FEM else adj
+    pistas = f'{pessoas[0]} é {alt(pessoas[0], "mais alto")} que {pessoas[1]}. {pessoas[2]} é {alt(pessoas[2], "mais baixo")} que {pessoas[1]}. {pessoas[3]} é {alt(pessoas[3], "mais alto")} que {pessoas[0]}.'
     log(s, 'bolsa', 'Ordenação', dif_base, f'{pistas} Quem é a pessoa mais baixa?', pessoas[2],
         [(pessoas[1], 'Parou na segunda pista'), (pessoas[0], 'Inverteu a primeira pista'), (pessoas[3], 'Inverteu o sentido'), ('Não dá para saber', 'Não juntou as pistas')],
         f'Ordem do mais alto ao mais baixo: {pessoas[3]}, {pessoas[0]}, {pessoas[1]}, {pessoas[2]}.', fmt=str)
